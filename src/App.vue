@@ -5,10 +5,17 @@ import Editor from './components/editor.vue'
 </script>
 
 <template lang="pug">
-h1
-  | Richer than you
-  sup.dollar $
-p.catchphrase $. Another modern rich text editor. This one's richer than you.
+.page
+  header
+    h1
+      | Richer than you
+      sup.dollar $
+    p.catchphrase $. Another modern rich text editor. This one's richer than you.
 
-editor.hero
+  main
+    editor.hero
+
+.particles
+  - for (i = 1; i <= 100; i++)
+    .c
 </template>

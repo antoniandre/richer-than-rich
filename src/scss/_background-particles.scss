@@ -1,0 +1,54 @@
+@use "sass:math";
+
+$total: 100; // Total particles.
+$orb-size: 80vh;
+$particle-size: 10px;
+$time: 40s;
+$base-hue: 20;
+
+.particles {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  animation: rotate $time infinite linear; // Rotate orb.
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  100% {transform: rotateY(360deg) rotateX(360deg);}
+}
+
+.c {
+  position: absolute;
+  width: $particle-size;
+  height: $particle-size;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform;
+}
+
+@for $i from 1 through $total {
+  $z: (random(360) * 1deg); // Random angle to rotateZ.
+  $y: (random(360) * 1deg); // Random to rotateX.
+  $hue: (math.div(40, $total * $i) + $base-hue); // Set hue.
+
+  .c:nth-child(#{$i}){ // Grab the nth particle.
+    animation: orbit#{$i} $time infinite;
+    animation-delay: ($i * .01s);
+    background-color: hsla($hue, 40%, 40%, 0.4);
+  }
+
+  @keyframes orbit#{$i} {
+    20% {opacity: 1;} // Fade in.
+    30% {transform: rotateZ(-$z) rotateY($y) translateX($orb-size) rotateZ($z);} // form orb
+    80% {
+      transform: rotateZ(-$z) rotateY($y) translateX($orb-size) rotateZ($z); // hold orb state 30-80
+      opacity: 1; // Hold opacity 20-80.
+    }
+    100% {transform: rotateZ(-$z) rotateY($y) translateX( ($orb-size * 3) ) rotateZ($z);} // translateX * 3
+  }
+}
