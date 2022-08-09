@@ -25,7 +25,44 @@ const action = button => {
   const sel = window.getSelection()
   console.log(sel, button)
 
-  inputField.value.focus() // Re-focus the editor after a button click.
+  focus() // Re-focus the editor after a button click.
+}
+
+const process = e => {
+  const sel = window.getSelection()
+  console.log('process', { e, sel })
+
+  // Process the HTML here.
+}
+
+const onClick = e => {
+  const sel = window.getSelection()
+  console.log('onClick', { e, sel })
+}
+
+const onKeyup = e => {
+  const sel = window.getSelection()
+  console.log('onKeyup', { e, sel })
+}
+
+const onFocus = e => {
+  const sel = window.getSelection()
+  console.log('onFocus', { e, sel })
+}
+
+const onBlur = e => {
+  const sel = window.getSelection()
+  console.log('onBlur', { e, sel })
+}
+
+const onPaste = e => {
+  const sel = window.getSelection()
+  console.log('onPaste', { e, sel })
+}
+
+// Public external method.
+const focus = () => {
+  inputField.value.focus()
 }
 </script>
 
@@ -39,7 +76,16 @@ const action = button => {
       type="button"
       :class="{ [`button--${button.name} ${button.name}`]: true, 'button--active': button.active }").
       {{ button.label }}
-  .richer__content(ref="inputField" contenteditable)
+  .richer__content(
+    ref="inputField"
+    contenteditable
+    @input="process"
+    @click="onClick"
+    @keyup="onKeyup"
+    @focus="onFocus"
+    @blur="onBlur"
+    @paste="onPaste"
+    v-html="content.initial")
 </template>
 
 <style lang="scss">
@@ -94,7 +140,13 @@ $highlight-color: #bf953f;
     }
   }
 
+  .bold {font-weight: bold;}
+  .italic {font-style: italic;}
+  .underline {text-decoration: underline;}
+  .strikethrough {text-decoration: line-through;}
+
   &__content {
+    text-align-last: left;
     padding: 12px;
     outline: none;
     flex-grow: 1;
