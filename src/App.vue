@@ -4,9 +4,11 @@
 import Editor from './components/editor.vue'
 </script>
 
-<template>
-  <h1>Richer than you</h1>
-  <p>Another modern rich text editor. This one's richer than you.</p>
+<template lang="pug">
+h1
+  | Richer than you
+  sup.dollar $
+p.catchphrase $. Another modern rich text editor. This one's richer than you.
 
-  <editor />
+editor.hero
 </template>
