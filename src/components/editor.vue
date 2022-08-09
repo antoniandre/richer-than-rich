@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 
-defineProps({
-  modelValue: { String, default: '' }
+const props = defineProps({
+  modelValue: { String, default: '' },
+  placeholder: { String, default: '' }
 })
 
 let inputField = ref(null)
@@ -13,6 +14,11 @@ const buttons = {
   strikethrough: { code: 's', tag: 'span', label: 's' }
 }
 const menuButtons = ref([])
+const placeholder = ref(props.placeholder)
+const content = ref({
+  initial: props.modelValue,
+  processed: props.modelValue
+})
 
 // Initialize the buttons.
 menuButtons.value.push(...Object.entries(buttons).map(([name, button]) => ({
@@ -33,6 +39,7 @@ const process = e => {
   console.log('process', { e, sel })
 
   // Process the HTML here.
+  content.value.processed = inputField.value.innerHTML
 }
 
 const onClick = e => {
@@ -76,16 +83,18 @@ const focus = () => {
       type="button"
       :class="{ [`button--${button.name} ${button.name}`]: true, 'button--active': button.active }").
       {{ button.label }}
-  .richer__content(
-    ref="inputField"
-    contenteditable
-    @input="process"
-    @click="onClick"
-    @keyup="onKeyup"
-    @focus="onFocus"
-    @blur="onBlur"
-    @paste="onPaste"
-    v-html="content.initial")
+  .content-wrap
+    .richer__content(
+      ref="inputField"
+      contenteditable
+      @input="process"
+      @click="onClick"
+      @keyup="onKeyup"
+      @focus="onFocus"
+      @blur="onBlur"
+      @paste="onPaste"
+      v-html="content.initial")
+    .richer__placeholder(v-if="placeholder && !content.processed") {{ props.placeholder }}
 </template>
 
 <style lang="scss">
@@ -144,6 +153,21 @@ $highlight-color: #bf953f;
   .italic {font-style: italic;}
   .underline {text-decoration: underline;}
   .strikethrough {text-decoration: line-through;}
+
+  .content-wrap {
+    position: relative;
+  }
+
+  &__placeholder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    pointer-events: none;
+    opacity: 0.5;
+  }
 
   &__content {
     text-align-last: left;
