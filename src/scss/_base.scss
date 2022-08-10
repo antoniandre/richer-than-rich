@@ -1,3 +1,10 @@
+* {margin: 0;padding: 0;}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -5,8 +12,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547;
+  background-color: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,12 +22,7 @@
   -webkit-text-size-adjust: 100%;
 }
 
-* {margin: 0;padding: 0;}
-
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
+::selection {background: #e5d38f;}
 
 #app {
   display: flex;
@@ -43,15 +45,14 @@ a {
   color: #646cff;
   text-decoration: inherit;
 
-  &:hover {
-    color: #535bf2;
-  }
+  &:hover {color: #747bff;}
 }
 
-header {
+header, .dollar, .catchphrase {
   background: linear-gradient(120deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
   background-size: 200%;
   color: transparent;
+  -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
 }
 
@@ -63,10 +64,6 @@ h1 {
 
 }
 
-.dollar, .catchphrase {
-  background: inherit;
-}
-
 .dollar {
   position: absolute;
   font-size: 2rem;
@@ -75,7 +72,6 @@ h1 {
 
 .catchphrase {
   position: relative;
-  // color: rgba(#000, 0.6);
   margin-bottom: 5.5rem;
   letter-spacing: -0.5px;
   font-size: 0.95rem;
@@ -102,19 +98,18 @@ h1 {
 }
 
 @media (prefers-color-scheme: dark) {
+  :root {
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  }
+  :selection {background-color: #82672b;}
+
+  a:hover {
+    color: #535bf2;
+  }
+
   .richer.hero {
     background-color: rgba(rgb(34, 34, 34), 0.8);
     box-shadow: 2px 2px 6px rgba(#000, 0.2);
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
   }
 }
