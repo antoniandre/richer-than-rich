@@ -101,13 +101,13 @@ const focus = () => {
 $highlight-color: #bf953f;
 
 .richer {
-  border: 1px solid rgba(#000, 0.05);
-  border-radius: 4px;
-  background: rgba(#fff, 0.85);
-  color: #333;
   display: flex;
   flex-direction: column;
   text-align: left;
+  border: 1px solid rgba(#000, 0.05);
+  border-radius: 8px;
+  background: rgba(#fff, 0.85);
+  color: #333;
 
   &__menu {
     border-top-left-radius: inherit;
@@ -120,13 +120,15 @@ $highlight-color: #bf953f;
     align-items: center;
 
     .button {
-      font-size: 1rem;
-      height: 100%;
-      width: 1.8rem;
+      position: relative;
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      border: 1px solid #ddd;
+      height: 26px;
+      width: 26px;
+      color: rgba(#000, 0.6);
+      font-size: 1rem;
+      border: 1px solid rgba(#000, 0.1);
       border-radius: 4px;
       margin-left: 4px;
       cursor: pointer;
@@ -134,17 +136,35 @@ $highlight-color: #bf953f;
       transition: background-color 0.2s ease-in-out;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+      transition: 0.15s ease-in-out;
 
       &:first-child {margin-left: 0;}
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
+
+      &:hover, &--active {border-color: rgba(#000, 0.06);}
+      &:focus {
+        border-color: rgba(#000, 0.4);
+        outline: none;
       }
-      &:active, &--active {
-        background-color: rgba(0, 0, 0, 0.08);
+      &:active {border-color: rgba(#000, 0.06);}
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(#000, 0.06);
+        border-radius: 99rem;
+        transform: scale(0.3);
+        opacity: 0;
+        transition: inherit;
       }
-      &--active {
-        background-color: rgba(0, 0, 0, 0.04);
-        border-color: $highlight-color;
+
+      &:hover:before, &:active:before, &--active:before {
+        opacity: 1;
+        transform: scale(1);
+        border-radius: 3px;
       }
     }
   }
@@ -156,6 +176,9 @@ $highlight-color: #bf953f;
 
   .content-wrap {
     position: relative;
+    display: flex;
+    flex-grow: 1;
+    overflow: auto;
   }
 
   &__placeholder {
@@ -185,6 +208,20 @@ $highlight-color: #bf953f;
 
     &__menu {
       background-color: rgba(#fff, 0.05);
+    }
+
+    .button {
+      border-color: rgba(#fff, 0.1);
+      color: rgba(#fff, 0.6);
+
+      &:hover, &--active {border-color: rgba(#fff, 0.06);}
+      &:focus {
+        border-color: rgba(#fff, 0.4);
+        outline: none;
+      }
+      &:active {border-color: rgba(#fff, 0.06);}
+
+      &:before {background-color: rgba(#fff, 0.06);}
     }
   }
 }
