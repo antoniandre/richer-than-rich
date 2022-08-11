@@ -8,18 +8,19 @@ const editorContent = ref('Hello, it\'s awesome.')
 </script>
 
 <template lang="pug">
-.page
-  header
+header
+  .container
     h1
       | Richer than you
       sup.dollar $
     p.catchphrase $. Another modern rich text editor. This one's richer than you.
 
-  main
     editor.hero(
       v-model="editorContent"
       placeholder="Write something...")
 
+main
+  .container
     ul.checklist
       li Designed for Vue 3
       li Designed for light and dark themes
@@ -29,6 +30,7 @@ const editorContent = ref('Hello, it\'s awesome.')
       li Modular
       li Clean HTML output
       li Plug and play
+      li Responsive
 
 .particles
   - for (i = 1; i <= 100; i++)
