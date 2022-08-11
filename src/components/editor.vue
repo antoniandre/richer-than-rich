@@ -7,32 +7,36 @@ const props = defineProps({
 })
 
 let inputField = ref(null)
+// Default tag: span.
+// Default icon: i-[button-name].
+// Default icon size: 100%.
 const buttons = {
+  'font-size': { label: 'Text size' },
+  'font-family': { label: 'Font' },
+  'text-color': { label: 'Text color' },
+  'background-color': { label: 'Background color' },
   bold: { code: 'b', tag: 'strong', label: 'Bold' },
   italic: { code: 'i', tag: 'em', label: 'Italic' },
-  underline: { code: 'u', tag: 'span', label: 'Underline' },
-  strikethrough: { code: 's', tag: 'span', label: 'Strikethrough' },
-  'strikethrough-1': { code: 's', tag: 'span', label: 'Strikethrough' },
-  'align-left': { code: '|<', tag: 'span', label: 'Align left' },
-  'align-center': { code: '|-|', tag: 'span', label: 'Align center' },
-  'align-right': { code: '>|', tag: 'span', label: 'Align right' },
-  'align-justify': { code: '||', tag: 'span', label: 'Align justify' },
-  indent: { code: '>', tag: 'span', label: 'indent' },
-  unindent: { code: '<', tag: 'span', label: 'Unindent' },
-  'font-size': { code: '||', tag: 'span', label: 'Text size' },
-  'text-color': { code: '||', tag: 'span', label: 'Text color' },
-  subscript: { code: '_', tag: 'span', label: 'Subscript' },
-  superscript: { code: 'º', tag: 'span', label: 'Superscript' },
-  code: { code: '</>', tag: 'span', label: 'Code' },
-  link: { code: '∞', tag: 'span', label: 'Link' },
-  'link-1': { code: '∞', tag: 'span', label: 'Link' },
-  'list-ul': { code: '-', tag: 'span', label: 'Bulleted list' },
-  'list-ol': { code: '.', tag: 'span', label: 'Numbered list' },
-  table: { code: '[]', tag: 'span', label: 'Table' },
-  undo: { code: '<-', tag: 'span', label: 'Undo' },
-  redo: { code: '->', tag: 'span', label: 'Redo' },
-  image: { code: '*', tag: 'span', label: 'Photo' },
-  'clear-format': { code: 'x', tag: 'span', label: 'Clear format' },
+  underline: { code: 'u', label: 'Underline' },
+  'strikethrough-1': { label: 'Strikethrough' },
+  strikethrough: { label: 'Strikethrough' },
+  'list-ul': { label: 'Bulleted list' },
+  'list-ol': { label: 'Numbered list' },
+  'align-left': { label: 'Align left' },
+  'align-center': { label: 'Align center' },
+  'align-right': { label: 'Align right' },
+  'align-justify': { label: 'Align justify' },
+  indent: { label: 'indent' },
+  unindent: { label: 'Unindent' },
+  subscript: { tag: 'sub', label: 'Subscript' },
+  superscript: { tag: 'sup', label: 'Superscript' },
+  link: { tag: 'a', label: 'Link' },
+  image: { tag: 'img', label: 'Photo' },
+  table: { tag: 'table', label: 'Table' },
+  code: { tag: 'code', label: 'Code' },
+  undo: { label: 'Undo' },
+  redo: { label: 'Redo' },
+  'clear-format': { code: 'x', label: 'Clear format' },
 }
 const menuButtons = ref([])
 const placeholder = ref(props.placeholder)
@@ -103,7 +107,8 @@ const focus = () => {
       @click="action(button)"
       type="button"
       :title="button.label"
-      :class="{ [`button--${button.name} i-${button.name}`]: true, 'button--active': button.active }")
+      :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
+      :style="{ fontSize: button.size ? `${button.size}%` : null }")
       span {{ button.label }}
   .content-wrap
     .richer__content(
@@ -148,7 +153,7 @@ $highlight-color: #bf953f;
       align-items: center;
       height: 26px;
       width: 26px;
-      color: rgba(#000, 0.6);
+      color: rgba(#000, 0.65);
       font-size: 1rem;
       border: 1px solid rgba(#000, 0.1);
       border-radius: 4px;
@@ -165,7 +170,10 @@ $highlight-color: #bf953f;
         border-color: rgba(#000, 0.4);
         outline: none;
       }
-      &:active {border-color: rgba(#000, 0.06);}
+      &:active {
+        border-color: rgba(#000, 0.06);
+        background-color: rgba(#000, 0.1);
+      }
 
       &:after {
         content: '';
@@ -234,14 +242,17 @@ $highlight-color: #bf953f;
 
     .button {
       border-color: rgba(#fff, 0.1);
-      color: rgba(#fff, 0.6);
+      color: rgba(#fff, 0.65);
 
       &:hover, &--active {border-color: rgba(#fff, 0.06);}
       &:focus {
         border-color: rgba(#fff, 0.4);
         outline: none;
       }
-      &:active {border-color: rgba(#fff, 0.06);}
+      &:active {
+        border-color: rgba(#fff, 0.06);
+        background-color: rgba(#fff, 0.1);
+      }
 
       &:after {background-color: rgba(#fff, 0.06);}
     }
