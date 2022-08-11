@@ -10,19 +10,20 @@ let inputField = ref(null)
 // Default tag: span.
 // Default icon: i-[button-name].
 // Default icon size: 100%.
+// Add a `|` before and/or after the button name to create a separator.
 const buttons = {
   'font-size': { label: 'Text size' },
   'font-family': { label: 'Font' },
   'text-color': { label: 'Text color' },
   'background-color': { label: 'Background color' },
-  bold: { code: 'b', tag: 'strong', label: 'Bold' },
+  '| bold': { code: 'b', tag: 'strong', label: 'Bold' },
   italic: { code: 'i', tag: 'em', label: 'Italic' },
   underline: { code: 'u', label: 'Underline' },
   'strikethrough-1': { label: 'Strikethrough' },
   strikethrough: { label: 'Strikethrough' },
-  'list-ul': { label: 'Bulleted list' },
+  '| list-ul': { label: 'Bulleted list' },
   'list-ol': { label: 'Numbered list' },
-  'align-left': { label: 'Align left' },
+  '| align-left': { label: 'Align left' },
   'align-center': { label: 'Align center' },
   'align-right': { label: 'Align right' },
   'align-justify': { label: 'Align justify' },
@@ -48,7 +49,9 @@ const content = ref({
 // Initialize the buttons.
 menuButtons.value.push(...Object.entries(buttons).map(([name, button]) => ({
   ...button,
-  name,
+  name: name.replace(/\s?\|\s?/g, ''),
+  separatorStart: name[0] === '|',
+  separatorEnd: name[name.length - 1] === '|',
   active: false
 })))
 
@@ -101,15 +104,16 @@ const focus = () => {
 <template lang="pug">
 .richer
   .richer__menu
-    button.button(
-      v-for="(button, i) in menuButtons"
-      :key="i"
-      @click="action(button)"
-      type="button"
-      :title="button.label"
-      :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
-      :style="{ fontSize: button.size ? `${button.size}%` : null }")
-      span {{ button.label }}
+    template(v-for="(button, i) in menuButtons" :key="i")
+      span.separator(v-if="button.separatorStart")
+      button.button(
+        @click="action(button)"
+        type="button"
+        :title="button.label"
+        :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
+        :style="{ fontSize: button.size ? `${button.size}%` : null }")
+        span {{ button.label }}
+      span.separator(v-if="button.separatorEnd")
   .content-wrap
     .richer__content(
       ref="inputField"
@@ -197,6 +201,14 @@ $highlight-color: #bf953f;
 
       span {display: none;}
     }
+
+    .separator {
+      display: flex;
+      align-self: stretch;
+      width: 1px;
+      margin: 6px 4px;
+      background: rgba(#000, 0.15);
+    }
   }
 
   .bold {font-weight: bold;}
@@ -256,6 +268,8 @@ $highlight-color: #bf953f;
 
       &:after {background-color: rgba(#fff, 0.06);}
     }
+
+    .separator {background: rgba(#fff, 0.15);}
   }
 }
 </style>
