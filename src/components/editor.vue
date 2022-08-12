@@ -32,8 +32,7 @@ const buttons = {
   '| bold': { code: 'b', tag: 'strong', label: 'Bold' },
   italic: { code: 'i', tag: 'em', label: 'Italic' },
   underline: { code: 'u', label: 'Underline' },
-  'strikethrough-1': { label: 'Strikethrough' },
-  strikethrough: { label: 'Strikethrough' },
+  strikethrough: { label: 'Strikethrough', size: 130 },
   '| list-ul': { label: 'Bulleted list' },
   'list-ol': { label: 'Numbered list' },
   '| align-left': { label: 'Align left' },
@@ -68,50 +67,107 @@ menuButtons.value.push(...Object.entries(buttons).map(([name, button]) => ({
   active: false
 })))
 
+// On button click, perform an action on the content.
 const action = (e, button) => {
   const sel = window.getSelection()
-  console.log(sel, button)
-  emit('button-click', e, toRaw(button))
+
+  emit('button-click', { e, button: toRaw(button) })
+
+  // Notes:
+  // = multi-ranges are only supported on Firefox for now.
+  // - no range means the content has never been focused.
+  if (sel.rangeCount !== 1) return focus() // Not handled.
+
+  button.active = !button.active
+
+  // No selection (isCollapsed), just a caret.
+  if (sel.isCollapsed) {}
+
+  // Selection with a range.
+  else {
+    if (button.active) wrapSelection(sel, button)
+    else unwrapSelection(sel, button)
+  }
 
   focus() // Re-focus the editor after a button click.
 }
 
-const process = e => {
-  const sel = window.getSelection()
-  console.log('process', { e, sel })
+/**
+ * Wrap the selected content with the clicked button generated tag.
+ * This will modify the innerHTML of the contenteditable, then call process() to cleanup,
+ * and emit the clean markup.
+ */
+const wrapSelection = (sel, button) => {
+  const range = sel.getRangeAt(0)
+  const newParent = document.createElement(button.tag || 'span')
+  newParent.className = button.name
+
+  try {
+    // Can't surround the content if the selection is cutting a DOM element (across 2 nodes).
+    range.surroundContents(newParent)
+  }
+  // If selection is across 2 nodes, cut the selection, wrap it, then reinject in place.
+  catch (e) {
+    // This will collapse the range to no char and create an HTML fragment.
+    const fragment = range.extractContents()
+
+    // Wrap the fragment and reinject at caret position.
+    newParent.appendChild(fragment)
+    range.insertNode(newParent)
+  }
+
+  process(null, sel)
+}
+
+/**
+ * Unwrap the selected content from the clicked button generated markup.
+ * This will modify the innerHTML of the contenteditable, then call process() to cleanup,
+ * and emit the clean markup.
+ */
+const unwrapSelection = (sel, button) => {
+
+  process(null, sel)
+}
+
+/**
+ * Cleanup the HTML markup:
+ * - replace <b> & <i>
+ * - glue back the text nodes together
+ * - delete nested identical tags
+ * - merge consecutive identical tags
+ */
+const process = (e, sel) => {
+  console.log('processing content...', { e, sel })
 
   // Process the HTML here.
   content.value.processed = inputField.value.innerHTML
+
+  emit('input', { e, html: content.value.processed })
 }
 
 const onClick = e => {
   const sel = window.getSelection()
-  // console.log('onClick', { e, sel })
-  emit('click', e, content.value.processed)
+  emit('click', { e, html: content.value.processed })
 }
 
 const onKeyup = e => {
   const sel = window.getSelection()
-  // console.log('onKeyup', { e, sel })
-  emit('keyup', e, content.value.processed)
+  emit('keyup', { e, html: content.value.processed })
 }
 
 const onFocus = e => {
   const sel = window.getSelection()
-  // console.log('onFocus', { e, sel })
-  emit('focus', e, content.value.processed)
+  emit('focus', { e, html: content.value.processed })
 }
 
 const onBlur = e => {
   const sel = window.getSelection()
-  // console.log('onBlur', { e, sel })
-  emit('blur', e, content.value.processed)
+  emit('blur', { e, html: content.value.processed })
 }
 
 const onPaste = e => {
   const sel = window.getSelection()
-  // console.log('onPaste', { e, sel })
-  emit('paste', e, content.value.processed)
+  emit('paste', { e, html: content.value.processed })
 }
 
 // Public external method.
@@ -237,8 +293,6 @@ $highlight-color: #bf953f;
     }
   }
 
-  .bold {font-weight: bold;}
-  .italic {font-style: italic;}
   .underline {text-decoration: underline;}
   .strikethrough {text-decoration: line-through;}
 
@@ -261,7 +315,6 @@ $highlight-color: #bf953f;
   }
 
   &__content {
-    text-align-last: left;
     padding: 12px;
     outline: none;
     flex-grow: 1;
