@@ -1,11 +1,22 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, toRaw } from 'vue'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
   placeholder: { type: String, default: '' },
   darkMode: { type: [Boolean, String] } // True, false, or 'auto'.
 })
+
+const emit = defineEmits([
+  'focus',
+  'blur',
+  'keyup',
+  'input',
+  'click',
+  'paste',
+  'html',
+  'button-click'
+])
 
 let dark = ref(props.darkMode)
 let inputField = ref(null)
@@ -44,8 +55,8 @@ const buttons = {
 const menuButtons = ref([])
 const placeholder = ref(props.placeholder)
 const content = ref({
-  initial: props.modelValue,
-  processed: props.modelValue
+  initial: props.modelValue || '',
+  processed: props.modelValue || ''
 })
 
 // Initialize the buttons.
@@ -57,9 +68,10 @@ menuButtons.value.push(...Object.entries(buttons).map(([name, button]) => ({
   active: false
 })))
 
-const action = button => {
+const action = (e, button) => {
   const sel = window.getSelection()
   console.log(sel, button)
+  emit('button-click', e, toRaw(button))
 
   focus() // Re-focus the editor after a button click.
 }
@@ -74,27 +86,32 @@ const process = e => {
 
 const onClick = e => {
   const sel = window.getSelection()
-  console.log('onClick', { e, sel })
+  // console.log('onClick', { e, sel })
+  emit('click', e, content.value.processed)
 }
 
 const onKeyup = e => {
   const sel = window.getSelection()
-  console.log('onKeyup', { e, sel })
+  // console.log('onKeyup', { e, sel })
+  emit('keyup', e, content.value.processed)
 }
 
 const onFocus = e => {
   const sel = window.getSelection()
-  console.log('onFocus', { e, sel })
+  // console.log('onFocus', { e, sel })
+  emit('focus', e, content.value.processed)
 }
 
 const onBlur = e => {
   const sel = window.getSelection()
-  console.log('onBlur', { e, sel })
+  // console.log('onBlur', { e, sel })
+  emit('blur', e, content.value.processed)
 }
 
 const onPaste = e => {
   const sel = window.getSelection()
-  console.log('onPaste', { e, sel })
+  // console.log('onPaste', { e, sel })
+  emit('paste', e, content.value.processed)
 }
 
 // Public external method.
@@ -115,7 +132,7 @@ onMounted(() => {
     template(v-for="(button, i) in menuButtons" :key="i")
       span.separator(v-if="button.separatorStart")
       button.button(
-        @click="action(button)"
+        @click="action($event, button)"
         type="button"
         :title="button.label"
         :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"

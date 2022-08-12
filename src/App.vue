@@ -5,6 +5,8 @@ import Editor from './components/editor.vue'
 let darkTheme = ref(true)
 const editorContent = ref('Hello, it\'s awesome.')
 
+const cl = (...args) => console.log(...args)
+
 onMounted(() => {
   darkTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 })
@@ -27,7 +29,13 @@ onMounted(() => {
       editor.hero(
         v-model="editorContent"
         placeholder="Write something..."
-        :dark-mode="darkTheme")
+        :dark-mode="darkTheme"
+        @button-click="cl"
+        @click="cl"
+        @keyup="cl"
+        @focus="cl"
+        @blur="cl"
+        @paste="cl")
 
   main
     .container
