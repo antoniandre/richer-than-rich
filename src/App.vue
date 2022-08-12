@@ -30,12 +30,12 @@ onMounted(() => {
         v-model="editorContent"
         placeholder="Write something..."
         :dark-mode="darkTheme"
-        @button-click="cl"
-        @click="cl"
-        @keyup="cl"
-        @focus="cl"
-        @blur="cl"
-        @paste="cl")
+        @button-click="cl('button-click', $event)"
+        @click="cl('click', $event)"
+        @keyup="cl('keyup', $event)"
+        @focus="cl('focus', $event)"
+        @blur="cl('blur', $event)"
+        @paste="cl('paste', $event)")
 
   main
     .container
