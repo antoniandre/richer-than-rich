@@ -1,10 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Editor from './components/editor.vue'
 
-let darkTheme = ref('dark')
+let darkTheme = ref(true)
 const editorContent = ref('Hello, it\'s awesome.')
 
 onMounted(() => {
@@ -16,8 +14,8 @@ onMounted(() => {
 .page(:class="darkTheme ? 'dark' : 'light'")
   .top-bar
     .theme-switch(@click="darkTheme = !darkTheme")
-      button.button.i-moon(:class="{ 'button--active': !darkTheme }")
-      button.button.i-sun(:class="{ 'button--active': darkTheme }")
+      button.button.i-moon(:class="{ 'button--active': darkTheme }")
+      button.button.i-sun(:class="{ 'button--active': !darkTheme }")
       .slider
   header
     .container
@@ -28,7 +26,8 @@ onMounted(() => {
 
       editor.hero(
         v-model="editorContent"
-        placeholder="Write something...")
+        placeholder="Write something..."
+        :dark-mode="darkTheme")
 
   main
     .container

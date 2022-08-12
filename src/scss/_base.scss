@@ -12,10 +12,7 @@ body {
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: #213547;
-  background-color: #fff;
   // background:
   //   radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9F7923 30%, #8A6E2F 40%, transparent 80%),
   //   radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1fba 62.5%, #5d4a1f 100%);
@@ -42,6 +39,12 @@ a {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+.page {
+  color: #213547;
+  background-color: #fff;
+  transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
 }
 
 // Top bar.

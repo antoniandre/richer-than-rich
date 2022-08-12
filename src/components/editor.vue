@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const props = defineProps({
-  modelValue: { String, default: '' },
-  placeholder: { String, default: '' }
+  modelValue: { type: String, default: '' },
+  placeholder: { type: String, default: '' },
+  darkMode: { type: [Boolean, String] } // True, false, or 'auto'.
 })
 
+let dark = ref(props.darkMode)
 let inputField = ref(null)
 // Default tag: span.
 // Default icon: i-[button-name].
@@ -99,10 +101,16 @@ const onPaste = e => {
 const focus = () => {
   inputField.value.focus()
 }
+
+onMounted(() => {
+  if (props.darkMode === 'auto') {
+    dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+})
 </script>
 
 <template lang="pug">
-.richer
+.richer(:class="{ 'richer--dark': darkMode }")
   .richer__menu
     template(v-for="(button, i) in menuButtons" :key="i")
       span.separator(v-if="button.separatorStart")
@@ -139,6 +147,7 @@ $highlight-color: #bf953f;
   border-radius: 8px;
   background: rgba(#fff, 0.85);
   color: #333;
+  transition: 0.4s ease-in-out;
 
   &__menu {
     border-top-left-radius: inherit;
@@ -149,6 +158,7 @@ $highlight-color: #bf953f;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    transition: 0.4s ease-in-out;
 
     .button {
       position: relative;
@@ -164,7 +174,6 @@ $highlight-color: #bf953f;
       margin: 2px;
       cursor: pointer;
       background-color: transparent;
-      transition: background-color 0.2s ease-in-out;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       transition: 0.15s ease-in-out;
@@ -242,15 +251,13 @@ $highlight-color: #bf953f;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .richer {
-    color: #ccc;
-    border-color: rgba(#fff, 0.05);
-    background-color: rgba(#000, 0.05);
+.richer--dark {
+  color: #ccc;
+  border-color: rgba(#fff, 0.05);
+  background-color: rgba(#000, 0.05);
 
-    &__menu {
-      background-color: rgba(#fff, 0.05);
-    }
+  .richer__menu {
+    background-color: rgba(#fff, 0.05);
 
     .button {
       border-color: rgba(#fff, 0.1);
