@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import Editor from './components/editor.vue'
 
 let darkTheme = ref(true)
-const editorContent = ref('Hello, it\'s awesome.')
+const editorContent = ref('<div style="text-align: center"><br><h2>Hi. I\'m r$$$ch.</h2><p><br><br>Wanna try me?</p></div>')
 
 const cl = (...args) => console.log(...args)
 
@@ -44,7 +44,7 @@ onMounted(() => {
         li Designed for light and dark darkThemes
         li Fully accessible
         li Lightweight
-        li Modern technics, supported by all recent browsers
+        li Modern technics using recent browsers powers. No legacy-IE-code.
         li Modular
         li Clean HTML output
         li Plug and play

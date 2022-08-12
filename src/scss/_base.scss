@@ -106,6 +106,7 @@ h1, .dollar, .catchphrase {
   color: transparent;
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
+  user-select: none;
 }
 
 h1 {
@@ -113,7 +114,6 @@ h1 {
   line-height: 1.1;
   margin-bottom: 4px;
   letter-spacing: 1.5px;
-
 }
 
 .dollar {
