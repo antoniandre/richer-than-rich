@@ -40,6 +40,26 @@ header {
   height: 100vh;
   display: flex;
   place-items: center;
+  margin-bottom: 120px;
+  overflow: hidden;
+
+  &:before, &:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: -5vw;
+    right: -5vw;
+    height: 260px;
+    background: #fff;
+    border-radius: 0 80% 0 0;
+    transform: rotate(-4deg);
+  }
+
+  &:before {
+    background: rgba(73, 73, 73, 0.5);
+    border-radius: 0 80% 0 0;
+    transform: rotate(-2deg) translateY(-15%);
+  }
 }
 
 h1, .dollar, .catchphrase {
