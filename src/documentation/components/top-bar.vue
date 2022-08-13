@@ -1,16 +1,16 @@
 <script setup>
 defineProps({
-  darkTheme: { Boolean }
+  darkMode: Boolean
 })
 
-defineEmits(['update:darkTheme'])
+defineEmits(['update:dark-mode'])
 </script>
 
 <template lang="pug">
 .top-bar
-  .theme-switch(@click="$emit('update:darkTheme', !darkTheme)")
-    button.button.i-moon(:class="{ 'button--active': darkTheme }")
-    button.button.i-sun(:class="{ 'button--active': !darkTheme }")
+  .theme-switch(@click="$emit('update:dark-mode', !darkMode)")
+    button.button.i-moon(:class="{ 'button--active': darkMode }")
+    button.button.i-sun(:class="{ 'button--active': !darkMode }")
     .slider
 </template>
 
