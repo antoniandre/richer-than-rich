@@ -42,8 +42,8 @@ body {
 // Main.
 // --------------------------------------------------------
 main {
-  // padding-top: 120px;
-  background-color: #fff;
+  background-color: #242424;
+  color: rgba(#fff, 0.8);
 }
 
 ul.checklist {
@@ -76,4 +76,9 @@ ul.checklist {
   background-color: #242424;
 
   ::selection {background-color: #82672b;}
+
+  main {
+    background-color: #fff;
+    color: rgba(#000, 0.6);
+  }
 }

@@ -37,28 +37,49 @@ header
 
 <style lang="scss" scoped>
 header {
-  height: 100vh;
+  height: 122vh;
   display: flex;
   place-items: center;
-  margin-bottom: 120px;
+  position: relative;
   overflow: hidden;
 
   &:before, &:after {
     content: "";
     position: absolute;
-    top: 100%;
+    bottom: -10vh;
     left: -5vw;
     right: -5vw;
-    height: 260px;
-    background: #fff;
+    height: 32vh;
+    background: #242424;
     border-radius: 0 80% 0 0;
     transform: rotate(-4deg);
   }
-
   &:before {
-    background: rgba(73, 73, 73, 0.5);
+    background: #bf953f;
     border-radius: 0 80% 0 0;
-    transform: rotate(-2deg) translateY(-15%);
+    transform: rotate(-2deg) translateY(-8%);
+  }
+
+  &:after {
+    box-shadow: 3px 10px 15px rgba(0, 0, 0, 0.15) inset;
+  }
+
+  .wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .page.dark & {
+    &:before {
+      background: rgba(73, 73, 73, 0.5);
+      transform: rotate(-2deg) translateY(-15%);
+    }
+    &:after {
+      background: #fff;
+    }
   }
 }
 

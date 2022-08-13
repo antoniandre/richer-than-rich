@@ -16,11 +16,14 @@ defineEmits(['update:dark-mode'])
 
 <style lang="scss" scoped>
 .top-bar {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 48px;
+  background: #2424244d;
+  backdrop-filter: blur(6px);
+  z-index: 1;
 }
 
 .theme-switch {
