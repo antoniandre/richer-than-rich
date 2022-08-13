@@ -47,52 +47,6 @@ a {
   transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
 }
 
-// Top bar.
-// --------------------------------------------------------
-.theme-switch {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2px;
-  border-radius: 99rem;
-  line-height: 0;
-  background-color: rgba(#bf953f, 0.5);
-  box-shadow: 1px 1px 3px #973 inset;
-  cursor: pointer;
-
-  .button {
-    display: inline-flex;
-    font-size: 18px;
-    line-height: 1;
-    margin: 2px;
-    border: none;
-    background: none;
-    z-index: 1;
-    color: rgba(#fff, 1);
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-
-    &--active {color: #bf953f;}
-  }
-
-  .slider {
-    position: absolute;
-    border-radius: 99rem;
-    left: 2px;
-    height: 22px;
-    width: 22px;
-    background-color: rgba(#fff, 1);
-    box-shadow: 0 0 3px rgba(#000, 0.15);
-    transition: 0.3s ease-in-out;
-  }
-
-  .i-sun.button--active ~ .slider {transform: translateX(100%);}
-}
-
 // Header.
 // --------------------------------------------------------
 header {
