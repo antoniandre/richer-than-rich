@@ -14,7 +14,7 @@ defineEmits(['update:dark-mode'])
     .slider
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .top-bar {
   position: absolute;
   top: 0;
@@ -65,5 +65,13 @@ defineEmits(['update:dark-mode'])
   }
 
   .i-sun.button--active ~ .slider {transform: translateX(100%);}
+
+  .page.dark & {
+    box-shadow: 1px 1px 3px #403216 inset;
+
+    .button {color: rgba(#000, 0.5);}
+    .button--active {color: hsl(40, 30%, 53%)}
+    .slider {background-color: #242424;}
+  }
 }
 </style>
