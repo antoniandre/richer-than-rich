@@ -24,12 +24,12 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-::selection {background: #e5c385;}
+::selection {background: $gold-color-light;}
 
 .page {
   color: #213547;
-  background-color: #fff;
-  transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
+  background-color: $page-bg-color-light;
+  transition: color $switch-mode-transition, background-color $switch-mode-transition;
 }
 
 .container {
@@ -42,8 +42,9 @@ body {
 // Main.
 // --------------------------------------------------------
 main {
-  background-color: #242424;
+  background-color: $page-bg-color-dark;
   color: rgba(#fff, 0.8);
+  transition: $switch-mode-transition;
 }
 
 ul.checklist {
@@ -68,17 +69,17 @@ ul.checklist {
   }
 }
 
-// Media queries.
+// Dark theme.
 // --------------------------------------------------------
 // @media (prefers-color-scheme: dark)
 .page.dark {
   color: rgba(#fff, 0.87);
-  background-color: #242424;
+  background-color: $page-bg-color-dark;
 
-  ::selection {background-color: #82672b;}
+  ::selection {background-color: $gold-color-dark;}
 
   main {
-    background-color: #fff;
+    background-color: $page-bg-color-light;
     color: rgba(#000, 0.6);
   }
 }

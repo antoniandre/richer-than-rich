@@ -21,9 +21,10 @@ defineEmits(['update:dark-mode'])
   left: 0;
   right: 0;
   height: 48px;
-  background: #2424244d;
+  background: rgba($page-bg-color-light, 0.3);
   backdrop-filter: blur(6px);
   z-index: 1;
+  transition: $switch-mode-transition;
 }
 
 .theme-switch {
@@ -68,13 +69,22 @@ defineEmits(['update:dark-mode'])
   }
 
   .i-sun.button--active ~ .slider {transform: translateX(100%);}
+}
 
-  .page.dark & {
+// Dark theme.
+// --------------------------------------------------------
+.page.dark {
+  .top-bar {
+    background: rgba($page-bg-color-dark, 0.3);
+    box-shadow: 1px 1px 3px #403216 inset;
+  }
+
+  .theme-switch {
     box-shadow: 1px 1px 3px #403216 inset;
 
     .button {color: rgba(#000, 0.5);}
     .button--active {color: hsl(40, 30%, 53%)}
-    .slider {background-color: #242424;}
+    .slider {background-color: $page-bg-color-dark;}
   }
 }
 </style>

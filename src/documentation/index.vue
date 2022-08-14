@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import Editor from '@/richer-than-you/editor.vue'
 import TopBar from './components/top-bar.vue'
 import Hero from './components/hero.vue'
+import './scss/index.scss'
 
 let darkMode = ref(true)
 

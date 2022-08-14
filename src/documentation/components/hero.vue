@@ -13,7 +13,7 @@ const cl = (...args) => console.log(...args)
 
 <template lang="pug">
 header
-  .container
+  .header__content.container
     h1
       | Richer than you
       sup.dollar $
@@ -37,11 +37,11 @@ header
 
 <style lang="scss" scoped>
 header {
-  height: 122vh;
   display: flex;
   place-items: center;
   position: relative;
   overflow: hidden;
+  padding-bottom: 250px;
 
   &:before, &:after {
     content: "";
@@ -50,18 +50,25 @@ header {
     left: -5vw;
     right: -5vw;
     height: 32vh;
-    background: #242424;
     border-radius: 0 80% 0 0;
     transform: rotate(-4deg);
-  }
-  &:before {
-    background: #bf953f;
-    border-radius: 0 80% 0 0;
-    transform: rotate(-2deg) translateY(-8%);
+    transition: $switch-mode-transition;
   }
 
-  &:after {
-    box-shadow: 3px 10px 15px rgba(0, 0, 0, 0.15) inset;
+  &:before {
+    background: #bf953f linear-gradient(45deg, #bf953f, #fee49b);
+    border-radius: 0 71% 0 0;
+    transform: rotate(-2deg) translateY(-1%);
+  }
+
+  &:after {background: $page-bg-color-dark;}
+
+  .header__content {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .wrap {
@@ -70,16 +77,6 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
-  }
-
-  .page.dark & {
-    &:before {
-      background: rgba(73, 73, 73, 0.5);
-      transform: rotate(-2deg) translateY(-15%);
-    }
-    &:after {
-      background: #fff;
-    }
   }
 }
 
@@ -128,8 +125,10 @@ h1 {
   position: relative;
   height: 260px;
   z-index: 1;
-  background-color: rgba(#fff, 0.85);
+  background-color: rgba($page-bg-color-light, 0.85);
   box-shadow: 2px 2px 6px rgba(#000, 0.05);
+
+  &, .richer__menu {transition: $switch-mode-transition;}
 
   .button:focus, .button--active {
     border-color: #bf953f;
@@ -139,14 +138,18 @@ h1 {
 
     &:after {display: none;}
   }
+}
 
-  .page.dark & {
+// Dark theme.
+// --------------------------------------------------------
+.page.dark {
+  header:after {background: $page-bg-color-light;}
+
+  .richer.hero {
     background-color: rgba(rgb(34, 34, 34), 0.8);
     box-shadow: 2px 2px 6px rgba(#000, 0.2);
 
-    .button:focus, .button--active {
-      border-color: #967738;
-    }
+    .button:focus, .button--active {border-color: #967738;}
 
     .button--active {color: #967738;}
   }
