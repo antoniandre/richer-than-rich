@@ -36,15 +36,40 @@ body {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+}
+
+.flex {
+  display: flex;
+
+  &.align-center {align-items: center;}
+  &.justify-center {justify-content: center;}
+
+  .grow {flex-grow: 1;}
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
 }
 
 // Main.
 // --------------------------------------------------------
 main {
-  background-color: $page-bg-color-dark;
+  background: $page-bg-color-dark linear-gradient(175deg, $page-bg-color-dark 50%, rgba($page-bg-color-light, 7%));
   color: rgba(#fff, 0.8);
   transition: $switch-mode-transition;
+  height: 100vh;
+
+  .container > h2 {
+    color: rgba(#fff, 0.8);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .section {
+    min-height: 60vh;
+  }
 }
 
 ul.checklist {
@@ -79,7 +104,9 @@ ul.checklist {
   ::selection {background-color: $gold-color-dark;}
 
   main {
-    background-color: $page-bg-color-light;
+    background: $page-bg-color-light linear-gradient(175deg, $page-bg-color-light 10%, rgba(229, 195, 133, 0.7));
     color: rgba(#000, 0.6);
+
+    h2 {color: #000;}
   }
 }

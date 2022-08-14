@@ -19,15 +19,26 @@ onMounted(() => {
   hero(:dark-mode="darkMode")
 
   main
-    .container
-      ul.checklist
-        li Designed for Vue 3
-        li Designed for light and dark themes
-        li Fully accessible
-        li Lightweight
-        li Modern technics using recent browsers powers. No legacy-IE code
-        li Modular
-        li Clean HTML output
-        li Plug and play, no dependency
-        li Responsive
+    section
+      .container
+        h2 Why it's cool.
+        ul.checklist
+          li Designed for Vue 3
+          li Designed for light and dark themes
+          li Fully accessible
+          li Lightweight
+          li Modern technics using recent browsers powers. No legacy-IE code
+          li Modular
+          li Clean HTML output
+          li Plug and play, no dependency
+          li Responsive
+          li Customizable
+    section
+      .container.grid-2
+        .grow
+          h3 Emit events
+          editor
+        .grow
+          h3 Use slots
+          editor
 </template>
