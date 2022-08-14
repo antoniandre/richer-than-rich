@@ -4,7 +4,9 @@ import { onMounted, ref, toRaw } from 'vue'
 const props = defineProps({
   modelValue: { type: String, default: '' },
   placeholder: { type: String, default: '' },
-  darkMode: { type: [Boolean, String] } // True, false, or 'auto'.
+  buttons: { type: Array, default: () => [] },
+  darkMode: { type: [Boolean, String] }, // True, false, or 'auto'.
+  contentProps: { type: Object, default: () => ({}) }
 })
 
 const emit = defineEmits([
@@ -23,19 +25,18 @@ let inputField = ref(null)
 // Default tag: span.
 // Default icon: i-[button-name].
 // Default icon size: 100%.
-// Add a `|` before and/or after the button name to create a separator.
-const buttons = {
+const availableButtons = {
   'font-size': { label: 'Text size' },
   'font-family': { label: 'Font' },
   'text-color': { label: 'Text color' },
   'background-color': { label: 'Background color' },
-  '| bold': { code: 'b', tag: 'strong', label: 'Bold' },
+  bold: { code: 'b', tag: 'strong', label: 'Bold' },
   italic: { code: 'i', tag: 'em', label: 'Italic' },
   underline: { code: 'u', label: 'Underline' },
   strikethrough: { label: 'Strikethrough', size: 130 },
-  '| list-ul': { label: 'Bulleted list' },
+  'list-ul': { label: 'Bulleted list' },
   'list-ol': { label: 'Numbered list' },
-  '| align-left': { label: 'Align left' },
+  'align-left': { label: 'Align left' },
   'align-center': { label: 'Align center' },
   'align-right': { label: 'Align right' },
   'align-justify': { label: 'Align justify' },
@@ -51,6 +52,21 @@ const buttons = {
   redo: { label: 'Redo' },
   'clear-format': { code: 'x', label: 'Clear format' },
 }
+const defaultButtons = [
+  'bold',
+  'italic',
+  'underline',
+  'strikethrough',
+  '|', // Add a '|' in the array to create a separator.
+  'list-ul',
+  'list-ol',
+  '|',
+  'align-left',
+  'align-center',
+  'align-right',
+  'align-justify'
+]
+
 const menuButtons = ref([])
 const placeholder = ref(props.placeholder)
 const content = ref({
@@ -58,14 +74,19 @@ const content = ref({
   processed: props.modelValue || ''
 })
 
-// Initialize the buttons.
-menuButtons.value.push(...Object.entries(buttons).map(([name, button]) => ({
-  ...button,
-  name: name.replace(/\s?\|\s?/g, ''),
-  separatorStart: name[0] === '|',
-  separatorEnd: name[name.length - 1] === '|',
-  active: false
-})))
+const initializeButtons = (() => {
+  let requestedButtons = props.buttons.length ? props.buttons : defaultButtons
+
+  requestedButtons = requestedButtons.map(button => {
+    if (typeof button === 'string') button = { name: button }
+    return { ...availableButtons[button.name], name: button.name }
+  })
+
+  menuButtons.value.push(...requestedButtons.map(button => ({
+    ...button,
+    active: false
+  })))
+})()
 
 // On button click, perform an action on the content.
 const action = (e, button) => {
@@ -186,15 +207,15 @@ onMounted(() => {
 .richer(:class="{ 'richer--dark': darkMode }")
   .richer__menu
     template(v-for="(button, i) in menuButtons" :key="i")
-      span.separator(v-if="button.separatorStart")
+      span.separator(v-if="button.name === '|'")
       button.button(
+        v-else
         @click="action($event, button)"
         type="button"
         :title="button.label"
         :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
         :style="{ fontSize: button.size ? `${button.size}%` : null }")
         span {{ button.label }}
-      span.separator(v-if="button.separatorEnd")
   .content-wrap
     .richer__content(
       ref="inputField"
@@ -205,6 +226,7 @@ onMounted(() => {
       @focus="onFocus"
       @blur="onBlur"
       @paste="onPaste"
+      v-bind="props.contentProps"
       v-html="content.initial")
     .richer__placeholder(v-if="placeholder && !content.processed") {{ props.placeholder }}
 </template>

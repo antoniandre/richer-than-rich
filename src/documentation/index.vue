@@ -6,6 +6,13 @@ import Hero from './components/hero.vue'
 import './scss/index.scss'
 
 let darkMode = ref(true)
+const buttons = [
+  { name: 'font-size', label: 'Text size' },
+  { name: 'font-family', label: 'Font' },
+  '|',
+  { name: 'text-color', label: 'Text color' }
+]
+const buttons2 = ['bold', 'italic', 'underline', 'subscript', 'superscript']
 
 onMounted(() => {
   darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -37,8 +44,8 @@ onMounted(() => {
       .container.grid-2
         .grow
           h3 Emit events
-          editor
+          editor(:buttons="buttons")
         .grow
           h3 Use slots
-          editor
+          editor(:buttons="buttons2")
 </template>
