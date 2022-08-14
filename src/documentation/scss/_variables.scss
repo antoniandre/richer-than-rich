@@ -7,3 +7,15 @@ $page-bg-color-dark: #242424;
 $gold-color-dark: #82672b;
 
 $switch-mode-transition: 0.5s ease-in-out;
+
+@mixin backdrop-blur($blur: 6px, $fallback-color: rgba($page-bg-color-light, 0.9), $blur-color: rgba($page-bg-color-light, 0.15)) {
+  background-color: $fallback-color; // Slightly transparent fallback by default.
+
+  // If backdrop support: very transparent and blurred.
+  @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    & {
+      background-color: $blur-color;
+      backdrop-filter: blur($blur);
+    }
+  }
+}

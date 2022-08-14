@@ -23,8 +23,10 @@ defineEmits(['update:dark-mode'])
   height: 48px;
   background: rgba($page-bg-color-light, 0.3);
   backdrop-filter: blur(6px);
-  z-index: 1;
+  z-index: 10;
   transition: $switch-mode-transition;
+  @include backdrop-blur(6px, rgba($page-bg-color-light, 0.8), rgba(#fff, 0));
+  box-shadow: 0 0 1px rgba($page-bg-color-light, 0.2);
 }
 
 .theme-switch {
@@ -75,8 +77,8 @@ defineEmits(['update:dark-mode'])
 // --------------------------------------------------------
 .page.dark {
   .top-bar {
-    background: rgba($page-bg-color-dark, 0.3);
-    box-shadow: 1px 1px 3px #403216 inset;
+    @include backdrop-blur(6px, rgba($page-bg-color-light, 0.8), rgba(#fff, 0));
+    box-shadow: 0 0 12px rgba($page-bg-color-dark, 0.15);
   }
 
   .theme-switch {
