@@ -4,6 +4,7 @@ specifiers:
   '@vitejs/plugin-vue': ^3.0.0
   path: ^0.12.7
   sass: ^1.54.3
+  simple-syntax-highlighter: ^2.2.3
   vite: ^3.0.0
   vite-plugin-pug: ^0.3.1
   vue: ^3.2.37
@@ -15,6 +16,7 @@ devDependencies:
   '@vitejs/plugin-vue': 3.0.1_vite@3.0.4+vue@3.2.37
   path: 0.12.7
   sass: 1.54.3
+  simple-syntax-highlighter: 2.2.3_vue@3.2.37
   vite: 3.0.4_sass@1.54.3
   vite-plugin-pug: 0.3.1_vite@3.0.4
 
@@ -733,6 +735,14 @@ packages:
       chokidar: 3.5.3
       immutable: 4.1.0
       source-map-js: 1.0.2
+    dev: true
+
+  /simple-syntax-highlighter/2.2.3_vue@3.2.37:
+    resolution: {integrity: sha512-4rUp96B3ngtAs9fdTdTcLlyRKUDcH9sTJcoXSnu3uBgMD4TH2+a5OqJULLORyGfp2lgq+r+xCrhnBrjEAEb5MQ==}
+    peerDependencies:
+      vue: ^2.6.14 || ^3.2.0
+    dependencies:
+      vue: 3.2.37
     dev: true
 
   /source-map-js/1.0.2:
