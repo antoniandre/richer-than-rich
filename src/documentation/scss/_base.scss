@@ -24,12 +24,28 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-::selection {background: $gold-color-light;}
+::selection {background: $light-gold-color;}
 
 .page {
-  color: #213547;
-  background-color: $page-bg-color-light;
+  // Light theme colors.
+  --theme-color-main-bg: #{$light-main-bg-color};
+  --theme-color-main-bg-rgb: #{$light-main-bg-color-rgb}; // Allowing an alpha channel.
+  --theme-color-main-fg: #{$light-main-fg-color};
+  --theme-color-invert-bg: #{$dark-main-bg-color};
+  --theme-color-invert-fg: #{$dark-main-fg-color};
+
+  background-color: var(--theme-color-main-bg);
+  color: var(--theme-color-main-fg);
   transition: color $switch-mode-transition, background-color $switch-mode-transition;
+
+  // Dark theme colors override.
+  &.dark {
+    --theme-color-main-bg: #{$dark-main-bg-color};
+    --theme-color-main-bg-rgb: #{$dark-main-bg-color-rgb}; // Allowing an alpha channel.
+    --theme-color-main-fg: #{$dark-main-fg-color};
+    --theme-color-invert-bg: #{$light-main-bg-color};
+    --theme-color-invert-fg: #{$light-main-fg-color};
+  }
 }
 
 .container {
@@ -47,29 +63,65 @@ body {
   .grow {flex-grow: 1;}
 }
 
-.grid-2 {
+.grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+
+  &.grid--2 {grid-template-columns: repeat(2, 1fr);}
+  &.grid--3 {grid-template-columns: repeat(3, 1fr);}
 }
 
 // Main.
 // --------------------------------------------------------
 main {
-  background: $page-bg-color-dark linear-gradient(175deg, $page-bg-color-dark 50%, rgba($page-bg-color-light, 7%));
-  color: rgba(#fff, 0.8);
+  // background-color: var(--theme-color-invert-bg);
+  // color: rgba(var(--theme-color-invert-bg), 0.8);
+  // transition: $switch-mode-transition;
+
+  // .container > h2 {
+  //   color: rgba(#fff, 0.8);
+  //   font-size: 2rem;
+  //   margin-bottom: 2rem;
+  // }
+}
+
+.section {
+  position: relative;
+  min-height: 60vh;
   transition: $switch-mode-transition;
-  height: 100vh;
 
-  .container > h2 {
-    color: rgba(#fff, 0.8);
-    font-size: 2rem;
-    margin-bottom: 2rem;
+  &--why {
+    margin-top: -2rem;
+    background:
+      var(--theme-color-invert-bg)
+      linear-gradient(175deg, var(--theme-color-invert-bg) 50%, rgba(var(--theme-color-main-bg-rgb), 7%));
+    color: var(--theme-color-invert-fg);
+
+    .checklist {
+      column-count: 2;
+      column-gap: 2rem;
+      justify-content: center;
+    }
   }
 
-  .section {
-    min-height: 60vh;
+  &--install {
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: 90%;
+      left: -5vw;
+      right: -5vw;
+      height: 100px;
+      border-radius: 0 80% 0 0;
+      transform: rotate(-4deg);
+      transition: inherit;
+      background-color: inherit;
+    }
   }
+
+  &--easy {}
+
+  &--customizable {}
 }
 
 ul.checklist {
@@ -94,19 +146,63 @@ ul.checklist {
   }
 }
 
+.stack-box {
+  position: relative;
+
+  > * + * {
+    position: absolute;
+    top: 4rem;
+    left: 4rem;
+  }
+  > * + * + * {
+    top: 8rem;
+    left: 8rem;
+  }
+}
+
+pre {
+  padding: 12px;
+  background: $dark-main-bg-color;
+  border-radius: 8px;
+  display: flex;
+}
+
 // Dark theme.
 // --------------------------------------------------------
 // @media (prefers-color-scheme: dark)
-.page.dark {
+/* .page.dark {
   color: rgba(#fff, 0.87);
-  background-color: $page-bg-color-dark;
+  background-color: $dark-main-bg-color;
 
-  ::selection {background-color: $gold-color-dark;}
+  ::selection {background-color: $dark-gold-color;}
 
   main {
-    background: $page-bg-color-light linear-gradient(175deg, $page-bg-color-light 10%, rgba(229, 195, 133, 0.7));
+    background-color: $light-main-bg-color;
     color: rgba(#000, 0.6);
 
-    h2 {color: #000;}
+    .container > h2 {color: #000;}
   }
+
+  .section {
+    background-color: $dark-main-bg-color;
+    color: $light-main-bg-color;
+
+    &--why {
+      background: $light-main-bg-color linear-gradient(175deg, $light-main-bg-color 10%, rgba(229, 195, 133, 0.7));
+    }
+    &--install {
+      &, &:before {background: $dark-main-bg-color;}
+    }
+    &--easy {
+      background-color: $dark-main-bg-color;
+    }
+    }
 }
+ */
+ .page.dark {
+  .section--why {
+    background:
+      var(--theme-color-invert-bg)
+      linear-gradient(175deg, var(--theme-color-invert-bg) 10%, rgba($light-gold-color, 0.7));
+  }
+ }

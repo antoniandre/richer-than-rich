@@ -61,7 +61,7 @@ header {
     transform: rotate(-2deg) translateY(-1%);
   }
 
-  &:after {background: $page-bg-color-dark;}
+  &:after {background: $dark-main-bg-color;}
 
   .header__content {
     height: 100vh;
@@ -125,7 +125,7 @@ h1 {
   position: relative;
   height: 260px;
   z-index: 1;
-  background-color: rgba($page-bg-color-light, 0.85);
+  background-color: rgba($light-main-bg-color, 0.85);
   box-shadow: 2px 2px 6px rgba(#000, 0.05);
 
   &, .richer__menu {transition: $switch-mode-transition;}
@@ -143,7 +143,7 @@ h1 {
 // Dark theme.
 // --------------------------------------------------------
 .page.dark {
-  header:after {background: $page-bg-color-light;}
+  header:after {background: $light-main-bg-color;}
 
   .richer.hero {
     background-color: rgba(rgb(34, 34, 34), 0.8);

@@ -1,14 +1,18 @@
 // Light theme.
-$page-bg-color-light: #fff;
-$gold-color-light: #e5c385;
+$light-main-bg-color: #fff;
+$light-main-bg-color-rgb: 255, 255, 255; // Same as above but for applying alpha channel.
+$light-main-fg-color: #333;
+$light-gold-color: #e5c385;
 
 // Dark theme.
-$page-bg-color-dark: #242424;
-$gold-color-dark: #82672b;
+$dark-main-bg-color: #242424;
+$dark-main-bg-color-rgb: 36, 36, 36; // Same as above but for applying alpha channel.
+$dark-main-fg-color: #ccc;
+$dark-gold-color: #82672b;
 
 $switch-mode-transition: 0.5s ease-in-out;
 
-@mixin backdrop-blur($blur: 6px, $fallback-color: rgba($page-bg-color-light, 0.9), $blur-color: rgba($page-bg-color-light, 0.15)) {
+@mixin backdrop-blur($blur: 6px, $fallback-color: rgba($light-main-bg-color, 0.9), $blur-color: rgba($light-main-bg-color, 0.15)) {
   background-color: $fallback-color; // Slightly transparent fallback by default.
 
   // If backdrop support: very transparent and blurred.

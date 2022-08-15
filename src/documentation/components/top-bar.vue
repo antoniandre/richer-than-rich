@@ -21,12 +21,12 @@ defineEmits(['update:dark-mode'])
   left: 0;
   right: 0;
   height: 48px;
-  background: rgba($page-bg-color-light, 0.3);
+  background: rgba($light-main-bg-color, 0.3);
   backdrop-filter: blur(6px);
   z-index: 10;
   transition: $switch-mode-transition;
-  @include backdrop-blur(6px, rgba($page-bg-color-light, 0.8), rgba(#fff, 0));
-  box-shadow: 0 0 1px rgba($page-bg-color-light, 0.2);
+  @include backdrop-blur(6px, rgba($light-main-bg-color, 0.8), rgba(#fff, 0));
+  box-shadow: 0 0 1px rgba($light-main-bg-color, 0.2);
 }
 
 .theme-switch {
@@ -77,8 +77,8 @@ defineEmits(['update:dark-mode'])
 // --------------------------------------------------------
 .page.dark {
   .top-bar {
-    @include backdrop-blur(6px, rgba($page-bg-color-light, 0.8), rgba(#fff, 0));
-    box-shadow: 0 0 12px rgba($page-bg-color-dark, 0.15);
+    @include backdrop-blur(6px, rgba($light-main-bg-color, 0.8), rgba(#fff, 0));
+    box-shadow: 0 0 12px rgba($dark-main-bg-color, 0.15);
   }
 
   .theme-switch {
@@ -86,7 +86,7 @@ defineEmits(['update:dark-mode'])
 
     .button {color: rgba(#000, 0.5);}
     .button--active {color: hsl(40, 30%, 53%)}
-    .slider {background-color: $page-bg-color-dark;}
+    .slider {background-color: $dark-main-bg-color;}
   }
 }
 </style>
