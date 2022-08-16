@@ -1,15 +1,24 @@
 // Light theme.
+// --------------------------------------------------------
 $light-main-bg-color: #fff;
-$light-main-bg-color-rgb: 255, 255, 255; // Same as above but for applying alpha channel.
 $light-main-fg-color: #333;
+$light-invert-bg-color: #242424;
 $light-gold-color: #e5c385;
+// Same as above but for applying alpha channel.
+$light-main-bg-color-rgb: 255, 255, 255;
+$light-invert-bg-color-rgb: 36, 36, 36;
 
 // Dark theme.
+// --------------------------------------------------------
 $dark-main-bg-color: #242424;
-$dark-main-bg-color-rgb: 36, 36, 36; // Same as above but for applying alpha channel.
 $dark-main-fg-color: #ccc;
+$dark-invert-bg-color: #fff;
 $dark-gold-color: #82672b;
+// Same as above but for applying alpha channel.
+$dark-main-bg-color-rgb: 36, 36, 36;
+$dark-invert-bg-color-rgb: 255, 255, 255;
 
+// --------------------------------------------------------
 $switch-mode-transition: 0.5s ease-in-out;
 
 @mixin backdrop-blur($blur: 6px, $fallback-color: rgba($light-main-bg-color, 0.9), $blur-color: rgba($light-main-bg-color, 0.15)) {

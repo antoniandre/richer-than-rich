@@ -1,6 +1,11 @@
-// Global.
+// Global structure.
 // --------------------------------------------------------
-* {margin: 0;padding: 0;}
+* {
+  margin: 0;
+  padding: 0;
+
+  &, &:before, &:after {box-sizing: border-box;}
+}
 
 html, body {
   min-height: 100%;
@@ -14,8 +19,8 @@ body {
   font-weight: 400;
   color-scheme: light dark;
   // background:
-  //   radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9F7923 30%, #8A6E2F 40%, transparent 80%),
-  //   radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1fba 62.5%, #5d4a1f 100%);
+  //   radial-gradient(ellipse farthest-corner at right bottom, #fedb37 0%, #fdb931 8%, #9f7923 30%, #8a6e2f 40%, transparent 80%),
+  //   radial-gradient(ellipse farthest-corner at left top, #ffffff 0%, #ffffac 8%, #d1b464 25%, #5d4a1fba 62.5%, #5d4a1f 100%);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,15 +29,17 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-::selection {background: $light-gold-color;}
+::selection {background: var(--theme-color-gold);}
 
 .page {
   // Light theme colors.
   --theme-color-main-bg: #{$light-main-bg-color};
   --theme-color-main-bg-rgb: #{$light-main-bg-color-rgb}; // Allowing an alpha channel.
   --theme-color-main-fg: #{$light-main-fg-color};
-  --theme-color-invert-bg: #{$dark-main-bg-color};
+  --theme-color-invert-bg: #{$light-invert-bg-color};
+  --theme-color-invert-bg-rgb: #{$light-invert-bg-color-rgb};
   --theme-color-invert-fg: #{$dark-main-fg-color};
+  --theme-color-gold: #{$light-gold-color};
 
   background-color: var(--theme-color-main-bg);
   color: var(--theme-color-main-fg);
@@ -43,17 +50,21 @@ body {
     --theme-color-main-bg: #{$dark-main-bg-color};
     --theme-color-main-bg-rgb: #{$dark-main-bg-color-rgb}; // Allowing an alpha channel.
     --theme-color-main-fg: #{$dark-main-fg-color};
-    --theme-color-invert-bg: #{$light-main-bg-color};
+    --theme-color-invert-bg: #{$dark-invert-bg-color};
+    --theme-color-invert-bg-rgb: #{$dark-invert-bg-color-rgb};
     --theme-color-invert-fg: #{$light-main-fg-color};
+    --theme-color-gold: #{$dark-gold-color};
   }
 }
 
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem;
 }
 
+// Helper classes.
+// --------------------------------------------------------
 .flex {
   display: flex;
 
@@ -71,57 +82,142 @@ body {
   &.grid--3 {grid-template-columns: repeat(3, 1fr);}
 }
 
+.mt0 {margin-top: 0;}
+.mt05 {margin-top: 0.5em;}
+.mt1 {margin-top: 1em;}
+.mt2 {margin-top: 2em;}
+.mt3 {margin-top: 3em;}
+.mt4 {margin-top: 4em;}
+.mb0 {margin-bottom: 0;}
+.mb05 {margin-bottom: 0.5em;}
+.mb1 {margin-bottom: 1em;}
+.mb2 {margin-bottom: 2em;}
+.mb3 {margin-bottom: 3em;}
+.mb4 {margin-bottom: 4em;}
+
 // Main.
 // --------------------------------------------------------
 main {
-  // background-color: var(--theme-color-invert-bg);
-  // color: rgba(var(--theme-color-invert-bg), 0.8);
-  // transition: $switch-mode-transition;
-
   // .container > h2 {
   //   color: rgba(#fff, 0.8);
-  //   font-size: 2rem;
-  //   margin-bottom: 2rem;
   // }
 }
 
 .section {
   position: relative;
-  min-height: 60vh;
+  min-height: 450px;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
   transition: $switch-mode-transition;
 
-  &--why {
-    margin-top: -2rem;
-    background:
-      var(--theme-color-invert-bg)
-      linear-gradient(175deg, var(--theme-color-invert-bg) 50%, rgba(var(--theme-color-main-bg-rgb), 7%));
-    color: var(--theme-color-invert-fg);
+  .container {position: relative;}
+  .richer {box-shadow: 1px 1px 4px rgba(#000, 0.07);}
+}
 
-    .checklist {
-      column-count: 2;
-      column-gap: 2rem;
-      justify-content: center;
-    }
+.section--why {
+  padding-top: 1rem;
+  background:
+    var(--theme-color-invert-bg)
+    linear-gradient(175deg, var(--theme-color-invert-bg) 50%, rgba(var(--theme-color-main-bg-rgb), 7%));
+  color: var(--theme-color-invert-fg);
+
+  ::selection {background: $dark-gold-color;}
+
+  .container {max-width: 700px;}
+
+  .checklist {
+    column-count: 2;
+    column-gap: 2rem;
+    justify-content: center;
   }
+}
 
-  &--install {
-    &:before {
+.section--install {
+  padding-top: 4rem;
+
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: -5vw;
+    right: -5vw;
+    height: 150px;
+    border-radius: 0 80% 0 0;
+    transform: rotate(-4deg) translateY(50%);
+    background-color: var(--theme-color-main-bg);
+    transition: inherit;
+  }
+}
+
+.section--easy {
+  background-color: rgba(var(--theme-color-invert-bg-rgb), 0.05);
+}
+
+.section--customizable {}
+
+.section--get-it {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(170deg, transparent 20%, #fde9ae);
+
+  .cta {
+    position: relative;
+    background: linear-gradient(110deg, #ebb447, #fcf6ba, #cc9a2e, #fbf5b7, #bf953f);
+    background-size: 200%;
+    border: none;
+    border-radius: 99em;
+    font-size: 1.2rem;
+    font-family: 'Arial Black', Arial, Helvetica, sans-serif;
+    color: #000;
+    cursor: pointer;
+    box-shadow: 3px 3px 12px rgba(#000, 0.25);
+
+    span.wrap {
+      display: block;
+      position: relative;
+      padding: 1rem 1.5rem;
+      border-radius: inherit;
+      overflow: hidden;
+    }
+
+    span.wrap:before {
       content: '';
       position: absolute;
-      bottom: 90%;
-      left: -5vw;
-      right: -5vw;
-      height: 100px;
-      border-radius: 0 80% 0 0;
-      transform: rotate(-4deg);
-      transition: inherit;
-      background-color: inherit;
+      top: -120%;
+      right: -200%;
+      width: 50%;
+      height: 300%;
+      transform: rotate(30deg);
+      background: linear-gradient( to right, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.13), rgba(255, 246, 198, 0.65), rgba(255, 255, 255, 0));
+    }
+
+    &:after {
+      content: 'Copied!';
+      position: absolute;
+      top: 100%;
+      margin-top: 0.5rem;
+      font: italic 1rem Arial, Helvetica, sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%);
+      transition: 0.3s ease-in-out;
+      color: #bf953f;
+    }
+
+    code {
+      margin-left: 0.5rem;
+      background-color: #{$light-gold-color}9c;
+      padding: 0.5rem;
+    }
+
+    span.wrap:hover:before {animation: shine 2s infinite;}
+
+    &.copied:after {
+      opacity: 1;
+      transform: translate(-50%, 0.3rem);
     }
   }
-
-  &--easy {}
-
-  &--customizable {}
 }
 
 ul.checklist {
@@ -149,6 +245,8 @@ ul.checklist {
 .stack-box {
   position: relative;
 
+  > * {width: 70%;}
+
   > * + * {
     position: absolute;
     top: 4rem;
@@ -160,49 +258,36 @@ ul.checklist {
   }
 }
 
-pre {
-  padding: 12px;
-  background: $dark-main-bg-color;
-  border-radius: 8px;
-  display: flex;
+div.ssh-pre {
+  background: rgba(var(--theme-color-invert-bg-rgb), 0.08);
+}
+
+@keyframes shine {
+  to {right: 210%;}
 }
 
 // Dark theme.
 // --------------------------------------------------------
-// @media (prefers-color-scheme: dark)
-/* .page.dark {
-  color: rgba(#fff, 0.87);
-  background-color: $dark-main-bg-color;
-
-  ::selection {background-color: $dark-gold-color;}
-
-  main {
-    background-color: $light-main-bg-color;
-    color: rgba(#000, 0.6);
-
-    .container > h2 {color: #000;}
-  }
-
-  .section {
-    background-color: $dark-main-bg-color;
-    color: $light-main-bg-color;
-
-    &--why {
-      background: $light-main-bg-color linear-gradient(175deg, $light-main-bg-color 10%, rgba(229, 195, 133, 0.7));
-    }
-    &--install {
-      &, &:before {background: $dark-main-bg-color;}
-    }
-    &--easy {
-      background-color: $dark-main-bg-color;
-    }
-    }
-}
- */
- .page.dark {
+.page.dark {
   .section--why {
     background:
       var(--theme-color-invert-bg)
       linear-gradient(175deg, var(--theme-color-invert-bg) 10%, rgba($light-gold-color, 0.7));
+
+    ::selection {background: $light-gold-color;}
   }
- }
+
+  .section--get-it {
+    background: linear-gradient(170deg, transparent 20%, #fde9ae29);
+
+    .cta {
+      background: linear-gradient(110deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+      box-shadow: 4px 4px 20px 3px rgba(#000, 0.5);
+
+      code {background-color: #{$dark-gold-color}9c;}
+
+      &.copied:after {color: $light-gold-color;}
+    }
+  }
+}
+
