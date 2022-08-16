@@ -12,6 +12,7 @@ const props = defineProps({
 const emit = defineEmits([
   'focus',
   'blur',
+  'keydown',
   'keyup',
   'input',
   'click',
@@ -25,15 +26,16 @@ let inputField = ref(null)
 // Default tag: span.
 // Default icon: i-[button-name].
 // Default icon size: 100%.
+// Default shortcut: none, except for bold, italic, underline, strikethrough.
 const availableButtons = {
   'font-size': { label: 'Text size' },
   'font-family': { label: 'Font' },
   'text-color': { label: 'Text color' },
   'background-color': { label: 'Background color' },
-  bold: { code: 'b', tag: 'strong', label: 'Bold' },
-  italic: { code: 'i', tag: 'em', label: 'Italic' },
-  underline: { code: 'u', label: 'Underline' },
-  strikethrough: { label: 'Strikethrough', size: 130 },
+  bold: { code: 'b', tag: 'strong', label: 'Bold', shortcut: 'meta+b' },
+  italic: { code: 'i', tag: 'em', label: 'Italic', shortcut: 'meta+i' },
+  underline: { code: 'u', label: 'Underline', shortcut: 'meta+u' },
+  strikethrough: { label: 'Strikethrough', size: 130, shortcut: 'meta+s' },
   'list-ul': { label: 'Bulleted list' },
   'list-ol': { label: 'Numbered list' },
   'align-left': { label: 'Align left' },
@@ -67,6 +69,8 @@ const defaultButtons = [
   'align-justify'
 ]
 
+const shortcuts = {}
+
 const menuButtons = ref([])
 const placeholder = ref(props.placeholder)
 const content = ref({
@@ -82,10 +86,15 @@ const initializeButtons = (() => {
     return { ...availableButtons[button.name], name: button.name }
   })
 
-  menuButtons.value.push(...requestedButtons.map(button => ({
-    ...button,
-    active: false
-  })))
+  menuButtons.value.push(...requestedButtons.map(button => {
+    // Populate the shortcuts map.
+    if (button.shortcut) shortcuts[button.shortcut] = button.name
+
+    return {
+      ...button,
+      active: false
+    }
+  }))
 })()
 
 // On button click, perform an action on the content.
@@ -176,6 +185,24 @@ const onKeyup = e => {
   emit('keyup', { e, html: content.value.processed })
 }
 
+/**
+ * When meta key is pressed, handle keyboard shortcuts and prevent default browser action.
+ */
+const onKeydown = e => {
+  // On metaKey+[key] press, perform an action of the matching shortcut.
+  if (e.metaKey) {
+    console.log(e.key)
+    const matchedAction = shortcuts[`meta+${e.key}`]
+    const matchedButton = menuButtons.value.find(item => item.name === matchedAction)
+    if (matchedAction && matchedButton) action(e, matchedButton)
+
+    // Prevent the browser default selection replacements bold, italic, etc.
+    e.preventDefault()
+  }
+
+  emit('keydown', { e, html: content.value.processed })
+}
+
 const onFocus = e => {
   const sel = window.getSelection()
   emit('focus', { e, html: content.value.processed })
@@ -223,6 +250,7 @@ onMounted(() => {
       @input="process"
       @click="onClick"
       @keyup="onKeyup"
+      @keydown="onKeydown"
       @focus="onFocus"
       @blur="onBlur"
       @paste="onPaste"
