@@ -130,10 +130,8 @@ h1 {
 
   &, .richer__menu {transition: $switch-mode-transition;}
 
-  .button:focus, .button--active {
-    border-color: #bf953f;
-  }
-  .button--active {
+  :deep(.button:focus), :deep(.button--active) {border-color: #bf953f;}
+  :deep(.button--active) {
     color: #bf953f;
 
     &:after {display: none;}
@@ -149,9 +147,9 @@ h1 {
     background-color: rgba(rgb(34, 34, 34), 0.8);
     box-shadow: 2px 2px 6px rgba(#000, 0.2);
 
-    .button:focus, .button--active {border-color: #967738;}
+    :deep(.button:focus), :deep(.button--active) {border-color: #967738;}
 
-    .button--active {color: #967738;}
+    :deep(.button--active) {color: #967738;}
   }
 }
 </style>
