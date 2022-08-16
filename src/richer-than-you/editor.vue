@@ -161,14 +161,62 @@ const wrapSelection = (sel, button) => {
  * and emit the clean markup.
  */
 const unwrapSelection = (sel, button) => {
-  const range = sel.getRangeAt(0)
-  const fragment = range.extractContents()
+  const selectionRange = sel.getRangeAt(0)
+  const selectionStartNode = selectionRange.baseNode || selectionRange.startContainer
+  const selectionStartOffset = selectionRange.baseOffset || selectionRange.startOffset
+  const selectionEndNode = selectionRange.extentNode || selectionRange.endContainer
+  const selectionEndOffset = selectionRange.extentOffset || selectionRange.endOffset
+
+  // Complexity:
+  // - For selection `text [<bold>text</bold>] text`, we can unwrap with the selection range only.
+  // - For selection `<bold>text [text] text</bold>`, we can't unwrap bold from the selection range:
+  //   We need to close bold before the selection and reopen after it.
+  // For that, create 3 fragments: 1 before selection, 1 selection, 1 after selection.
+  const startRange = document.createRange()
+  startRange.selectNodeContents(inputField.value)
+  startRange.setEnd(selectionStartNode, selectionStartOffset)
+  // const startFragment = startRange.extractContents()
+  // startRange.insertNode(startFragment)
+
+  // sel.removeAllRanges()
+  // sel.addRange(startRange)
+
+  const endRange = document.createRange()
+  endRange.selectNodeContents(inputField.value)
+  endRange.setStart(selectionEndNode, selectionEndOffset)
+  // const endFragment = endRange.extractContents()
+  // endRange.insertNode(endFragment)
+
+  // sel.removeAllRanges()
+  // sel.addRange(endRange)
+
+  const startFragment = startRange.extractContents()
+  startRange.insertNode(startFragment)
+
+  const endFragment = endRange.extractContents()
+  endRange.insertNode(endFragment)
+
+  const fragment = selectionRange.extractContents()
   const foundTagInSelection = fragment.querySelectorAll(`${button.tag || 'span'}.${button.name}`)
-
-  if (foundTagInSelection) {
+  if (foundTagInSelection.length) {
+    // Cleanup the selection fragment.
     foundTagInSelection.forEach(node => node.replaceWith(...node.childNodes))
+  }
+  selectionRange.insertNode(fragment)
 
-    range.insertNode(fragment)
+  if (selectionRange.commonAncestorContainer.matches(`${button.tag || 'span'}.${button.name}`)) {
+    // This loses the selection because we unwrap the node in which the selection is. :/
+    // selectionRange.commonAncestorContainer.replaceWith(...selectionRange.commonAncestorContainer.childNodes)
+
+    selectionRange.selectNode(selectionRange.commonAncestorContainer)
+    const fragment2 = selectionRange.extractContents()
+
+    const foundTagInSelection2 = fragment2.querySelectorAll(`${button.tag || 'span'}.${button.name}`)
+    if (foundTagInSelection2.length) {
+      // Cleanup the selection fragment.
+      foundTagInSelection2.forEach(node => node.replaceWith(...node.childNodes))
+    }
+    selectionRange.insertNode(fragment2)
   }
 }
 
@@ -182,7 +230,6 @@ const unwrapSelection = (sel, button) => {
 const process = (e, sel) => {
   console.log('processing content...', { e, sel })
 
-  // Process the HTML here.
   content.value.processed = inputField.value.innerHTML
 
   emit('input', { e, html: content.value.processed })
