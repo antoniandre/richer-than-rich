@@ -32,9 +32,9 @@ const availableButtons = {
   'font-family': { label: 'Font' },
   'text-color': { label: 'Text color' },
   'background-color': { label: 'Background color' },
-  bold: { code: 'b', tag: 'strong', label: 'Bold', shortcut: 'meta+b' },
-  italic: { code: 'i', tag: 'em', label: 'Italic', shortcut: 'meta+i' },
-  underline: { code: 'u', label: 'Underline', shortcut: 'meta+u' },
+  bold: { tag: 'strong', label: 'Bold', shortcut: 'meta+b' },
+  italic: { tag: 'em', label: 'Italic', shortcut: 'meta+i' },
+  underline: { label: 'Underline', shortcut: 'meta+u' },
   strikethrough: { label: 'Strikethrough', size: 130, shortcut: 'meta+s' },
   'list-ul': { label: 'Bulleted list' },
   'list-ol': { label: 'Numbered list' },
@@ -68,6 +68,12 @@ const defaultButtons = [
   'align-right',
   'align-justify'
 ]
+const replacements = {
+  b: { tag: 'strong', class: 'bold' },
+  i: { tag: 'em', class: 'italic' },
+  u: { tag: 'span', class: 'underline' },
+  s: { tag: 'span', class: 'strikethrough' }
+}
 
 const shortcuts = {}
 
@@ -155,8 +161,15 @@ const wrapSelection = (sel, button) => {
  * and emit the clean markup.
  */
 const unwrapSelection = (sel, button) => {
+  const range = sel.getRangeAt(0)
+  const fragment = range.extractContents()
+  const foundTagInSelection = fragment.querySelectorAll(`${button.tag || 'span'}.${button.name}`)
 
-  process(null, sel)
+  if (foundTagInSelection) {
+    foundTagInSelection.forEach(node => node.replaceWith(...node.childNodes))
+
+    range.insertNode(fragment)
+  }
 }
 
 /**
@@ -191,13 +204,13 @@ const onKeyup = e => {
 const onKeydown = e => {
   // On metaKey+[key] press, perform an action of the matching shortcut.
   if (e.metaKey) {
-    console.log(e.key)
     const matchedAction = shortcuts[`meta+${e.key}`]
     const matchedButton = menuButtons.value.find(item => item.name === matchedAction)
-    if (matchedAction && matchedButton) action(e, matchedButton)
-
-    // Prevent the browser default selection replacements bold, italic, etc.
-    e.preventDefault()
+    if (matchedAction && matchedButton) {
+      action(e, matchedButton)
+      // Prevent the browser default selection replacements bold, italic, etc.
+      e.preventDefault()
+    }
   }
 
   emit('keydown', { e, html: content.value.processed })
