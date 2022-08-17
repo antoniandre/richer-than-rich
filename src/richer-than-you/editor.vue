@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, toRaw } from 'vue'
+import * as actions from './actions'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -36,19 +37,19 @@ const availableButtons = {
   italic: { tag: 'em', label: 'Italic', shortcut: 'meta+i' },
   underline: { label: 'Underline', shortcut: 'meta+u' },
   strikethrough: { label: 'Strikethrough', size: 130, shortcut: 'meta+s' },
-  'list-ul': { label: 'Bulleted list' },
-  'list-ol': { label: 'Numbered list' },
-  'align-left': { label: 'Align left' },
-  'align-center': { label: 'Align center' },
-  'align-right': { label: 'Align right' },
-  'align-justify': { label: 'Align justify' },
-  indent: { label: 'indent' },
-  unindent: { label: 'Unindent' },
+  'list-ul': { label: 'Bulleted list', action: 'list' },
+  'list-ol': { label: 'Numbered list', action: 'list' },
+  'align-left': { label: 'Align left', action: 'align' },
+  'align-center': { label: 'Align center', action: 'align' },
+  'align-right': { label: 'Align right', action: 'align' },
+  'align-justify': { label: 'Align justify', action: 'align' },
+  indent: { label: 'indent', action: 'indent' },
+  unindent: { label: 'Unindent', action: 'unindent' },
   subscript: { tag: 'sub', label: 'Subscript' },
   superscript: { tag: 'sup', label: 'Superscript' },
   link: { tag: 'a', label: 'Link' },
   image: { tag: 'img', label: 'Photo' },
-  table: { tag: 'table', label: 'Table' },
+  table: { tag: 'table', label: 'Table', action: 'table' },
   code: { tag: 'code', label: 'Code' },
   undo: { label: 'Undo' },
   redo: { label: 'Redo' },
@@ -116,13 +117,21 @@ const action = (e, button) => {
 
   button.active = !button.active
 
-  // No selection (isCollapsed), just a caret.
-  if (sel.isCollapsed) {}
+  // Perform a specific action if any.
+  if (button.action && typeof actions[button.action] === 'function') {
+    actions[button.action]({ button, inputField, sel, e })
+  }
 
-  // Selection with a range.
+  // If no action found, just wrap the selection with the button tag if given or span otherwise.
   else {
-    if (button.active) wrapSelection(sel, button)
-    else unwrapSelection(sel, button)
+    // No selection (isCollapsed), just a caret.
+    if (sel.isCollapsed) {}
+
+    // Selection with a range.
+    else {
+      if (button.active) wrapSelection(sel, button)
+      else unwrapSelection(sel, button)
+    }
   }
 
   focus() // Re-focus the editor after a button click.
