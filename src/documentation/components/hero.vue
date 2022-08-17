@@ -16,7 +16,7 @@ header
   .header__content.container
     h1
       | Richer than you
-      sup.dollar $
+      img.dollar(src="/dollar.svg")
     p.catchphrase $. Another modern rich text editor. This one's richer than you.
 
     editor.hero(
@@ -89,6 +89,7 @@ h1, .dollar, .catchphrase {
 }
 
 h1 {
+  position: relative;
   font-size: 3.2em;
   line-height: 1.1;
   margin-bottom: 4px;
@@ -97,9 +98,9 @@ h1 {
 
 .dollar {
   position: absolute;
-  font-size: 2rem;
-  font-weight: bold;
-  background-size: 600%;
+  top: -6px;
+  left: 100%;
+  width: 28px;
 }
 
 .catchphrase {
@@ -147,6 +148,10 @@ h1 {
     background-color: rgba(rgb(34, 34, 34), 0.8);
     box-shadow: 2px 2px 6px rgba(#000, 0.2);
 
+    :deep(.separator) {
+      margin: 0 0.5rem;
+      width: 0;
+    }
     :deep(.button:focus), :deep(.button--active) {border-color: #967738;}
 
     :deep(.button--active) {color: #967738;}
