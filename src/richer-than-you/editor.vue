@@ -24,6 +24,7 @@ const emit = defineEmits([
 
 let dark = ref(props.darkMode)
 let inputField = ref(null)
+let processed = ref(false)
 // Default tag: span.
 // Default icon: i-[button-name].
 // Default icon size: 100%.
@@ -73,7 +74,8 @@ const replacements = {
   b: { tag: 'strong', class: 'bold' },
   i: { tag: 'em', class: 'italic' },
   u: { tag: 'span', class: 'underline' },
-  s: { tag: 'span', class: 'strikethrough' }
+  s: { tag: 'span', class: 'strikethrough' },
+  div: { tag: 'p', class: 'paragraph' }
 }
 
 const shortcuts = {}
@@ -231,27 +233,101 @@ const unwrapSelection = (sel, button) => {
 
 /**
  * Cleanup the HTML markup:
- * - replace <b> & <i>
+ * - replace tags following the replacements rules
  * - glue back the text nodes together
  * - delete nested identical tags
+ * - delete empty tags?
  * - merge consecutive identical tags
  */
 const process = (e, sel) => {
-  console.log('processing content...', { e, sel })
+  sel = sel || window.getSelection()
+
+  inputField.value.normalize() // Glue the text nodes back together.
+
+  // Check the content and wrap it in a `p` if the content is only text.
+  const inputChildren = inputField.value.childNodes
+  if (inputChildren.length === 1 && inputChildren[0].nodeType === 3) {
+    const text = inputChildren[0]
+    const p = document.createElement('p')
+    inputField.value.insertBefore(p, text)
+    p.appendChild(text)
+  }
+
+  //  Replace tags.
+  inputField.value.querySelectorAll('i,b,u,s,div').forEach(node => {
+    const { tag, class: Class } = replacements[node.tagName.toLowerCase()]
+    const newTag = document.createElement(tag)
+    newTag.className = Class
+    newTag.innerHTML = node.innerHTML
+    node.replaceWith(newTag)
+  })
+
+  processed.value = true
+  /*
+  Replace tags following the replacements rules
+  ---------------------------------------------
+  1ST WAY: REPLACE IN DOM.
+  -> Need to reapply selection after replacements.
+
+  inputField.value.querySelectorAll('i,b,u,s').forEach(node => {
+    const { tag, class: Class } = replacements[node.tagName.toLowerCase()]
+    const newTag = document.createElement(tag)
+    newTag.className = Class
+    newTag.innerHTML = node.innerHTML
+    node.replaceWith(newTag)
+  })
+
+  if (!sel.isCollapsed) {
+    // Need to reapply selection after transformation.
+    // const { baseNode, baseOffset, extentNode, extentOffset }= sel
+    // sel.setBaseAndExtent(baseNode, baseOffset, extentNode, extentOffset)
+  }
+  */
+
+  /*
+  2nd WAY: REPLACE IN THE RETURNED STRING ONLY.
+  content.value.processed = inputField.value.innerHTML.replace(/<(\/?)(i|b|u|s)[^>]*>/gi, (m0, slash, tag) => {
+    let cssClass
+
+    switch (tag) {
+      case 'b':
+        tag = 'strong'
+        break
+      case 'i':
+        tag = 'em'
+        break
+      case 'u':
+        tag = 'span'
+        cssClass = 'underline'
+        break
+      case 's':
+        tag = 'span'
+        cssClass = 'strikethrough'
+        break
+    }
+
+    return `<${slash}${tag}${slash || !cssClass ? '' : ` class="${cssClass}"`}>`
+  })
+  */
+
+  // console.log('processing content...', content.value.processed)
+
+  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
+  recursiveCleanup(inputField.children)
+  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
 
   content.value.processed = inputField.value.innerHTML
 
   emit('input', { e, html: content.value.processed })
 }
 
-const onClick = e => {
-  const sel = window.getSelection()
-  emit('click', { e, html: content.value.processed })
-}
-
-const onKeyup = e => {
-  const sel = window.getSelection()
-  emit('keyup', { e, html: content.value.processed })
+/**
+ * Recursive cleanup:
+ * - merge tween nodes
+ * - remove nested duplicates
+ * - remove empty nodes? (maybe set a rule for this)
+ **/
+const recursiveCleanup = htmlCollection => {
 }
 
 /**
@@ -272,18 +348,29 @@ const onKeydown = e => {
   emit('keydown', { e, html: content.value.processed })
 }
 
+const onKeyup = e => {
+  // processed.value = false
+  emit('keyup', { e, html: content.value.processed })
+}
+
+const onClick = e => {
+  emit('click', { e, html: content.value.processed })
+}
+
+const onInput = e => {
+  process(e, window.getSelection())
+  emit('input', { e, html: content.value.processed })
+}
+
 const onFocus = e => {
-  const sel = window.getSelection()
   emit('focus', { e, html: content.value.processed })
 }
 
 const onBlur = e => {
-  const sel = window.getSelection()
   emit('blur', { e, html: content.value.processed })
 }
 
 const onPaste = e => {
-  const sel = window.getSelection()
   emit('paste', { e, html: content.value.processed })
 }
 
@@ -316,7 +403,7 @@ onMounted(() => {
     .richer__content(
       ref="inputField"
       contenteditable
-      @input="process"
+      @input="onInput"
       @click="onClick"
       @keyup="onKeyup"
       @keydown="onKeydown"
