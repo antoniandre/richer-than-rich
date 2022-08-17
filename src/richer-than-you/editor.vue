@@ -248,36 +248,17 @@ const process = (e, sel) => {
     if (node.nodeType === 3) utils.wrapNode(node, 'p', inputField.value)
   })
 
-  //  Replace tags.
-  inputField.value.querySelectorAll('i,b,u,s,div').forEach(node => {
+  // Replace tags in full tree following the replacements rules
+  // ----------------------------------------------------------
+  // -> Drawback: Need to reapply selection after replacements.
+  const selector = Object.keys(replacements).join(',')
+  inputField.value.querySelectorAll(selector).forEach(node => {
     const { tag, class: Class } = replacements[node.tagName.toLowerCase()]
     const newTag = document.createElement(tag)
     newTag.className = Class
     newTag.innerHTML = node.innerHTML
     node.replaceWith(newTag)
   })
-
-  processed.value = true
-  /*
-  Replace tags following the replacements rules
-  ---------------------------------------------
-  1ST WAY: REPLACE IN DOM.
-  -> Need to reapply selection after replacements.
-
-  inputField.value.querySelectorAll('i,b,u,s').forEach(node => {
-    const { tag, class: Class } = replacements[node.tagName.toLowerCase()]
-    const newTag = document.createElement(tag)
-    newTag.className = Class
-    newTag.innerHTML = node.innerHTML
-    node.replaceWith(newTag)
-  })
-
-  if (!sel.isCollapsed) {
-    // Need to reapply selection after transformation.
-    // const { baseNode, baseOffset, extentNode, extentOffset }= sel
-    // sel.setBaseAndExtent(baseNode, baseOffset, extentNode, extentOffset)
-  }
-  */
 
   /*
   2nd WAY: REPLACE IN THE RETURNED STRING ONLY.
@@ -305,24 +286,27 @@ const process = (e, sel) => {
   })
   */
 
-  // console.log('processing content...', content.value.processed)
-
   inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
-  recursiveCleanup(inputField.children)
+  recursiveCleanup(inputField.value.children)
   inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
 
   content.value.processed = inputField.value.innerHTML
-
-  emit('input', { e, html: content.value.processed })
+  processed.value = true
 }
 
 /**
  * Recursive cleanup:
- * - merge tween nodes
- * - remove nested duplicates
  * - remove empty nodes? (maybe set a rule for this)
+ * - remove nested duplicates
+ * - merge tween nodes
  **/
 const recursiveCleanup = htmlCollection => {
+  // Remove empty nodes.
+
+  // Remove nested duplicates.
+
+  // Merge tween nodes.
+
 }
 
 /**
