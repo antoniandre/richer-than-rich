@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, toRaw } from 'vue'
 import * as actions from './actions'
+import * as utils from './dom-utils'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -173,28 +174,25 @@ const wrapSelection = (sel, button) => {
  */
 const unwrapSelection = (sel, button) => {
   const selectionRange = sel.getRangeAt(0)
-  const selectionStartNode = selectionRange.baseNode || selectionRange.startContainer
-  const selectionStartOffset = selectionRange.baseOffset || selectionRange.startOffset
-  const selectionEndNode = selectionRange.extentNode || selectionRange.endContainer
-  const selectionEndOffset = selectionRange.extentOffset || selectionRange.endOffset
+  const { startContainer, startOffset, endContainer, endOffset }= selectionRange
 
   // Complexity:
   // - For selection `text [<bold>text</bold>] text`, we can unwrap with the selection range only.
   // - For selection `<bold>text [text] text</bold>`, we can't unwrap bold from the selection range:
   //   We need to close bold before the selection and reopen after it.
   // For that, create 3 fragments: 1 before selection, 1 selection, 1 after selection.
-  const startRange = document.createRange()
+  const startRange = new Range()
   startRange.selectNodeContents(inputField.value)
-  startRange.setEnd(selectionStartNode, selectionStartOffset)
+  startRange.setEnd(startContainer, startOffset)
   // const startFragment = startRange.extractContents()
   // startRange.insertNode(startFragment)
 
   // sel.removeAllRanges()
   // sel.addRange(startRange)
 
-  const endRange = document.createRange()
+  const endRange = new Range()
   endRange.selectNodeContents(inputField.value)
-  endRange.setStart(selectionEndNode, selectionEndOffset)
+  endRange.setStart(endContainer, endOffset)
   // const endFragment = endRange.extractContents()
   // endRange.insertNode(endFragment)
 
@@ -246,12 +244,9 @@ const process = (e, sel) => {
 
   // Check the content and wrap it in a `p` if the content is only text.
   const inputChildren = inputField.value.childNodes
-  if (inputChildren.length === 1 && inputChildren[0].nodeType === 3) {
-    const text = inputChildren[0]
-    const p = document.createElement('p')
-    inputField.value.insertBefore(p, text)
-    p.appendChild(text)
-  }
+  inputChildren.forEach(node => {
+    if (node.nodeType === 3) utils.wrapNode(node, 'p', inputField.value)
+  })
 
   //  Replace tags.
   inputField.value.querySelectorAll('i,b,u,s,div').forEach(node => {
