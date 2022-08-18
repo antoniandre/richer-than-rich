@@ -2,7 +2,7 @@
  * DOM manipulation related utilities.
  */
 
-const blockNodes = ['p', 'ul', 'table', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'iframe']
+const blockNodes = ['p', 'ul', 'ol', 'table', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'iframe']
 
 /**
  * Creates a node just before the reference node.
@@ -22,7 +22,7 @@ export const createNodeBefore = (refNode, tag) => {
  * @param {Object} richerInputField the richer input wrapper.
  * @returns the new wrapper node.
  */
-export const wrapNode = (node, tag, richerInputField) => {
+export const wrapNode = (node, tag, richerInputField, keepMarkers = false) => {
   const range = new Range()
   range.selectNode(node)
 
@@ -32,13 +32,24 @@ export const wrapNode = (node, tag, richerInputField) => {
   const wrapper = document.createElement(tag)
   range.surroundContents(wrapper)
 
+  if (!keepMarkers) restoreSelection(richerInputField)
+
+  return wrapper
+}
+
+export const replaceNodeTag = (node, tag, richerInputField) => {
+  const wrapper = wrapNode(node, tag, richerInputField, true)
+
+  unwrapNode(node)
+
   restoreSelection(richerInputField)
+
   return wrapper
 }
 
 /** */
 export const unwrapNode = node => {
-
+  node.replaceWith(...node.childNodes)
 }
 
 export const memorizeSelection = () => addSelectionMarkers()
@@ -98,11 +109,13 @@ export const addSelectionMarkers = () => {
  * @returns the nearest "block" node.
  */
 export const getNearestBlockNode = node => {
-  let currNode = node
-
-  while (!blockNodes.includes(currNode.nodeName.toLowerCase())) {
-    currNode = currNode.parentNode
-  }
-
-  return currNode
+  // If the node is a text, get the parent node.
+  node = node.nodeType === 3 ? node.parentNode : node
+  return node.closest(blockNodes.join(','))
+  // Legacy:
+  // let currNode = node
+  // while (!blockNodes.includes(currNode.nodeName.toLowerCase())) {
+  //   currNode = currNode.parentNode
+  // }
+  // return currNode
 }
