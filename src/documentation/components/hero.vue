@@ -131,6 +131,10 @@ h1 {
 
   &, .richer__menu {transition: $switch-mode-transition;}
 
+  :deep(.separator) {
+    margin: 0 0.5rem;
+    width: 0;
+  }
   :deep(.button:focus), :deep(.button--active) {border-color: #bf953f;}
   :deep(.button--active) {
     color: #bf953f;
@@ -148,10 +152,6 @@ h1 {
     background-color: rgba(rgb(34, 34, 34), 0.8);
     box-shadow: 2px 2px 6px rgba(#000, 0.2);
 
-    :deep(.separator) {
-      margin: 0 0.5rem;
-      width: 0;
-    }
     :deep(.button:focus), :deep(.button--active) {border-color: #967738;}
 
     :deep(.button--active) {color: #967738;}
