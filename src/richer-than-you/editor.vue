@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, ref, toRaw } from 'vue'
-import * as actions from './actions'
+import { onMounted, ref, provide } from 'vue'
 import * as utils from './dom-utils'
+import Menu from './menu.vue'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -23,54 +23,11 @@ const emit = defineEmits([
   'button-click'
 ])
 
+const menu = ref(null)
+const inputField = ref(null)
 let dark = ref(props.darkMode)
-let inputField = ref(null)
 let processed = ref(false)
-// Default tag: span.
-// Default icon: i-[button-name].
-// Default icon size: 100%.
-// Default shortcut: none, except for bold, italic, underline, strikethrough.
-const availableButtons = {
-  'font-size': { label: 'Text size' },
-  'font-family': { label: 'Font' },
-  'text-color': { label: 'Text color' },
-  'background-color': { label: 'Background color' },
-  bold: { tag: 'strong', label: 'Bold', shortcut: 'meta+b' },
-  italic: { tag: 'em', label: 'Italic', shortcut: 'meta+i' },
-  underline: { label: 'Underline', shortcut: 'meta+u' },
-  strikethrough: { label: 'Strikethrough', size: 130, shortcut: 'meta+s' },
-  'list-ul': { label: 'Bulleted list', action: 'list' },
-  'list-ol': { label: 'Numbered list', action: 'list' },
-  'align-left': { label: 'Align left', action: 'align' },
-  'align-center': { label: 'Align center', action: 'align' },
-  'align-right': { label: 'Align right', action: 'align' },
-  'align-justify': { label: 'Align justify', action: 'align' },
-  indent: { label: 'indent', action: 'indent' },
-  unindent: { label: 'Unindent', action: 'unindent' },
-  subscript: { tag: 'sub', label: 'Subscript' },
-  superscript: { tag: 'sup', label: 'Superscript' },
-  link: { tag: 'a', label: 'Link' },
-  image: { tag: 'img', label: 'Photo' },
-  table: { tag: 'table', label: 'Table', action: 'table' },
-  code: { tag: 'code', label: 'Code' },
-  undo: { label: 'Undo' },
-  redo: { label: 'Redo' },
-  'clear-format': { code: 'x', label: 'Clear format' },
-}
-const defaultButtons = [
-  'bold',
-  'italic',
-  'underline',
-  'strikethrough',
-  '|', // Add a '|' in the array to create a separator.
-  'list-ul',
-  'list-ol',
-  '|',
-  'align-left',
-  'align-center',
-  'align-right',
-  'align-justify'
-]
+
 const replacements = {
   b: { tag: 'strong', class: 'bold' },
   i: { tag: 'em', class: 'italic' },
@@ -87,58 +44,6 @@ const content = ref({
   initial: props.modelValue || '',
   processed: props.modelValue || ''
 })
-
-const initializeButtons = (() => {
-  let requestedButtons = props.buttons.length ? props.buttons : defaultButtons
-
-  requestedButtons = requestedButtons.map(button => {
-    if (typeof button === 'string') button = { name: button }
-    return { ...availableButtons[button.name], name: button.name }
-  })
-
-  menuButtons.value.push(...requestedButtons.map(button => {
-    // Populate the shortcuts map.
-    if (button.shortcut) shortcuts[button.shortcut] = button.name
-
-    return {
-      ...button,
-      active: false
-    }
-  }))
-})()
-
-// On button click, perform an action on the content.
-const action = (e, button) => {
-  const sel = window.getSelection()
-
-  emit('button-click', { e, button: toRaw(button) })
-
-  // Notes:
-  // = multi-ranges are only supported on Firefox for now.
-  // - no range means the content has never been focused.
-  if (sel.rangeCount !== 1) return focus() // Not handled.
-
-  button.active = !button.active
-
-  // Perform a specific action if any.
-  if (button.action && typeof actions[button.action] === 'function') {
-    actions[button.action]({ button, inputField, sel, e })
-  }
-
-  // If no action found, just wrap the selection with the button tag if given or span otherwise.
-  else {
-    // No selection (isCollapsed), just a caret.
-    if (sel.isCollapsed) {}
-
-    // Selection with a range.
-    else {
-      if (button.active) wrapSelection(sel, button)
-      else unwrapSelection(sel, button)
-    }
-  }
-
-  focus() // Re-focus the editor after a button click.
-}
 
 /**
  * Wrap the selected content with the clicked button generated tag.
@@ -318,7 +223,7 @@ const onKeydown = e => {
     const matchedAction = shortcuts[`meta+${e.key}`]
     const matchedButton = menuButtons.value.find(item => item.name === matchedAction)
     if (matchedAction && matchedButton) {
-      action(e, matchedButton)
+      menu.value.action(e, matchedButton)
       // Prevent the browser default selection replacements bold, italic, etc.
       e.preventDefault()
     }
@@ -354,30 +259,26 @@ const onPaste = e => {
 }
 
 // Public external method.
-const focus = () => {
-  inputField.value.focus()
-}
+const focus = inputField.value.focus
+
 
 onMounted(() => {
   if (props.darkMode === 'auto') {
     dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 })
+
+provide('editor', { focus, wrapSelection, unwrapSelection, inputField })
 </script>
 
 <template lang="pug">
 .richer(:class="{ 'richer--dark': darkMode }")
-  .richer__menu
-    template(v-for="(button, i) in menuButtons" :key="i")
-      span.separator(v-if="button.name === '|'")
-      button.button(
-        v-else
-        @click="action($event, button)"
-        type="button"
-        :title="button.label"
-        :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
-        :style="{ fontSize: button.size ? `${button.size}%` : null }")
-        span {{ button.label }}
+  Menu(
+    ref="menu"
+    v-model:buttons="menuButtons"
+    :user-buttons="props.buttons"
+    :shortcuts="shortcuts")
+
   .content-wrap
     .richer__content(
       ref="inputField"
