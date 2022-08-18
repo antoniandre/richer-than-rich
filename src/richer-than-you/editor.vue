@@ -28,12 +28,15 @@ const inputField = ref(null)
 let dark = ref(props.darkMode)
 let processed = ref(false)
 
-const replacements = {
-  b: { tag: 'strong', class: 'bold' },
-  i: { tag: 'em', class: 'italic' },
-  u: { tag: 'span', class: 'underline' },
-  s: { tag: 'span', class: 'strikethrough' },
-  div: { tag: 'p', class: 'paragraph' }
+// Processing rules.
+const rules = {
+  replacements: {
+    b: { tag: 'strong', class: 'bold' },
+    i: { tag: 'em', class: 'italic' },
+    u: { tag: 'span', class: 'underline' },
+    s: { tag: 'span', class: 'strikethrough' },
+    div: { tag: 'p', class: 'paragraph' }
+  }
 }
 
 const shortcuts = {}
@@ -150,12 +153,12 @@ const process = (e, sel) => {
     if (node.nodeType === 3) utils.wrapNode(node, 'p', inputField.value)
   })
 
-  // Replace tags in full tree following the replacements rules
-  // ----------------------------------------------------------
+  // Replace tags in full tree following the replacements rule
+  // ---------------------------------------------------------
   // -> Drawback: Need to reapply selection after replacements.
-  const selector = Object.keys(replacements).join(',')
-  inputField.value.querySelectorAll(selector).forEach(node => {
-    const { tag, class: Class } = replacements[node.tagName.toLowerCase()]
+  const replacementsSelector = Object.keys(rules.replacements).join(',')
+  inputField.value.querySelectorAll(replacementsSelector).forEach(node => {
+    const { tag, class: Class } = rules.replacements[node.tagName.toLowerCase()]
     const newTag = document.createElement(tag)
     newTag.className = Class
     newTag.innerHTML = node.innerHTML
