@@ -265,9 +265,11 @@ onMounted(() => {
   if (props.darkMode === 'auto') {
     dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   }
+
+  process()
 })
 
-provide('editor', { focus, wrapSelection, unwrapSelection, inputField })
+provide('editor', { focus, wrapSelection, unwrapSelection, inputField, menuButtons })
 </script>
 
 <template lang="pug">

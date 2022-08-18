@@ -3,10 +3,10 @@ import { toRaw, inject } from 'vue'
 import * as actions from './actions'
 
 const { focus, wrapSelection, unwrapSelection, inputField } = inject('editor')
+let { menuButtons } = inject('editor')
 
 const props = defineProps({
   userButtons: { type: Object },
-  buttons: { type: Array },
   shortcuts: { type: Object }
 })
 
@@ -60,6 +60,8 @@ const defaultButtons = [
 ]
 
 const initializeButtons = (() => {
+  menuButtons = [] // Reset for HMR.
+
   let requestedButtons = props.userButtons.length ? props.userButtons : defaultButtons
 
   requestedButtons = requestedButtons.map(button => {
@@ -67,7 +69,7 @@ const initializeButtons = (() => {
     return { ...availableButtons[button.name], name: button.name }
   })
 
-  props.buttons.push(...requestedButtons.map(button => {
+  menuButtons.push(...requestedButtons.map(button => {
     // Populate the shortcuts map.
     if (button.shortcut) props.shortcuts[button.shortcut] = button.name
 
@@ -85,7 +87,7 @@ const initializeButtons = (() => {
  * @param {Object} button the clicked button, or matched button from action shortcut.
  */
 const action = (e, button) => {
-  focus()
+  focus() // Focus the input field first.
   const sel = window.getSelection()
 
   emit('button-click', { e, button: toRaw(button) })
@@ -124,7 +126,7 @@ defineExpose({ action })
 
 <template lang="pug">
 .richer__menu
-  template(v-for="(button, i) in buttons" :key="i")
+  template(v-for="(button, i) in menuButtons" :key="i")
     span.separator(v-if="button.name === '|'")
     button.button(
       v-else
