@@ -434,4 +434,17 @@ $highlight-color: #bf953f;
     .separator {background: rgba(#fff, 0.15);}
   }
 }
+
+// Richer content styling classes.
+// --------------------------------------------------------
+.r {
+  &-align-left {text-align: left;}
+  &-align-center {text-align: center;}
+  &-align-right {text-align: right;}
+  &-align-justify {text-align: justify;}
+
+  @for $i from 1 through 8 {
+    &-indent-#{$i} {padding-left: 3em * $i;}
+  }
+}
 </style>
