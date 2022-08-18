@@ -1,20 +1,22 @@
-export const align = ({ button, input, sel, e }) => {
-  switch (button.name) {
-    case 'align-left':
+/**
+ * Richer editor menu button actions.
+ *
+ * Each action receives 1 object parameter containing: `{ button, input, sel, e }`.
+ */
 
-      break
-    case 'align-center':
+import * as utils from './dom-utils'
 
-      break
-    case 'align-right':
-
-      break
-    case 'align-justify':
-
-      break
-  }
+/**
+ * Aligns the content to the left, center, right or justify.
+ */
+export const align = ({ button, input, sel }) => {
+  const blockNode = utils.getNearestBlockNode(sel.baseNode)
+  blockNode.className = blockNode.className.replace(/r-align-(left|center|right|justify)|/, `r-${button.name}`)
 }
 
+/**
+ * Creates a list (ul or ol) at caret position.
+ */
 export const list = ({ button, input, sel, e }) => {
   const range = sel.getRangeAt(0)
   switch (button.name) {
@@ -35,6 +37,9 @@ export const list = ({ button, input, sel, e }) => {
   }
 }
 
+/**
+ * Creates a table at caret position.
+ */
 export const table = ({ button, input, sel, e }) => {
   const range = sel.getRangeAt(0)
   const table = document.createElement('table')
@@ -45,11 +50,19 @@ export const table = ({ button, input, sel, e }) => {
   range.surroundContents(table)
 }
 
-export const indent = ({ button, input, sel, e }) => {
-  if (button.name === 'indent') {
+/**
+ * Indents or unindents the content. 8 indents available.
+ */
+export const indent = ({ button, sel }) => {
+  const blockNode = utils.getNearestBlockNode(sel.baseNode)
 
-  }
-  else {
+  if (blockNode) {
+    const currentIndent = +(blockNode.className.match(/indent-(\d)/) || [, 0])[1]
+    let newIndent = 1
+    if (button.name === 'indent') newIndent = Math.min(currentIndent + 1, 8)
+    else newIndent = Math.max(currentIndent - 1, 0)
 
+    blockNode.classList.remove(`r-indent-${currentIndent}`)
+    if (newIndent > 0) blockNode.classList.add(`r-indent-${newIndent}`)
   }
 }
