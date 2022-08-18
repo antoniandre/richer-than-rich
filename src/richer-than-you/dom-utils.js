@@ -2,6 +2,8 @@
  * DOM manipulation related utilities.
  */
 
+const blockNodes = ['p', 'ul', 'table', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'iframe']
+
 /**
  * Creates a node just before the reference node.
  * @param {Object} refNode the reference node to insert new node before.
@@ -47,7 +49,9 @@ export const memorizeSelection = () => addSelectionMarkers()
  */
 export const addSelectionMarkers = () => {
   const sel = window.getSelection()
-  const range = sel.getRangeAt(0)
+  const range = sel.rangeCount && sel.getRangeAt(0)
+  if (!range) return // Don't need the rest if there is no selection.
+
   sel.removeAllRanges()
 
   const startMarker = document.createElement('span')
@@ -73,6 +77,9 @@ export const addSelectionMarkers = () => {
   const range = new Range()
   const startMarker = richerInputField.querySelector('.richer__selection-start')
   const endMarker = richerInputField.querySelector('.richer__selection-end')
+
+  if (!startMarker || !endMarker) return // Don't need the rest if there is no selection.
+
   range.setStartBefore(startMarker)
   range.setEndAfter(endMarker)
 
@@ -82,4 +89,20 @@ export const addSelectionMarkers = () => {
 
   startMarker.remove()
   endMarker.remove()
+}
+
+/**
+ * Returns the nearest "block" node (≠ inline) of the given node, or itself if already a block node.
+ *
+ * @param {Object} node the node to find the nearest block node for. It can be a parent or itself.
+ * @returns the nearest "block" node.
+ */
+export const getNearestBlockNode = node => {
+  let currNode = node
+
+  while (!blockNodes.includes(currNode.nodeName.toLowerCase())) {
+    currNode = currNode.parentNode
+  }
+
+  return currNode
 }
