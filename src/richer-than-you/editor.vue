@@ -259,8 +259,7 @@ const onPaste = e => {
 }
 
 // Public external method.
-const focus = inputField.value.focus
-
+const focus = () => inputField.value.focus()
 
 onMounted(() => {
   if (props.darkMode === 'auto') {
