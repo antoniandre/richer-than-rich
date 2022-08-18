@@ -40,10 +40,7 @@ const shortcuts = {}
 
 const menuButtons = ref([])
 const placeholder = ref(props.placeholder)
-const content = ref({
-  initial: props.modelValue || '',
-  processed: props.modelValue || ''
-})
+const content = ref({ initial: props.modelValue || '', processed: props.modelValue || '' })
 
 /**
  * Wrap the selected content with the clicked button generated tag.
@@ -53,7 +50,7 @@ const content = ref({
 const wrapSelection = (sel, button) => {
   const range = sel.getRangeAt(0)
   const newParent = document.createElement(button.tag || 'span')
-  newParent.className = button.name
+  newParent.className = `r-${button.name}`
 
   try {
     // Can't surround the content if the selection is cutting a DOM element (across 2 nodes).
@@ -269,7 +266,7 @@ onMounted(() => {
   process()
 })
 
-provide('editor', { focus, wrapSelection, unwrapSelection, inputField, menuButtons })
+provide('editor', { focus, process, wrapSelection, unwrapSelection, inputField, menuButtons })
 </script>
 
 <template lang="pug">
@@ -297,8 +294,6 @@ provide('editor', { focus, wrapSelection, unwrapSelection, inputField, menuButto
 </template>
 
 <style lang="scss">
-$highlight-color: #bf953f;
-
 .richer {
   display: flex;
   flex-direction: column;
@@ -308,80 +303,6 @@ $highlight-color: #bf953f;
   background: rgba(#fff, 0.85);
   color: #333;
   transition: 0.4s ease-in-out;
-
-  &__menu {
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
-    border-bottom: 1px solid rgba(#fff, 0.05);
-    background-color: rgba(#000, 0.05);
-    padding: 4px 6px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    transition: 0.4s ease-in-out;
-
-    .button {
-      position: relative;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      height: 26px;
-      width: 26px;
-      color: rgba(#000, 0.65);
-      font-size: 1rem;
-      border: 1px solid rgba(#000, 0.1);
-      border-radius: 4px;
-      margin: 2px;
-      cursor: pointer;
-      background-color: transparent;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      transition: 0.15s ease-in-out;
-
-      &:hover, &--active {border-color: rgba(#000, 0.06);}
-      &:focus {
-        border-color: rgba(#000, 0.4);
-        outline: none;
-      }
-      &:active {
-        border-color: rgba(#000, 0.06);
-        background-color: rgba(#000, 0.1);
-      }
-
-      &:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(#000, 0.06);
-        border-radius: 99rem;
-        transform: scale(0.3);
-        opacity: 0;
-        transition: inherit;
-      }
-
-      &:hover:after, &:active:after, &--active:after {
-        opacity: 1;
-        transform: scale(1);
-        border-radius: 3px;
-      }
-
-      span {display: none;}
-    }
-
-    .separator {
-      display: flex;
-      align-self: stretch;
-      width: 1px;
-      margin: 6px 4px;
-      background: rgba(#000, 0.15);
-    }
-  }
-
-  .underline {text-decoration: underline;}
-  .strikethrough {text-decoration: line-through;}
 
   .content-wrap {
     position: relative;
@@ -406,40 +327,22 @@ $highlight-color: #bf953f;
     outline: none;
     flex-grow: 1;
   }
-}
 
-.richer--dark {
-  color: #ccc;
-  border-color: rgba(#fff, 0.05);
-  background-color: rgba(#000, 0.05);
-
-  .richer__menu {
-    background-color: rgba(#fff, 0.05);
-
-    .button {
-      border-color: rgba(#fff, 0.1);
-      color: rgba(#fff, 0.65);
-
-      &:hover, &--active {border-color: rgba(#fff, 0.06);}
-      &:focus {
-        border-color: rgba(#fff, 0.4);
-        outline: none;
-      }
-      &:active {
-        border-color: rgba(#fff, 0.06);
-        background-color: rgba(#fff, 0.1);
-      }
-
-      &:after {background-color: rgba(#fff, 0.06);}
-    }
-
-    .separator {background: rgba(#fff, 0.15);}
+  // Dark mode.
+  // ------------------------------------------------------
+  &--dark {
+    color: #ccc;
+    border-color: rgba(#fff, 0.05);
+    background-color: rgba(#000, 0.05);
   }
 }
 
 // Richer content styling classes.
 // --------------------------------------------------------
 .r {
+  &-underline {text-decoration: underline;}
+  &-strikethrough {text-decoration: line-through;}
+
   &-align-left {text-align: left;}
   &-align-center {text-align: center;}
   &-align-right {text-align: right;}
