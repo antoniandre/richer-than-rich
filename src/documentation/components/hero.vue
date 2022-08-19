@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import Editor from '@/richer-than-you/editor.vue'
+import Editor from '@/richer-than-you/index.vue'
 
 defineProps({
   darkMode: Boolean

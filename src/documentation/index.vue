@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import Editor from '@/richer-than-you/editor.vue'
+import Editor from '@/richer-than-you/index.vue'
 import TopBar from './components/top-bar.vue'
 import Hero from './components/hero.vue'
 import './scss/index.scss'
