@@ -1,15 +1,44 @@
 {
   "name": "richer-than-you",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Another modern rich text editor $$. A promising one. 🚧 WIP",
+  "author": "Antoni Andre <antoniandre.web@gmail.com>",
+  "license": "MIT",
+  "repository": "https://github.com/antoniandre/richer-than-you",
+  "funding": "https://github.com/sponsors/antoniandre",
+  "main": "./dist/richer-than-you.umd.js",
+  "unpkg": "dist/richer-than-you.umd.js",
+  "jsdelivr": "dist/richer-than-you.umd.js",
+  "module": "./dist/richer-than-you.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/richer-than-you.es.js",
+      "require": "./dist/richer-than-you.cjs.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/*": "./dist/*"
+  },
+  "files": [
+    "dist",
+    "src/richer-than-you"
+  ],
   "type": "module",
+  "keywords": [
+    "wysiwyg vue",
+    "rich editor vue",
+    "richer vue",
+    "rich text editor",
+    "vue text editor",
+    "vue3",
+    "ui"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "vue": "^3.2.37"
+  "peerDependencies": {
+    "vue": "^3.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.0",

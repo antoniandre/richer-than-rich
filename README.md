@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/dt/richer-than-you.svg)](https://www.npmjs.com/package/richer-than-you)
 <!-- [![npm](https://img.shields.io/npm/dw/richer-than-you.svg)](https://www.npmjs.com/package/richer-than-you) -->
 
-> Another modern rich text editor. A promising one. 🚧 WIP
+> Another modern rich text editor $$. A promising one. 🚧 WIP
 
 ___
 
