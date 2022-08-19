@@ -8,8 +8,9 @@ defineProps({
 
 const editorContent = ref(`
   <h2 class="r-align-center">Hi. I\'m r$$$ch.</h2>
-  <p class="r-align-center"><br><br>Wanna try me?</p>
+  <p class="r-align-center"><br><br>COMING SOON</p>
 `)
+// <p class="r-align-center"><br><br>Wanna try me?</p>
 
 const cl = (...args) => console.log(...args)
 </script>
@@ -35,7 +36,7 @@ header
       @blur="cl('blur', $event)"
       @paste="cl('paste', $event)")
 
-  .particles
+  //- .particles
     - for (i = 1; i <= 100; i++)
       .c
 </template>
