@@ -19,6 +19,8 @@ header
       img.dollar(src="/dollar.svg")
     p.catchphrase $. Another modern rich text editor. This one's richer than you.
 
+    p.wip 🚧 &nbsp; WORK IN PROGRESS &nbsp; 🚧
+
     editor.hero(
       :model-value="editorContent"
       placeholder="Write something..."
@@ -141,6 +143,12 @@ h1 {
 
     &:after {display: none;}
   }
+}
+
+.wip {
+  color: orange;
+  margin-bottom: 3rem;
+  font-size: 0.9rem;
 }
 
 // Dark theme.
