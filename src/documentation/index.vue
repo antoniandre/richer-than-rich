@@ -19,7 +19,7 @@ const buttons2 = ['bold', 'italic', 'underline', 'subscript', 'superscript']
 const buttons3 = ['bold', 'italic', 'underline', '|', 'subscript', 'superscript']
 
 onMounted(() => {
-  darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  darkMode.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 })
 
 const copyCode = e => {
@@ -37,7 +37,6 @@ const copyCode = e => {
   copied.value = true
   setTimeout(() => (copied.value = false), 2000)
 }
-
 </script>
 
 <template lang="pug">
@@ -65,10 +64,10 @@ const copyCode = e => {
 
     section.section.section--install
       .container
-        h2 Installation:
+        h2 Installation
         pre-ssh(language="shell") npm i richer-than-you
 
-        p Use in your component:
+        p.mt2 Use in your component:
         pre-ssh(language="html-vue") &lt;richer&gt;&lt;/richer&gt;
 
     section.section.section--easy

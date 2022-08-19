@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 
 const bundlingConf = {
   lib: {
-    entry: resolve(__dirname, '/src/richer-than-you/index.js'),
+    entry: resolve(__dirname, '/src/richer-than-you/index.vue'),
     name: 'RicherThanYou',
     formats: ['es', 'umd', 'cjs']
   },

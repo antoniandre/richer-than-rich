@@ -36,7 +36,7 @@
     "dev": "vite",
     "build": "vite build --base /richer-than-you/",
     "build-bundle": "BUNDLE=true vite build",
-    "serve": "vite preview --root docs --base /richer-than-you/"
+    "serve": "vite preview --base /richer-than-you/"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
