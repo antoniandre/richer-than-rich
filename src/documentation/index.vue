@@ -65,15 +65,17 @@ const copyCode = e => {
 
     section.section.section--install
       .container
-        h2 Installation
+        h2 Installation:
         pre-ssh(language="shell") npm i richer-than-you
 
+        p Use in your component:
         pre-ssh(language="html-vue") &lt;richer&gt;&lt;/richer&gt;
 
     section.section.section--easy
       .container
         h2 Easy to use
-        .grid.grid--2
+        p Content will be updated soon.
+        //- .grid.grid--2
           .grow
             h3 Simple markup
             p Only set the buttons you want as strings. Or get a common set by default.
@@ -91,7 +93,8 @@ const copyCode = e => {
     section.section.section--customizable
       .container
         h2 Highly customizable
-        .grid.grid--3
+        p Content will be updated soon.
+        //- .grid.grid--3
           .grow
             h3 Styles
             editor(:dark-mode="darkMode" :buttons="buttons")
