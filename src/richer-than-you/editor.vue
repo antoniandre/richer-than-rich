@@ -247,6 +247,10 @@ const onInput = e => {
 }
 
 const onFocus = e => {
+  // On focus, if there is no content at all, add a `p` ready to type in.
+  const p = document.createElement('p')
+  if (!inputField.value.innerHTML) inputField.value.appendChild(p)
+
   emit('focus', { e, html: content.value.processed })
 }
 
