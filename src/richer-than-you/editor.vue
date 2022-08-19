@@ -145,6 +145,29 @@ const unwrapSelection = (sel, button) => {
 const process = (e, sel) => {
   sel = sel || window.getSelection()
 
+  // Check the content and wrap it in a `p` if the content has no block nodes.
+  const blockNodes = inputField.value.querySelectorAll(utils.blockNodes.join(','))
+  if (!blockNodes.length) {
+    utils.memorizeSelection()
+    const range = new Range()
+    range.selectNodeContents(inputField.value)
+    range.surroundContents(document.createElement('p'))
+    utils.restoreSelection(inputField.value)
+  }
+
+  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
+  recursiveCleanup(inputField.value.children)
+  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
+
+  content.value.processed = inputField.value.innerHTML
+  processed.value = true
+}
+
+// Process untrusted content on paste, or on v-model on init.
+// This process is heavier than the process to perform on input.
+const processExternal = (e, sel) => {
+  sel = sel || window.getSelection()
+
   inputField.value.normalize() // Glue the text nodes back together.
 
   // Check the content and wrap it in a `p` if the content is only text.
@@ -164,39 +187,6 @@ const process = (e, sel) => {
     newTag.innerHTML = node.innerHTML
     node.replaceWith(newTag)
   })
-
-  /*
-  2nd WAY: REPLACE IN THE RETURNED STRING ONLY.
-  content.value.processed = inputField.value.innerHTML.replace(/<(\/?)(i|b|u|s)[^>]*>/gi, (m0, slash, tag) => {
-    let cssClass
-
-    switch (tag) {
-      case 'b':
-        tag = 'strong'
-        break
-      case 'i':
-        tag = 'em'
-        break
-      case 'u':
-        tag = 'span'
-        cssClass = 'underline'
-        break
-      case 's':
-        tag = 'span'
-        cssClass = 'strikethrough'
-        break
-    }
-
-    return `<${slash}${tag}${slash || !cssClass ? '' : ` class="${cssClass}"`}>`
-  })
-  */
-
-  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
-  recursiveCleanup(inputField.value.children)
-  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
-
-  content.value.processed = inputField.value.innerHTML
-  processed.value = true
 }
 
 /**
@@ -270,7 +260,7 @@ onMounted(() => {
     dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
-  process()
+  processExternal()
 })
 
 provide('editor', { focus, process, wrapSelection, unwrapSelection, inputField, menuButtons })
