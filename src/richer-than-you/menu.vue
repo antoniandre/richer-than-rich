@@ -96,7 +96,7 @@ const action = (e, button) => {
 
   // Perform a specific action if any.
   if (button.action && typeof actions[button.action] === 'function') {
-    actions[button.action]({ button, inputField, sel, e })
+    actions[button.action]({ button, inputField: inputField.value, sel, e })
     process()
   }
 
@@ -215,10 +215,7 @@ defineExpose({ action })
       color: rgba(#fff, 0.65);
 
       &:hover, &--active {border-color: rgba(#fff, 0.06);}
-      &:focus {
-        border-color: rgba(#fff, 0.4);
-        outline: none;
-      }
+      &:focus {border-color: rgba(#fff, 0.4);}
       &:active {
         border-color: rgba(#fff, 0.06);
         background-color: rgba(#fff, 0.1);

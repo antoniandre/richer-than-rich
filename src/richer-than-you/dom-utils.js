@@ -2,7 +2,7 @@
  * DOM manipulation related utilities.
  */
 
-const blockNodes = ['p', 'ul', 'ol', 'table', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'iframe']
+export const blockNodes = ['p', 'ul', 'ol', 'table', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'iframe']
 
 /**
  * Creates a node just before the reference node.
@@ -112,10 +112,4 @@ export const getNearestBlockNode = node => {
   // If the node is a text, get the parent node.
   node = node.nodeType === 3 ? node.parentNode : node
   return node.closest(blockNodes.join(','))
-  // Legacy:
-  // let currNode = node
-  // while (!blockNodes.includes(currNode.nodeName.toLowerCase())) {
-  //   currNode = currNode.parentNode
-  // }
-  // return currNode
 }
