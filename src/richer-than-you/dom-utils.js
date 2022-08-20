@@ -108,8 +108,12 @@ export const addSelectionMarkers = () => {
  * @param {Object} node the node to find the nearest block node for. It can be a parent or itself.
  * @returns the nearest "block" node.
  */
-export const getNearestBlockNode = node => {
+export const getNearestBlockNode = (node, offset, richerInputField) => {
   // If the node is a text, get the parent node.
   node = node.nodeType === 3 ? node.parentNode : node
-  return node.closest(blockNodes.join(','))
+  if (node.isSameNode(richerInputField)) {
+    // Find the next sibling at caret position.
+    return richerInputField.childNodes[offset]
+  }
+  else return node.closest(blockNodes.join(','))
 }
