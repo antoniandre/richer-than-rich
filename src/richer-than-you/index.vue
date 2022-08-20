@@ -156,6 +156,8 @@ const process = (e, sel) => {
     utils.restoreSelection(inputField.value)
   }
 
+  processReplaceTags()
+
   inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
   recursiveCleanup(inputField.value.children)
   inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
@@ -171,12 +173,16 @@ const processExternal = (e, sel) => {
 
   inputField.value.normalize() // Glue the text nodes back together.
 
+  processReplaceTags()
+
   // Check the content and wrap it in a `p` if the content is only text.
   const inputChildren = inputField.value.childNodes
   inputChildren.forEach(node => {
-    if (node.nodeType === 3) utils.wrapNode(node, 'p', inputField.value)
+    if (node.nodeType === 3 && !node.nodeValue) utils.wrapNode(node, 'p', inputField.value)
   })
+}
 
+const processReplaceTags = () => {
   // Replace tags in full tree following the replacements rule
   // ---------------------------------------------------------
   // -> Drawback: Need to reapply selection after replacements.
@@ -189,7 +195,6 @@ const processExternal = (e, sel) => {
     node.replaceWith(newTag)
   })
 }
-
 /**
  * Recursive cleanup:
  * - remove empty nodes? (maybe set a rule for this)
