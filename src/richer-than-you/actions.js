@@ -1,46 +1,43 @@
 /**
  * Richer editor menu button actions.
  *
- * Each action receives 1 object parameter containing: `{ button, input, sel, e }`.
+ * Each action receives 1 object parameter containing:
+ * `{ button, inputField, sel, e, nearestBlockEl }`.
  */
 
 import * as utils from './dom-utils'
 
 /**
- * Aligns the content to the left, center, right or justify.
+ * Aligns the content (closest block node) to the left, center, right or justify.
  */
-export const align = ({ button, input, sel }) => {
-  const blockNode = utils.getNearestBlockNode(sel.baseNode)
-  blockNode.className = blockNode.className.replace(/r-align-(left|center|right|justify)|/, `r-${button.name}`)
+export const align = ({ button, nearestBlockEl }) => {
+  nearestBlockEl.className = nearestBlockEl.className.replace(
+    /r-align-(left|center|right|justify)|/,
+    `r-${button.name}`
+  )
 }
 
 /**
- * Creates a list (ul or ol) at caret position.
+ * Creates a list (ul or ol) at the closest block node.
  */
-export const list = ({ button, input, sel, e }) => {
-  const range = sel.getRangeAt(0)
-  switch (button.name) {
-    case 'list-ul': {
-      const ul = document.createElement('ul')
-      const li = document.createElement('li')
-      range.surroundContents(li)
-      range.surroundContents(ul)
-      break
-    }
-    case 'list-ol': {
-      const ol = document.createElement('ol')
-      const li = document.createElement('li')
-      range.surroundContents(li)
-      range.surroundContents(ol)
-      break
-    }
+export const list = ({ button, inputField, nearestBlockEl }) => {
+  const listType = button.name.substr(-2)
+
+  // Remove the list when there's already one (replace with `p`).
+  if (nearestBlockEl.nodeName.toLowerCase() === listType) {
+    nearestBlockEl.childNodes.forEach(li => utils.replaceNodeTag(li, 'p', inputField))
+    utils.unwrapNode(nearestBlockEl)
+  }
+  else {
+    const li = utils.replaceNodeTag(nearestBlockEl, 'li', inputField)
+    utils.wrapNode(li, listType, inputField)
   }
 }
 
 /**
  * Creates a table at caret position.
  */
-export const table = ({ button, input, sel, e }) => {
+export const table = ({ button, inputField, sel }) => {
   const range = sel.getRangeAt(0)
   const table = document.createElement('table')
   const tr = document.createElement('tr')
@@ -53,16 +50,14 @@ export const table = ({ button, input, sel, e }) => {
 /**
  * Indents or unindents the content. 8 indents available.
  */
-export const indent = ({ button, sel }) => {
-  const blockNode = utils.getNearestBlockNode(sel.baseNode)
-
-  if (blockNode) {
-    const currentIndent = +(blockNode.className.match(/indent-(\d)/) || [, 0])[1]
+export const indent = ({ button, sel, nearestBlockEl }) => {
+  if (nearestBlockEl) {
+    const currentIndent = +(nearestBlockEl.className.match(/indent-(\d)/) || [, 0])[1]
     let newIndent = 1
     if (button.name === 'indent') newIndent = Math.min(currentIndent + 1, 8)
     else newIndent = Math.max(currentIndent - 1, 0)
 
-    blockNode.classList.remove(`r-indent-${currentIndent}`)
-    if (newIndent > 0) blockNode.classList.add(`r-indent-${newIndent}`)
+    nearestBlockEl.classList.remove(`r-indent-${currentIndent}`)
+    if (newIndent > 0) nearestBlockEl.classList.add(`r-indent-${newIndent}`)
   }
 }
