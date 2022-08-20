@@ -2,6 +2,7 @@
 import { onMounted, ref, provide } from 'vue'
 import * as utils from './dom-utils'
 import Menu from './menu.vue'
+import './scss/index.scss'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -331,22 +332,6 @@ provide('editor', { focus, process, wrapSelection, unwrapSelection, inputField, 
     color: #ccc;
     border-color: rgba(#fff, 0.05);
     background-color: rgba(#000, 0.05);
-  }
-}
-
-// Richer content styling classes.
-// --------------------------------------------------------
-.r {
-  &-underline {text-decoration: underline;}
-  &-strikethrough {text-decoration: line-through;}
-
-  &-align-left {text-align: left;}
-  &-align-center {text-align: center;}
-  &-align-right {text-align: right;}
-  &-align-justify {text-align: justify;}
-
-  @for $i from 1 through 8 {
-    &-indent-#{$i} {padding-left: 3em * $i;}
   }
 }
 </style>
