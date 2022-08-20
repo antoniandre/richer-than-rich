@@ -1,6 +1,7 @@
 <script setup>
 import { toRaw, inject } from 'vue'
 import * as actions from './actions'
+import * as utils from './dom-utils'
 
 const { focus, process, wrapSelection, unwrapSelection, inputField } = inject('editor')
 let { menuButtons } = inject('editor')
@@ -96,7 +97,8 @@ const action = (e, button) => {
 
   // Perform a specific action if any.
   if (button.action && typeof actions[button.action] === 'function') {
-    actions[button.action]({ button, inputField: inputField.value, sel, e })
+    let nearestBlockEl = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
+    actions[button.action]({ button, inputField: inputField.value, sel, e, nearestBlockEl })
     process()
   }
 
