@@ -77,6 +77,9 @@ const wrapSelection = (sel, button) => {
  * Unwrap the selected content from the clicked button generated markup.
  * This will modify the innerHTML of the contenteditable, then call process() to cleanup,
  * and emit the clean markup.
+ *
+ * @todo: should only unwrap from the tag we are unselecting. Should not cut a block node into
+ * multiple!
  */
 const unwrapSelection = (sel, button) => {
   const selectionRange = sel.getRangeAt(0)
