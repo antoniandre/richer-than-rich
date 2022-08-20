@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "richer";
+  src: url("../assets/richer.woff2") format("woff2"),
+       url("../assets/richer.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="i-"]:before,
+[class*=" i-"]:before {font-family: "richer" !important;
+  font-style: normal important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.i-align-center:before {content: "\e000";}
+.i-align-justify:before {content: "\e001";}
+.i-align-left:before {content: "\e002";}
+.i-align-right:before {content: "\e003";}
+.i-image:before {content: "\e004";}
+.i-strikethrough:before {content: "\e005";}
+.i-angle-down:before {content: "\e006";}
+.i-code:before {content: "\e007";}
+.i-list-ol:before {content: "\e008";}
+.i-list-ul:before {content: "\e009";}
+.i-android-arrow-dropdown:before {content: "\e00a";}
+.i-trash-bin:before {content: "\e00b";}
+.i-character:before {content: "\e00c";}
+.i-bold:before {content: "\e00d";}
+.i-clear-format:before {content: "\e00e";}
+.i-font-size:before {content: "\e00f";}
+.i-background-color:before {content: "\e010";}
+.i-text-color:before {content: "\e011";}
+.i-unindent:before {content: "\e012";}
+.i-indent:before {content: "\e013";}
+.i-italic:before {content: "\e014";}
+.i-underline:before {content: "\e015";}
+.i-table:before {content: "\e016";}
+.i-undo:before {content: "\e017";}
+.i-redo:before {content: "\e018";}
+.i-subscript:before {content: "\e019";}
+.i-superscript:before {content: "\e01a";}
+.i-check:before {content: "\e01b";}
+.i-sun:before {content: "\e01c";}
+.i-moon:before {content: "\e01d";}
+.i-font-family:before {content: "\e01e";}
+.i-link:before {content: "\e020";}
