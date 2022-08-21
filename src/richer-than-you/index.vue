@@ -54,7 +54,7 @@ const content = ref({ initial: props.modelValue || '', processed: props.modelVal
 const wrapSelection = (sel, button) => {
   const range = sel.getRangeAt(0)
   const newParent = document.createElement(button.tag || 'span')
-  newParent.className = `r-${button.name}`
+  if (!button.tag || button.tag === 'span') newParent.className = `r-${button.name}`
 
   try {
     // Can't surround the content if the selection is cutting a DOM element (across 2 nodes).
@@ -153,7 +153,9 @@ const unwrapSelection = (sel, button) => {
   const middleFragment = middleRange.extractContents()
 
   // On the selection, remove the tag of the selected button (there could be multiple).
-  middleFragment.querySelectorAll(button.tag || `span.r-${button.name}`).forEach(node => {
+  const selectorTag = button.tag || 'span'
+  const selectorClass =  selectorTag === 'span' ? `.r-${button.name}` : ''
+  middleFragment.querySelectorAll(selectorTag + selectorClass).forEach(node => {
     node.replaceWith(...node.childNodes)
   })
 
@@ -259,7 +261,7 @@ const processReplaceTags = () => {
   inputField.value.querySelectorAll(replacementsSelector).forEach(node => {
     const { tag, class: Class } = rules.replacements[node.tagName.toLowerCase()]
     const newTag = document.createElement(tag)
-    newTag.className = Class
+    if (tag === 'span') newTag.className = Class
     newTag.innerHTML = node.innerHTML
     node.replaceWith(newTag)
   })
@@ -288,6 +290,7 @@ const onKeydown = e => {
     const matchedAction = shortcuts[`meta+${e.key}`]
     const matchedButton = menuButtons.value.find(item => item.name === matchedAction)
     if (matchedAction && matchedButton) {
+      // Call the menu component's action method via Vue ref.
       menu.value.action(e, matchedButton)
       // Prevent the browser default selection replacements bold, italic, etc.
       e.preventDefault()

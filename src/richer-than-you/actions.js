@@ -52,7 +52,7 @@ export const table = ({ button, inputField, sel }) => {
  */
 export const indent = ({ button, sel, nearestBlockEl }) => {
   if (nearestBlockEl) {
-    const currentIndent = +(nearestBlockEl.className.match(/indent-(\d)/) || [, 0])[1]
+    const currentIndent = +(nearestBlockEl.className.match(/r-indent-(\d)/) || [, 0])[1]
     let newIndent = 1
     if (button.name === 'indent') newIndent = Math.min(currentIndent + 1, 8)
     else newIndent = Math.max(currentIndent - 1, 0)
