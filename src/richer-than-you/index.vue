@@ -151,8 +151,9 @@ const unwrapSelection = (sel, button) => {
   // The selection range.
   const middleRange = sel.getRangeAt(0)
   const middleFragment = middleRange.extractContents()
+
   // On the selection, remove the tag of the selected button (there could be multiple).
-  middleFragment.querySelectorAll(button.tag).forEach(node => {
+  middleFragment.querySelectorAll(button.tag || `span.r-${button.name}`).forEach(node => {
     node.replaceWith(...node.childNodes)
   })
 
@@ -170,14 +171,33 @@ const unwrapSelection = (sel, button) => {
   // console.log({ startFragment, middleFragment, endFragment })
 
   const fullFragment = new DocumentFragment()
-  fullFragment.append(...startFragment.childNodes, ...middleFragment.childNodes, ...endFragment.childNodes)
+
+  // Inject selection markers before the DOM changes.
+  const selMarkerStart = document.createElement('span')
+  selMarkerStart.className = 'richer__selection-start'
+  const selMarkerEnd = document.createElement('span')
+  selMarkerEnd.className = 'richer__selection-end'
+
+  // Assemble the final HTML containing the selection markers.
+  fullFragment.append(
+    ...startFragment.childNodes,
+    selMarkerStart,
+    ...middleFragment.childNodes,
+    selMarkerEnd,
+    ...endFragment.childNodes
+  )
   // console.log(fullFragment)
   // debugger
 
+  // Reinject the final HTML at caret position.
   const fullRange = new Range()
   fullRange.setStart(startRange.startContainer, 0)
   fullRange.setEnd(endRange.endContainer, endRange.endOffset)
   fullRange.insertNode(fullFragment)
+
+  // Cleanup.
+  utils.restoreSelection(inputField.value)
+  // process() is also called after actions to cleanup and normalize text nodes.
 }
 
 /**
