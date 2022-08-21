@@ -1,4 +1,4 @@
-# Wave UI
+# Richer than you
 
 [![Latest Version on NPM](https://img.shields.io/npm/v/richer-than-you.svg)](https://npmjs.com/package/richer-than-you)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
