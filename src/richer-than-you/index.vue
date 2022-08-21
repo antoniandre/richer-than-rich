@@ -224,6 +224,10 @@ const process = (e, sel) => {
   processReplaceTags()
 
   inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
+
+  // Remove empty tags.
+  inputField.value.querySelectorAll('*:not(p,br):empty').forEach(node => node.remove())
+
   recursiveCleanup(inputField.value.children)
   inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
 
