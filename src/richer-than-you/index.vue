@@ -81,7 +81,7 @@ const wrapSelection = (sel, button) => {
  * @todo: should only unwrap from the tag we are unselecting. Should not cut a block node into
  * multiple!
  */
-const unwrapSelection = (sel, button) => {
+/* const unwrapSelection = (sel, button) => {
   const selectionRange = sel.getRangeAt(0)
   const { startContainer, startOffset, endContainer, endOffset }= selectionRange
 
@@ -136,6 +136,48 @@ const unwrapSelection = (sel, button) => {
     }
     selectionRange.insertNode(fragment2)
   }
+} */
+
+const unwrapSelection = (sel, button) => {
+  const baseBlockNode = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
+  const extentBlockNode = utils.getNearestBlockNode(sel.extentNode, sel.extentOffset, inputField.value)
+
+  // The range starting from the beginning of the selection block node and until the selection.
+  const startRange = new Range()
+  startRange.setStart(baseBlockNode, 0)
+  startRange.setEnd(sel.baseNode, sel.baseOffset)
+  const startFragment = startRange.extractContents()
+
+  // The selection range.
+  const middleRange = sel.getRangeAt(0)
+  const middleFragment = middleRange.extractContents()
+  // On the selection, remove the tag of the selected button (there could be multiple).
+  middleFragment.querySelectorAll(button.tag).forEach(node => {
+    node.replaceWith(...node.childNodes)
+  })
+
+  // The range starting after the selection until the end of the block node of the selection.
+  const endRange = new Range()
+  // Sets the end of the range correctly: just before the block node closing tag.
+  endRange.selectNodeContents(extentBlockNode)
+  endRange.setStart(sel.extentNode, sel.extentOffset)
+  const endFragment = endRange.extractContents()
+
+  // sel.removeAllRanges()
+  // sel.addRange(endRange)
+  // debugger
+
+  // console.log({ startFragment, middleFragment, endFragment })
+
+  const fullFragment = new DocumentFragment()
+  fullFragment.append(...startFragment.childNodes, ...middleFragment.childNodes, ...endFragment.childNodes)
+  // console.log(fullFragment)
+  // debugger
+
+  const fullRange = new Range()
+  fullRange.setStart(startRange.startContainer, 0)
+  fullRange.setEnd(endRange.endContainer, endRange.endOffset)
+  fullRange.insertNode(fullFragment)
 }
 
 /**
