@@ -67,7 +67,7 @@ const initializeButtons = (() => {
 
   requestedButtons = requestedButtons.map(button => {
     if (typeof button === 'string') button = { name: button }
-    return { ...availableButtons[button.name], name: button.name }
+    return { ...availableButtons[button.name], ...button, name: button.name }
   })
 
   menuButtons.push(...requestedButtons.map(button => {
@@ -125,16 +125,21 @@ defineExpose({ action })
 <template lang="pug">
 .richer__menu
   template(v-for="(button, i) in menuButtons" :key="i")
-    span.separator(v-if="button.name === '|'")
-
-    slot(v-else name="button" :button="button" :action="() => action($event, button)")
-      button.button(
+    span.richer__separator(v-if="button.name === '|'")
+    slot(
+      v-else
+      name="button"
+      :button="button"
+      :action="() => action($event, button)"
+      :classes="{ [`richer__button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'richer__button--active': button.active }")
+      | {{button.icon}}
+      button.richer__button(
         @click="action($event, button)"
         type="button"
         :title="button.label"
-        :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
+        :class="{ [`richer__button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'richer__button--active': button.active }"
         :style="{ fontSize: button.size ? `${button.size}%` : null }")
-        span {{ button.label }}
+        span {{ button }}
 </template>
 
 <style lang="scss">
@@ -148,86 +153,86 @@ defineExpose({ action })
   flex-wrap: wrap;
   align-items: center;
   transition: 0.4s ease-in-out;
+}
 
-  .button {
-    position: relative;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    height: 26px;
-    width: 26px;
-    color: rgba(#000, 0.65);
-    font-size: 1rem;
-    border: 1px solid rgba(#000, 0.1);
-    border-radius: 4px;
-    margin: 2px;
-    cursor: pointer;
-    background-color: transparent;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-    transition: 0.15s ease-in-out;
+.richer__button {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 26px;
+  width: 26px;
+  color: rgba(#000, 0.65);
+  font-size: 1rem;
+  border: 1px solid rgba(#000, 0.1);
+  border-radius: 4px;
+  margin: 2px;
+  cursor: pointer;
+  background-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: 0.15s ease-in-out;
 
-    &:hover, &--active {border-color: rgba(#000, 0.06);}
-    &:focus {
-      border-color: rgba(#000, 0.4);
-      outline: none;
-    }
+  &:hover, &--active {border-color: rgba(#000, 0.06);}
+  &:focus {
+    border-color: rgba(#000, 0.4);
+    outline: none;
+  }
+  &:active {
+    border-color: rgba(#000, 0.06);
+    background-color: rgba(#000, 0.1);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(#000, 0.06);
+    border-radius: 99rem;
+    transform: scale(0.3);
+    opacity: 0;
+    transition: inherit;
+  }
+
+  &:hover:after, &:active:after, &--active:after {
+    opacity: 1;
+    transform: scale(1);
+    border-radius: 3px;
+  }
+
+  span {display: none;}
+}
+
+.richer__separator {
+  display: flex;
+  align-self: stretch;
+  width: 1px;
+  margin: 6px 4px;
+  background: rgba(#000, 0.15);
+}
+
+// Dark mode.
+// --------------------------------------------------------
+.richer--dark {
+  .richer__menu {background-color: rgba(#fff, 0.05);}
+
+  .richer__button {
+    border-color: rgba(#fff, 0.1);
+    color: rgba(#fff, 0.65);
+
+    &:hover, &--active {border-color: rgba(#fff, 0.06);}
+    &:focus {border-color: rgba(#fff, 0.4);}
     &:active {
-      border-color: rgba(#000, 0.06);
-      background-color: rgba(#000, 0.1);
+      border-color: rgba(#fff, 0.06);
+      background-color: rgba(#fff, 0.1);
     }
 
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(#000, 0.06);
-      border-radius: 99rem;
-      transform: scale(0.3);
-      opacity: 0;
-      transition: inherit;
-    }
-
-    &:hover:after, &:active:after, &--active:after {
-      opacity: 1;
-      transform: scale(1);
-      border-radius: 3px;
-    }
-
-    span {display: none;}
+    &:after {background-color: rgba(#fff, 0.06);}
   }
 
-  .separator {
-    display: flex;
-    align-self: stretch;
-    width: 1px;
-    margin: 6px 4px;
-    background: rgba(#000, 0.15);
-  }
-
-  // Dark mode.
-  // ------------------------------------------------------
-  .richer--dark & {
-    background-color: rgba(#fff, 0.05);
-
-    .button {
-      border-color: rgba(#fff, 0.1);
-      color: rgba(#fff, 0.65);
-
-      &:hover, &--active {border-color: rgba(#fff, 0.06);}
-      &:focus {border-color: rgba(#fff, 0.4);}
-      &:active {
-        border-color: rgba(#fff, 0.06);
-        background-color: rgba(#fff, 0.1);
-      }
-
-      &:after {background-color: rgba(#fff, 0.06);}
-    }
-
-    .separator {background: rgba(#fff, 0.15);}
-  }
+  .richer__separator {background: rgba(#fff, 0.15);}
 }
 </style>
