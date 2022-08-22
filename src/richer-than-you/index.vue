@@ -351,6 +351,8 @@ provide('editor', { focus, process, wrapSelection, unwrapSelection, inputField, 
     v-model:buttons="menuButtons"
     :user-buttons="props.buttons"
     :shortcuts="shortcuts")
+    template(#button="props")
+      slot(name="button" v-bind="props")
 
   .content-wrap
     .richer__content(
