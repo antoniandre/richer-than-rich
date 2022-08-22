@@ -26,7 +26,13 @@ const build = process.env.BUNDLE ? bundlingConf : { outDir: 'docs' }
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: { whitespace: 'preserve' }
+      }
+    })
+  ],
   resolve: {
     alias: {
       '@': resolve(__dirname, '/src')
