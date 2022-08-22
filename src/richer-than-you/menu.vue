@@ -126,14 +126,15 @@ defineExpose({ action })
 .richer__menu
   template(v-for="(button, i) in menuButtons" :key="i")
     span.separator(v-if="button.name === '|'")
-    button.button(
-      v-else
-      @click="action($event, button)"
-      type="button"
-      :title="button.label"
-      :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
-      :style="{ fontSize: button.size ? `${button.size}%` : null }")
-      span {{ button.label }}
+
+    slot(v-else name="button" :button="button" :action="() => action($event, button)")
+      button.button(
+        @click="action($event, button)"
+        type="button"
+        :title="button.label"
+        :class="{ [`button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'button--active': button.active }"
+        :style="{ fontSize: button.size ? `${button.size}%` : null }")
+        span {{ button.label }}
 </template>
 
 <style lang="scss">
