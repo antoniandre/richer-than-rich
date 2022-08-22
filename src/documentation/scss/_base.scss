@@ -95,6 +95,8 @@ body {
 .mb3 {margin-bottom: 3em;}
 .mb4 {margin-bottom: 4em;}
 
+div.ssh-pre {margin-top: 0;}
+
 // Main.
 // --------------------------------------------------------
 main {
@@ -153,7 +155,14 @@ main {
   background-color: rgba(var(--theme-color-invert-bg-rgb), 0.05);
 }
 
-.section--customizable {}
+.section--customizable {
+  .flex {gap: 2rem;}
+
+  .richer {
+    width: 100%;
+    max-width: 400px;
+  }
+}
 
 .section--get-it {
   display: flex;
