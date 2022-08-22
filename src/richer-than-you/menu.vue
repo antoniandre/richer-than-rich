@@ -132,14 +132,13 @@ defineExpose({ action })
       :button="button"
       :action="() => action($event, button)"
       :classes="{ [`richer__button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'richer__button--active': button.active }")
-      | {{button.icon}}
       button.richer__button(
         @click="action($event, button)"
         type="button"
         :title="button.label"
         :class="{ [`richer__button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'richer__button--active': button.active }"
         :style="{ fontSize: button.size ? `${button.size}%` : null }")
-        span {{ button }}
+        span {{ button.label }}
 </template>
 
 <style lang="scss">
