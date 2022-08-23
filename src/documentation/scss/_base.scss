@@ -63,6 +63,14 @@ body {
   padding: 0 2rem;
 }
 
+code {
+  background-color: rgba(var(--theme-color-invert-bg-rgb), 0.1);
+  border-radius: 3px;
+  border: 1px solid rgba(var(--theme-color-invert-bg-rgb), 0.1);
+  padding: 1px 3px;
+  line-height: 1;
+}
+
 // Helper classes.
 // --------------------------------------------------------
 .flex {
