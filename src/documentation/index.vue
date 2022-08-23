@@ -78,7 +78,6 @@ const copyCode = e => {
     section.section.section--easy
       .container
         h2 Easy to use
-        p Content coming soon.
         .grid.grid--2
           .grow
             h3 Simple markup
@@ -109,7 +108,7 @@ const copyCode = e => {
               :dark-mode="darkMode"
               :buttons="['bold', 'underline', 'subscript', 'superscript']")
 
-            .stack-box
+            //- .stack-box
               editor(
                 :dark-mode="darkMode"
                 :buttons="buttons2"
