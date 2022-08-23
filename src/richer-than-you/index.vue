@@ -6,7 +6,7 @@ import './scss/index.scss'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
-  placeholder: { type: String, default: '' },
+  placeholder: { type: String, default: 'Type something...' },
   buttons: { type: Array, default: () => [] },
   darkMode: { type: [Boolean, String] }, // True, false, or 'auto'.
   contentProps: { type: Object, default: () => ({}) }
@@ -27,7 +27,6 @@ const emit = defineEmits([
 const menu = ref(null)
 const inputField = ref(null)
 let dark = ref(props.darkMode)
-let processed = ref(false)
 
 // Processing rules.
 const rules = {
@@ -44,7 +43,12 @@ const shortcuts = {}
 
 const menuButtons = ref([])
 const placeholder = ref(props.placeholder)
-const content = ref({ initial: props.modelValue || '', processed: props.modelValue || '' })
+const content = ref({
+  initial: props.modelValue || '',
+  processed: props.modelValue || '',
+  isEmpty: true,
+  isProcessed: false
+})
 
 /**
  * Wrap the selected content with the clicked button generated tag.
@@ -74,70 +78,16 @@ const wrapSelection = (sel, button) => {
 }
 
 /**
- * Unwrap the selected content from the clicked button generated markup.
+ * Unwrap the selected content from the clicked button wrapping markup.
  * This will modify the innerHTML of the contenteditable, then call process() to cleanup,
  * and emit the clean markup.
  *
- * @todo: should only unwrap from the tag we are unselecting. Should not cut a block node into
- * multiple!
+ * Complexity:
+ * - For selection `text [<bold>text</bold>] text`, we can unwrap with the selection range only.
+ * - For selection `<bold>text [text] text</bold>`, we can't unwrap bold from the selection range:
+ *   We need to close bold before the selection and reopen after it.
+ * For that, create 3 fragments: 1 before selection, 1 selection, 1 after selection.
  */
-/* const unwrapSelection = (sel, button) => {
-  const selectionRange = sel.getRangeAt(0)
-  const { startContainer, startOffset, endContainer, endOffset }= selectionRange
-
-  // Complexity:
-  // - For selection `text [<bold>text</bold>] text`, we can unwrap with the selection range only.
-  // - For selection `<bold>text [text] text</bold>`, we can't unwrap bold from the selection range:
-  //   We need to close bold before the selection and reopen after it.
-  // For that, create 3 fragments: 1 before selection, 1 selection, 1 after selection.
-  const startRange = new Range()
-  startRange.selectNodeContents(inputField.value)
-  startRange.setEnd(startContainer, startOffset)
-  // const startFragment = startRange.extractContents()
-  // startRange.insertNode(startFragment)
-
-  // sel.removeAllRanges()
-  // sel.addRange(startRange)
-
-  const endRange = new Range()
-  endRange.selectNodeContents(inputField.value)
-  endRange.setStart(endContainer, endOffset)
-  // const endFragment = endRange.extractContents()
-  // endRange.insertNode(endFragment)
-
-  // sel.removeAllRanges()
-  // sel.addRange(endRange)
-
-  const startFragment = startRange.extractContents()
-  startRange.insertNode(startFragment)
-
-  const endFragment = endRange.extractContents()
-  endRange.insertNode(endFragment)
-
-  const fragment = selectionRange.extractContents()
-  const foundTagInSelection = fragment.querySelectorAll(`${button.tag || 'span'}.${button.name}`)
-  if (foundTagInSelection.length) {
-    // Cleanup the selection fragment.
-    foundTagInSelection.forEach(node => node.replaceWith(...node.childNodes))
-  }
-  selectionRange.insertNode(fragment)
-
-  if (selectionRange.commonAncestorContainer.matches(`${button.tag || 'span'}.${button.name}`)) {
-    // This loses the selection because we unwrap the node in which the selection is. :/
-    // selectionRange.commonAncestorContainer.replaceWith(...selectionRange.commonAncestorContainer.childNodes)
-
-    selectionRange.selectNode(selectionRange.commonAncestorContainer)
-    const fragment2 = selectionRange.extractContents()
-
-    const foundTagInSelection2 = fragment2.querySelectorAll(`${button.tag || 'span'}.${button.name}`)
-    if (foundTagInSelection2.length) {
-      // Cleanup the selection fragment.
-      foundTagInSelection2.forEach(node => node.replaceWith(...node.childNodes))
-    }
-    selectionRange.insertNode(fragment2)
-  }
-} */
-
 const unwrapSelection = (sel, button) => {
   const baseBlockNode = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
   const extentBlockNode = utils.getNearestBlockNode(sel.extentNode, sel.extentOffset, inputField.value)
@@ -211,10 +161,53 @@ const unwrapSelection = (sel, button) => {
  * - merge consecutive identical tags
  */
 const process = (e, sel) => {
+  content.value.isProcessed = false
   sel = sel || window.getSelection()
 
-  // Check the content and wrap it in a `p` if the content has no block nodes.
+  processGlobalWrapInP() // Wrap in a `p` if the content has no block nodes.
+
+  processReplaceTags()
+
+  inputField.value.normalize() // Deep clean the text nodes (merge and delete empty ones).
+
+  // Remove empty tags.
+  inputField.value.querySelectorAll('*:not(p,br):empty').forEach(node => node.remove())
+
+  recursiveCleanup(inputField.value.children)
+  inputField.value.normalize() // Deep clean the text nodes (merge and delete empty ones).
+
+  const { value: ct } = content
+  ct.processed = inputField.value.innerHTML
+  ct.isProcessed = true
+  ct.isEmpty = !ct.processed || !!ct.processed.match(/^\s*<p[^>]*>\s*<\/p>\s*$/)
+}
+
+/**
+ * Process untrusted content on paste, or on v-model on init.
+ * This process is heavier than the process to perform on input.
+ */
+const processExternal = (e, sel) => {
+  content.value.isProcessed = false
+  sel = sel || window.getSelection()
+
+  processGlobalWrapInP() // Wrap in a `p` if the content has no block nodes.
+
+  processReplaceTags()
+
+  inputField.value.normalize() // Deep clean the text nodes (merge and delete empty ones).
+
+  const { value: ct } = content
+  ct.processed = inputField.value.innerHTML
+  ct.isProcessed = true
+  ct.isEmpty = !ct.processed || !!ct.processed.match(/^\s*<p[^>]*>\s*<\/p>\s*$/)
+}
+
+/**
+ * Check the full content and wrap it in a `p` if the content has no block nodes.
+ */
+const processGlobalWrapInP = () => {
   const blockNodes = inputField.value.querySelectorAll(utils.blockNodes.join(','))
+
   if (!blockNodes.length) {
     utils.memorizeSelection()
     const range = new Range()
@@ -222,41 +215,13 @@ const process = (e, sel) => {
     range.surroundContents(document.createElement('p'))
     utils.restoreSelection(inputField.value)
   }
-
-  processReplaceTags()
-
-  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
-
-  // Remove empty tags.
-  inputField.value.querySelectorAll('*:not(p,br):empty').forEach(node => node.remove())
-
-  recursiveCleanup(inputField.value.children)
-  inputField.value.normalize() // Recursively cleanup text nodes (merge and delete empty ones).
-
-  content.value.processed = inputField.value.innerHTML
-  processed.value = true
 }
 
-// Process untrusted content on paste, or on v-model on init.
-// This process is heavier than the process to perform on input.
-const processExternal = (e, sel) => {
-  sel = sel || window.getSelection()
-
-  inputField.value.normalize() // Glue the text nodes back together.
-
-  processReplaceTags()
-
-  // Check the content and wrap it in a `p` if the content is only text.
-  const inputChildren = inputField.value.childNodes
-  inputChildren.forEach(node => {
-    if (node.nodeType === 3 && !node.nodeValue) utils.wrapNode(node, 'p', inputField.value)
-  })
-}
-
+/**
+ * Replace tags in full tree following the replacements rule
+ * -> Drawback: Need to reapply selection after replacements.
+ **/
 const processReplaceTags = () => {
-  // Replace tags in full tree following the replacements rule
-  // ---------------------------------------------------------
-  // -> Drawback: Need to reapply selection after replacements.
   const replacementsSelector = Object.keys(rules.replacements).join(',')
   inputField.value.querySelectorAll(replacementsSelector).forEach(node => {
     const { tag, class: Class } = rules.replacements[node.tagName.toLowerCase()]
@@ -266,6 +231,7 @@ const processReplaceTags = () => {
     node.replaceWith(newTag)
   })
 }
+
 /**
  * Recursive cleanup:
  * - remove empty nodes? (maybe set a rule for this)
@@ -278,7 +244,6 @@ const recursiveCleanup = htmlCollection => {
   // Remove nested duplicates.
 
   // Merge tween nodes.
-
 }
 
 /**
@@ -367,7 +332,7 @@ provide('editor', { focus, process, wrapSelection, unwrapSelection, inputField, 
       @paste="onPaste"
       v-bind="props.contentProps"
       v-html="content.initial")
-    .richer__placeholder(v-if="placeholder && !content.processed") {{ props.placeholder }}
+    .richer__placeholder(v-if="placeholder && content.isEmpty") {{ props.placeholder }}
 </template>
 
 <style lang="scss">
