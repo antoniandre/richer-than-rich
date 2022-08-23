@@ -103,8 +103,6 @@ code {
 .mb3 {margin-bottom: 3em;}
 .mb4 {margin-bottom: 4em;}
 
-div.ssh-pre {margin-top: 0;}
-
 // Main.
 // --------------------------------------------------------
 main {
@@ -276,7 +274,8 @@ ul.checklist {
 }
 
 div.ssh-pre {
-  background: rgba(var(--theme-color-invert-bg-rgb), 0.08);
+  margin-top: 0;
+  background: rgba(var(--theme-color-invert-bg-rgb), 0.05);
 }
 
 @keyframes shine {
