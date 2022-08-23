@@ -79,17 +79,48 @@ const copyCode = e => {
       .container
         h2 Easy to use
         p Content coming soon.
-        //- .grid.grid--2
+        .grid.grid--2
           .grow
             h3 Simple markup
-            p Only set the buttons you want as strings. Or get a common set by default.
-            p separator is as easy as '|'
+            p.
+              If you're after an easy plug &amp; play solution, just use the bare component.
+              It will come with a set of common buttons.
+            pre-ssh(language="html-vue" :dark="darkMode").
+              &lt;richer&gt;&lt;/richer&gt;
+            editor.mt1(:dark-mode="darkMode")
+
+            p.mt2 You can also chose buttons by just giving an array of button names.
+            pre-ssh(language="html-vue" :dark="darkMode").
+              &lt;richer
+                :buttons="['bold', 'underline', 'subscript', 'superscript']"
+              &gt;
+              &lt;/richer&gt;
+            editor.mt1(
+              :dark-mode="darkMode"
+              :buttons="['bold', 'underline', 'subscript', 'superscript']")
+
+            p.mt2 Adding separators between buttons is as easy as #[code |]
+            pre-ssh(language="html-vue" :dark="darkMode").
+              &lt;richer
+                :buttons="['bold', 'underline', 'subscript', 'superscript']"
+              &gt;
+              &lt;/richer&gt;
+            editor.mt1(
+              :dark-mode="darkMode"
+              :buttons="['bold', 'underline', 'subscript', 'superscript']")
+
             .stack-box
-              editor(:dark-mode="darkMode" :buttons="buttons2" model-value="Only set the buttons you want as strings.")
+              editor(
+                :dark-mode="darkMode"
+                :buttons="buttons2"
+                model-value="Only set the buttons you want as strings.")
               editor(:dark-mode="darkMode" model-value="...Or get a common set by default.")
-              editor(:dark-mode="darkMode" :buttons="buttons3" model-value="Separate buttons with a simple '|'.")
+              editor(
+                :dark-mode="darkMode"
+                :buttons="buttons3"
+                model-value="Separate buttons with a simple '|'.")
           .grow
-            h3 Emit events
+            h3 Emitted events
             .stack-box
               editor.mt2(:dark-mode="darkMode" :buttons="buttons")
               pre-ssh(language="html-vue" :dark="darkMode") &lt;richer&gt;&lt;/richer&gt;
@@ -102,12 +133,10 @@ const copyCode = e => {
           h3.mt3 You pick your buttons
           .flex
             editor(
-              model-value="I'm rich. $$"
               :dark-mode="darkMode"
               :buttons="['bold', 'underline', 'subscript', 'superscript']")
             pre-ssh(language="html-vue" :dark="darkMode").
               &lt;richer
-                model-value="I'm rich. $$"
                 :buttons="['bold', 'underline', 'subscript', 'superscript']"
               &gt;
               &lt;/richer&gt;
@@ -116,12 +145,10 @@ const copyCode = e => {
           h3.mt3 Add your own custom buttons
           .flex
             editor(
-              model-value="I'm rich. $$"
               :dark-mode="darkMode"
               :buttons="[{ name: 'dark', label: 'Dark theme', icon: 'i-moon' }, { name: 'light', label: 'Light theme', icon: 'i-sun' }]")
             pre-ssh(language="html-vue" :dark="darkMode").
               &lt;richer
-                model-value="I'm rich. $$"
                 :buttons="[
                   { name: 'dark', label: 'Dark theme', icon: 'i-moon' },
                   { name: 'light', label: 'Light theme', icon: 'i-sun' }
@@ -131,19 +158,19 @@ const copyCode = e => {
         div
           h3.mt3 Styles
           .flex
-            editor.round-buttons(model-value="I'm rich. $$" :dark-mode="darkMode")
+            editor.round-buttons(:dark-mode="darkMode")
             p.
               The component is using the BEM nomenclature as well as easy selectors as much as possible.#[br]
               It should be a breeze to apply the style you want.
         div
           h3.mt3 Using slots
           .flex.align-center
-            editor.slots(model-value="I'm rich. $$" :dark-mode="darkMode")
+            editor.slots(:dark-mode="darkMode")
               template(#button="{ button, action }")
                 button(@click="action") {{ button.label }}
 
             pre-ssh(language="html-vue" :dark="darkMode").
-              &lt;richer model-value="I'm rich. $$"&gt;
+              &lt;richer gt;
                 &lt;template #button="{ button, action }"&gt;
                   &lt;button @click="action"&gt;
                     {{ '\{\{ button.label \}\}' }}
