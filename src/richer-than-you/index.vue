@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, provide } from 'vue'
 import * as utils from './dom-utils'
+import { process, processExternal } from './content-processing'
 import Menu from './menu.vue'
 import './scss/index.scss'
 
@@ -27,17 +28,6 @@ const emit = defineEmits([
 const menu = ref(null)
 const inputField = ref(null)
 let dark = ref(props.darkMode)
-
-// Processing rules.
-const rules = {
-  replacements: {
-    b: { tag: 'strong', class: 'bold' },
-    i: { tag: 'em', class: 'italic' },
-    u: { tag: 'span', class: 'underline' },
-    s: { tag: 'span', class: 'strikethrough' },
-    div: { tag: 'p', class: 'paragraph' }
-  }
-}
 
 const shortcuts = {}
 
@@ -74,7 +64,7 @@ const wrapSelection = (sel, button) => {
     range.insertNode(newParent)
   }
 
-  process(null, sel)
+  process({ inputField: inputField.value, content: content.value })
 }
 
 /**
@@ -153,100 +143,6 @@ const unwrapSelection = (sel, button) => {
 }
 
 /**
- * Cleanup the HTML markup:
- * - replace tags following the replacements rules
- * - glue back the text nodes together
- * - delete nested identical tags
- * - delete empty tags?
- * - merge consecutive identical tags
- */
-const process = (e, sel) => {
-  content.value.isProcessed = false
-  sel = sel || window.getSelection()
-
-  processGlobalWrapInP() // Wrap in a `p` if the content has no block nodes.
-
-  processReplaceTags()
-
-  inputField.value.normalize() // Deep clean the text nodes (merge and delete empty ones).
-
-  // Remove empty tags.
-  inputField.value.querySelectorAll('*:not(p,br):empty').forEach(node => node.remove())
-
-  recursiveCleanup(inputField.value.children)
-  inputField.value.normalize() // Deep clean the text nodes (merge and delete empty ones).
-
-  const { value: ct } = content
-  ct.processed = inputField.value.innerHTML
-  ct.isProcessed = true
-  ct.isEmpty = !ct.processed || !!ct.processed.match(/^\s*<p[^>]*>\s*<\/p>\s*$/)
-}
-
-/**
- * Process untrusted content on paste, or on v-model on init.
- * This process is heavier than the process to perform on input.
- */
-const processExternal = (e, sel) => {
-  content.value.isProcessed = false
-  sel = sel || window.getSelection()
-
-  processGlobalWrapInP() // Wrap in a `p` if the content has no block nodes.
-
-  processReplaceTags()
-
-  inputField.value.normalize() // Deep clean the text nodes (merge and delete empty ones).
-
-  const { value: ct } = content
-  ct.processed = inputField.value.innerHTML
-  ct.isProcessed = true
-  ct.isEmpty = !ct.processed || !!ct.processed.match(/^\s*<p[^>]*>\s*<\/p>\s*$/)
-}
-
-/**
- * Check the full content and wrap it in a `p` if the content has no block nodes.
- */
-const processGlobalWrapInP = () => {
-  const blockNodes = inputField.value.querySelectorAll(utils.blockNodes.join(','))
-
-  if (!blockNodes.length) {
-    utils.memorizeSelection()
-    const range = new Range()
-    range.selectNodeContents(inputField.value)
-    range.surroundContents(document.createElement('p'))
-    utils.restoreSelection(inputField.value)
-  }
-}
-
-/**
- * Replace tags in full tree following the replacements rule
- * -> Drawback: Need to reapply selection after replacements.
- **/
-const processReplaceTags = () => {
-  const replacementsSelector = Object.keys(rules.replacements).join(',')
-  inputField.value.querySelectorAll(replacementsSelector).forEach(node => {
-    const { tag, class: Class } = rules.replacements[node.tagName.toLowerCase()]
-    const newTag = document.createElement(tag)
-    if (tag === 'span') newTag.className = Class
-    newTag.innerHTML = node.innerHTML
-    node.replaceWith(newTag)
-  })
-}
-
-/**
- * Recursive cleanup:
- * - remove empty nodes? (maybe set a rule for this)
- * - remove nested duplicates
- * - merge tween nodes
- **/
-const recursiveCleanup = htmlCollection => {
-  // Remove empty nodes.
-
-  // Remove nested duplicates.
-
-  // Merge tween nodes.
-}
-
-/**
  * When meta key is pressed, handle keyboard shortcuts and prevent default browser action.
  */
 const onKeydown = e => {
@@ -275,7 +171,7 @@ const onClick = e => {
 }
 
 const onInput = e => {
-  process(e, window.getSelection())
+  process({ inputField: inputField.value, content: content.value })
   emit('input', { e, html: content.value.processed })
 }
 
@@ -303,10 +199,13 @@ onMounted(() => {
     dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
-  processExternal()
+  processExternal({ inputField: inputField.value, content: content.value })
 })
 
-provide('editor', { focus, process, wrapSelection, unwrapSelection, inputField, menuButtons })
+provide(
+  'editor',
+  { focus, process, wrapSelection, unwrapSelection, inputField, menuButtons, content }
+)
 </script>
 
 <template lang="pug">

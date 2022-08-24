@@ -3,7 +3,7 @@ import { toRaw, inject } from 'vue'
 import * as actions from './actions'
 import * as utils from './dom-utils'
 
-const { focus, process, wrapSelection, unwrapSelection, inputField } = inject('editor')
+const { focus, process, wrapSelection, unwrapSelection, inputField, content } = inject('editor')
 let { menuButtons } = inject('editor')
 
 const props = defineProps({
@@ -99,7 +99,7 @@ const action = (e, button) => {
   if (button.action && typeof actions[button.action] === 'function') {
     let nearestBlockEl = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
     actions[button.action]({ button, inputField: inputField.value, sel, e, nearestBlockEl })
-    process()
+    process({ inputField: inputField.value, content: content.value })
   }
 
   // If no action found, just wrap the selection with the button tag if given or span otherwise.
