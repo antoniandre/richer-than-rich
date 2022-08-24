@@ -5,7 +5,7 @@
  * `{ button, inputField, sel, e, nearestBlockEl }`.
  */
 
-import * as utils from './dom-utils'
+import { replaceNodeTag, unwrapNode, wrapNode } from './dom-utils'
 
 /**
  * Aligns the content (closest block node) to the left, center, right or justify.
@@ -25,12 +25,12 @@ export const list = ({ button, inputField, nearestBlockEl }) => {
 
   // Remove the list when there's already one (replace with `p`).
   if (nearestBlockEl.nodeName.toLowerCase() === listType) {
-    nearestBlockEl.childNodes.forEach(li => utils.replaceNodeTag(li, 'p', inputField))
-    utils.unwrapNode(nearestBlockEl)
+    nearestBlockEl.childNodes.forEach(li => replaceNodeTag(li, 'p', inputField))
+    unwrapNode(nearestBlockEl)
   }
   else {
-    const li = utils.replaceNodeTag(nearestBlockEl, 'li', inputField)
-    utils.wrapNode(li, listType, inputField)
+    const li = replaceNodeTag(nearestBlockEl, 'li', inputField)
+    wrapNode(li, listType, inputField)
   }
 }
 
