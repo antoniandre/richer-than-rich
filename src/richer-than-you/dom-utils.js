@@ -117,3 +117,15 @@ export const getNearestBlockNode = (node, offset, richerInputField) => {
   }
   else return node.closest(blockNodes.join(','))
 }
+
+// Merge consecutive tags. E.g. <strong> directly next to <strong>.
+export const mergeTweenNodes = htmlCollection => {
+  [...htmlCollection].forEach((node, i) => {
+    const nextNode = htmlCollection[i + 1]
+    console.log(nextNode && nextNode.nodeType !== 3, 'la')
+    if (nextNode && nextNode.nodeType !== 3 && nextNode.nodeName === node.nodeName && nextNode.className === node.className) {
+      node.append(...nextNode.childNodes)
+      nextNode.remove()
+    }
+  })
+}
