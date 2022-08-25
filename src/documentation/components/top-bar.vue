@@ -13,9 +13,14 @@ const emit = defineEmits(['update:dark-mode'])
 
 <template lang="pug">
 .top-bar
-  .theme-switch(@click="switchTheme")
-    button.button.i-moon(:class="{ 'button--active': darkMode }")
-    button.button.i-sun(:class="{ 'button--active': !darkMode }")
+  .theme-switch(
+    @click="switchTheme"
+    @keypress.enter="switchTheme"
+    @keypress.space.prevent="switchTheme"
+    tabindex="0"
+    role="button")
+    button.button.i-moon(:class="{ 'button--active': darkMode }" tabindex="-1")
+    button.button.i-sun(:class="{ 'button--active': !darkMode }" tabindex="-1")
     .slider
 </template>
 
@@ -48,6 +53,12 @@ const emit = defineEmits(['update:dark-mode'])
   background-color: rgba(#bf953f, 0.5);
   box-shadow: 1px 1px 3px #973 inset;
   cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  transition: 0.3s ease-in-out;
+
+
+  &:focus {box-shadow: 0 0 3px 2px #e1a116a3;}
 
   .button {
     display: inline-flex;
@@ -88,6 +99,7 @@ const emit = defineEmits(['update:dark-mode'])
 
   .theme-switch {
     box-shadow: 1px 1px 3px #403216 inset;
+    &:focus {border-color: #b9a273;}
 
     .button {color: rgba(#000, 0.5);}
     .button--active {color: hsl(40, 30%, 53%)}
