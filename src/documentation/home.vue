@@ -89,12 +89,12 @@ section.section.section--easy
         p.mt2 Adding separators between buttons is as easy as #[code |]
         pre-ssh(language="html-vue" :dark="darkMode").
           &lt;richer
-            :buttons="['bold', 'underline', 'subscript', 'superscript']"
+            :buttons="['bold', 'underline', '|', 'subscript', 'superscript']"
           &gt;
           &lt;/richer&gt;
         editor.mt1(
           :dark-mode="darkMode"
-          :buttons="['bold', 'underline', 'subscript', 'superscript']")
+          :buttons="['bold', 'underline', '|', 'subscript', 'superscript']")
 
       .grow
         h3 Emitted events
