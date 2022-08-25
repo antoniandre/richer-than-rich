@@ -13,25 +13,6 @@ html, body {
 }
 
 body {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-  color-scheme: light dark;
-  // background:
-  //   radial-gradient(ellipse farthest-corner at right bottom, #fedb37 0%, #fdb931 8%, #9f7923 30%, #8a6e2f 40%, transparent 80%),
-  //   radial-gradient(ellipse farthest-corner at left top, #ffffff 0%, #ffffac 8%, #d1b464 25%, #5d4a1fba 62.5%, #5d4a1f 100%);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-::selection {background: var(--theme-color-gold);}
-
-.page {
   // Light theme colors.
   --theme-color-main-bg: #{$light-main-bg-color};
   --theme-color-main-bg-rgb: #{$light-main-bg-color-rgb}; // Allowing an alpha channel.
@@ -41,6 +22,20 @@ body {
   --theme-color-invert-fg: #{$dark-main-fg-color};
   --theme-color-gold: #{$light-gold-color};
 
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  // background:
+  //   radial-gradient(ellipse farthest-corner at right bottom, #fedb37 0%, #fdb931 8%, #9f7923 30%, #8a6e2f 40%, transparent 80%),
+  //   radial-gradient(ellipse farthest-corner at left top, #ffffff 0%, #ffffac 8%, #d1b464 25%, #5d4a1fba 62.5%, #5d4a1f 100%);
   background-color: var(--theme-color-main-bg);
   color: var(--theme-color-main-fg);
   transition: color $switch-mode-transition, background-color $switch-mode-transition;
@@ -56,6 +51,8 @@ body {
     --theme-color-gold: #{$dark-gold-color};
   }
 }
+
+::selection {background: var(--theme-color-gold);}
 
 .container {
   max-width: 1280px;
@@ -105,12 +102,6 @@ code {
 
 // Main.
 // --------------------------------------------------------
-main {
-  // .container > h2 {
-  //   color: rgba(#fff, 0.8);
-  // }
-}
-
 .section {
   position: relative;
   min-height: 450px;
@@ -235,6 +226,11 @@ main {
   }
 }
 
+.gold-separator {
+  height: 1px;
+  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+}
+
 ul.checklist {
   margin-top: 20px;
   list-style-type: none;
@@ -278,13 +274,21 @@ div.ssh-pre {
   background: rgba(var(--theme-color-invert-bg-rgb), 0.05);
 }
 
+footer {
+  .container {
+    padding: 1rem;
+    opacity: 0.3;
+    font-size: 0.9rem;
+  }
+}
+
 @keyframes shine {
   to {right: 210%;}
 }
 
 // Dark theme.
 // --------------------------------------------------------
-.page.dark {
+.dark {
   .section--why {
     background:
       var(--theme-color-invert-bg)

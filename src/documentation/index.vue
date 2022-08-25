@@ -18,10 +18,6 @@ const buttons = [
 const buttons2 = ['bold', 'italic', 'underline', 'subscript', 'superscript']
 const buttons3 = ['bold', 'italic', 'underline', '|', 'subscript', 'superscript']
 
-onMounted(() => {
-  darkMode.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-})
-
 const copyCode = e => {
   e.target.insertAdjacentHTML(
     'afterend',
@@ -37,151 +33,160 @@ const copyCode = e => {
   copied.value = true
   setTimeout(() => (copied.value = false), 2000)
 }
+
+onMounted(() => {
+  darkMode.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  darkMode && document.body.classList.add('dark')
+})
 </script>
 
 <template lang="pug">
-.page(:class="darkMode ? 'dark' : 'light'")
-  top-bar(v-model:dark-mode="darkMode")
+top-bar(v-model:dark-mode="darkMode")
 
-  hero(:dark-mode="darkMode")
+hero(:dark-mode="darkMode")
 
-  main
-    section.section.section--why
-      .container
-        h2 Why it's cool.
-        ul.checklist
-          li Free and open source
-          li Designed for Vue 3
-          li Designed for light and dark themes
-          li Fully accessible
-          li Lightweight
-          li Modern technics using recent browsers powers. No legacy-IE code
-          li Modular
-          li Clean HTML output
-          li Plug and play, no dependency
-          li Responsive
-          li Customizable
+main
+  section.section.section--why
+    .container
+      h2 Why it's cool.
+      ul.checklist
+        li Free and open source
+        li Designed for Vue 3
+        li Designed for light and dark themes
+        li Fully accessible
+        li Lightweight
+        li Modern technics using recent browsers powers. No legacy-IE code
+        li Modular
+        li Clean HTML output
+        li Plug and play, no dependency
+        li Responsive
+        li Customizable
 
-    section.section.section--install
-      .container
-        h2 Installation
-        pre-ssh(language="shell") npm i richer-than-you
+  section.section.section--install
+    .container
+      h2 Installation
+      pre-ssh(language="shell") npm i richer-than-you
 
-        p.mt2 Import in your component:
-        pre-ssh(language="js" :dark="darkMode").
-          import Richer from 'richer-than-you'
-          import 'richer-than-you/dist/styles.css'
+      p.mt2 Import in your component:
+      pre-ssh(language="js" :dark="darkMode").
+        import Richer from 'richer-than-you'
+        import 'richer-than-you/dist/styles.css'
 
-        p.mt2 Use in the template:
-        pre-ssh(language="html-vue") &lt;richer&gt;&lt;/richer&gt;
+      p.mt2 Use in the template:
+      pre-ssh(language="html-vue") &lt;richer&gt;&lt;/richer&gt;
 
-    section.section.section--easy
-      .container
-        h2 Easy to use
-        .grid.grid--2
-          .grow
-            h3 Simple markup
-            p.
-              If you're after an easy plug &amp; play solution, just use the bare component.
-              It will come with a set of common buttons.
-            pre-ssh(language="html-vue" :dark="darkMode").
-              &lt;richer&gt;&lt;/richer&gt;
-            editor.mt1(:dark-mode="darkMode")
+  section.section.section--easy
+    .container
+      h2 Easy to use
+      .grid.grid--2
+        .grow
+          h3 Simple markup
+          p.
+            If you're after an easy plug &amp; play solution, just use the bare component.
+            It will come with a set of common buttons.
+          pre-ssh(language="html-vue" :dark="darkMode").
+            &lt;richer&gt;&lt;/richer&gt;
+          editor.mt1(:dark-mode="darkMode")
 
-            p.mt2 You can also chose buttons by just giving an array of button names.
-            pre-ssh(language="html-vue" :dark="darkMode").
-              &lt;richer
-                :buttons="['bold', 'underline', 'subscript', 'superscript']"
-              &gt;
-              &lt;/richer&gt;
-            editor.mt1(
-              :dark-mode="darkMode"
-              :buttons="['bold', 'underline', 'subscript', 'superscript']")
+          p.mt2 You can also chose buttons by just giving an array of button names.
+          pre-ssh(language="html-vue" :dark="darkMode").
+            &lt;richer
+              :buttons="['bold', 'underline', 'subscript', 'superscript']"
+            &gt;
+            &lt;/richer&gt;
+          editor.mt1(
+            :dark-mode="darkMode"
+            :buttons="['bold', 'underline', 'subscript', 'superscript']")
 
-            p.mt2 Adding separators between buttons is as easy as #[code |]
-            pre-ssh(language="html-vue" :dark="darkMode").
-              &lt;richer
-                :buttons="['bold', 'underline', 'subscript', 'superscript']"
-              &gt;
-              &lt;/richer&gt;
-            editor.mt1(
-              :dark-mode="darkMode"
-              :buttons="['bold', 'underline', 'subscript', 'superscript']")
+          p.mt2 Adding separators between buttons is as easy as #[code |]
+          pre-ssh(language="html-vue" :dark="darkMode").
+            &lt;richer
+              :buttons="['bold', 'underline', 'subscript', 'superscript']"
+            &gt;
+            &lt;/richer&gt;
+          editor.mt1(
+            :dark-mode="darkMode"
+            :buttons="['bold', 'underline', 'subscript', 'superscript']")
 
-            //- .stack-box
-              editor(
-                :dark-mode="darkMode"
-                :buttons="buttons2"
-                model-value="Only set the buttons you want as strings.")
-              editor(:dark-mode="darkMode" model-value="...Or get a common set by default.")
-              editor(
-                :dark-mode="darkMode"
-                :buttons="buttons3"
-                model-value="Separate buttons with a simple '|'.")
-          .grow
-            h3 Emitted events
-            .stack-box
-              editor.mt2(:dark-mode="darkMode" :buttons="buttons")
-              pre-ssh(language="html-vue" :dark="darkMode") &lt;richer&gt;&lt;/richer&gt;
-
-    section.section.section--customizable
-      .container
-        h2 Highly customizable
-
-        div
-          h3.mt3 You pick your buttons
-          .flex
+          //- .stack-box
             editor(
               :dark-mode="darkMode"
-              :buttons="['bold', 'underline', 'subscript', 'superscript']")
-            pre-ssh(language="html-vue" :dark="darkMode").
-              &lt;richer
-                :buttons="['bold', 'underline', 'subscript', 'superscript']"
-              &gt;
-              &lt;/richer&gt;
-
-        div
-          h3.mt3 Add your own custom buttons
-          .flex
+              :buttons="buttons2"
+              model-value="Only set the buttons you want as strings.")
+            editor(:dark-mode="darkMode" model-value="...Or get a common set by default.")
             editor(
               :dark-mode="darkMode"
-              :buttons="[{ name: 'dark', label: 'Dark theme', icon: 'i-moon' }, { name: 'light', label: 'Light theme', icon: 'i-sun' }]")
-            pre-ssh(language="html-vue" :dark="darkMode").
-              &lt;richer
-                :buttons="[
-                  { name: 'dark', label: 'Dark theme', icon: 'i-moon' },
-                  { name: 'light', label: 'Light theme', icon: 'i-sun' }
-                ]"
-              &gt;
-              &lt;/richer&gt;
-        div
-          h3.mt3 Styles
-          .flex
-            editor.round-buttons(:dark-mode="darkMode")
-            p.
-              The component is using the BEM nomenclature as well as easy selectors as much as possible.#[br]
-              It should be a breeze to apply the style you want.
-        div
-          h3.mt3 Using slots
-          .flex.align-center
-            editor.slots(:dark-mode="darkMode")
-              template(#button="{ button, action }")
-                button(@click="action") {{ button.label }}
+              :buttons="buttons3"
+              model-value="Separate buttons with a simple '|'.")
+        .grow
+          h3 Emitted events
+          .stack-box
+            editor.mt2(:dark-mode="darkMode" :buttons="buttons")
+            pre-ssh(language="html-vue" :dark="darkMode") &lt;richer&gt;&lt;/richer&gt;
 
-            pre-ssh(language="html-vue" :dark="darkMode").
-              &lt;richer gt;
-                &lt;template #button="{ button, action }"&gt;
-                  &lt;button @click="action"&gt;
-                    {{ '\{\{ button.label \}\}' }}
-                  &lt;/button&gt;
-                &lt;/template&gt;
-              &lt;/richer&gt;
+  section.section.section--customizable
+    .container
+      h2 Highly customizable
 
-    section.section.section--get-it
-      button.cta(@click="copyCode" :class="{ copied }")
-        span.wrap
-          | Get it now:
-          code(ref="codeToCopy") npm i richer-than-you
+      div
+        h3.mt3 You pick your buttons
+        .flex
+          editor(
+            :dark-mode="darkMode"
+            :buttons="['bold', 'underline', 'subscript', 'superscript']")
+          pre-ssh(language="html-vue" :dark="darkMode").
+            &lt;richer
+              :buttons="['bold', 'underline', 'subscript', 'superscript']"
+            &gt;
+            &lt;/richer&gt;
+
+      div
+        h3.mt3 Add your own custom buttons
+        .flex
+          editor(
+            :dark-mode="darkMode"
+            :buttons="[{ name: 'dark', label: 'Dark theme', icon: 'i-moon' }, { name: 'light', label: 'Light theme', icon: 'i-sun' }]")
+          pre-ssh(language="html-vue" :dark="darkMode").
+            &lt;richer
+              :buttons="[
+                { name: 'dark', label: 'Dark theme', icon: 'i-moon' },
+                { name: 'light', label: 'Light theme', icon: 'i-sun' }
+              ]"
+            &gt;
+            &lt;/richer&gt;
+      div
+        h3.mt3 Styles
+        .flex
+          editor.round-buttons(:dark-mode="darkMode")
+          p.
+            The component is using the BEM nomenclature as well as easy selectors as much as possible.#[br]
+            It should be a breeze to apply the style you want.
+      div
+        h3.mt3 Using slots
+        .flex.align-center
+          editor.slots(:dark-mode="darkMode")
+            template(#button="{ button, action }")
+              button(@click="action") {{ button.label }}
+
+          pre-ssh(language="html-vue" :dark="darkMode").
+            &lt;richer gt;
+              &lt;template #button="{ button, action }"&gt;
+                &lt;button @click="action"&gt;
+                  {{ '\{\{ button.label \}\}' }}
+                &lt;/button&gt;
+              &lt;/template&gt;
+            &lt;/richer&gt;
+
+  section.section.section--get-it
+    button.cta(@click="copyCode" :class="{ copied }")
+      span.wrap
+        | Get it now:
+        code(ref="codeToCopy") npm i richer-than-you
+
+  footer
+    .gold-separator
+    .container.
+      Copyright © Antoni Andre {{ (new Date()).getFullYear() }}.
 </template>
 
 
@@ -242,47 +247,46 @@ const copyCode = e => {
     width: 24px;
     height: 24px;
     overflow: hidden;
-    box-shadow: 0 0 1px rgb(255 255 255 / 68%) inset;
+    box-shadow: 0 0 1px rgba(#fff, 0.68) inset;
     text-shadow: 0 0 4px rgba(#000, 0.6);
 
     &:before {
       border-radius: 99em;
       transition: 0.25s ease-in-out;
     }
-    &:hover:before {
-      background-color: #fff0;
-    }
+    &:hover:before {background-color: transparent;}
 
+    &:focus:after {
+      transform: scale(1);
+      opacity: 1;
+      border-radius: inherit;
+      border: 1px solid rgba(var(--theme-color-invert-bg-rgb), 0.6);
+      background-color: transparent;
+    }
     &:hover:after {
       border-radius: inherit;
-      background-color: rgba(255, 255, 255, 0.25);
+      background-color: rgba(var(--theme-color-main-bg-rgb), 0.25);
     }
   }
 
-  .separator {background: none;}
+  .richer__separator {background: none;}
 }
 
 .richer--dark.round-buttons {
-  .richer__content {
-    color: #fff;
-
-    &:before {background: linear-gradient(160deg, #3451bc, #9c66ff, #ff75ff);}
-    &:after {background-color: #242424;}
-  }
-
   .richer__button {
     background: linear-gradient(120deg, #3451bc 10%, #9c66ff 60%, #ff75ff 87%);
     color: #fff;
     box-shadow: 0 0 1px rgb(255 255 255 / 68%) inset;
     text-shadow: 0 0 4px rgba(#000, 0.6);
 
-    &:hover:before {
-      background-color: #fff0;
-    }
+    &:hover:after {background-color: rgba(255, 255, 255, 0.25);}
+  }
 
-    &:hover:after {
-      background-color: rgba(255, 255, 255, 0.25);
-    }
+  .richer__content {
+    color: #fff;
+
+    &:before {background: linear-gradient(160deg, #3451bc, #9c66ff, #ff75ff);}
+    &:after {background-color: #242424;}
   }
 }
 

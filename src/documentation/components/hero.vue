@@ -136,12 +136,12 @@ h1 {
 
   &, .richer__menu {transition: $switch-mode-transition;}
 
-  :deep(.separator) {
+  :deep(.richer__separator) {
     margin: 0 0.5rem;
     width: 0;
   }
-  :deep(.button:focus), :deep(.button--active) {border-color: #bf953f;}
-  :deep(.button--active) {
+  :deep(.richer__button:focus), :deep(.richer__button--active) {border-color: #bf953f;}
+  :deep(.richer__button--active) {
     color: #bf953f;
 
     &:after {display: none;}
@@ -156,16 +156,16 @@ h1 {
 
 // Dark theme.
 // --------------------------------------------------------
-.page.dark {
+.dark {
   header:after {background: $light-main-bg-color;}
 
   .richer.hero {
     background-color: rgba(rgb(34, 34, 34), 0.8);
     box-shadow: 2px 2px 6px rgba(#000, 0.2);
 
-    :deep(.button:focus), :deep(.button--active) {border-color: #967738;}
+    :deep(.richer__button:focus), :deep(.richer__button--active) {border-color: #967738;}
 
-    :deep(.button--active) {color: #967738;}
+    :deep(.richer__button--active) {color: #967738;}
   }
 }
 </style>
