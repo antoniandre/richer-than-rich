@@ -37,6 +37,7 @@ const copyCode = e => {
 onMounted(() => {
   darkMode.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   darkMode && document.body.classList.add('dark')
+  setTimeout(() => document.body.classList.add('ready'), 300)
 })
 </script>
 

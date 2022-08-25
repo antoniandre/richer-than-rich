@@ -21,6 +21,7 @@ body {
   --theme-color-invert-bg-rgb: #{$light-invert-bg-color-rgb};
   --theme-color-invert-fg: #{$dark-main-fg-color};
   --theme-color-gold: #{$light-gold-color};
+  --switch-mode-transition: 0s;
 
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -38,7 +39,7 @@ body {
   //   radial-gradient(ellipse farthest-corner at left top, #ffffff 0%, #ffffac 8%, #d1b464 25%, #5d4a1fba 62.5%, #5d4a1f 100%);
   background-color: var(--theme-color-main-bg);
   color: var(--theme-color-main-fg);
-  transition: color $switch-mode-transition, background-color $switch-mode-transition;
+  transition: color var(--switch-mode-transition), background-color var(--switch-mode-transition);
 
   // Dark theme colors override.
   &.dark {
@@ -50,6 +51,8 @@ body {
     --theme-color-invert-fg: #{$light-main-fg-color};
     --theme-color-gold: #{$dark-gold-color};
   }
+
+  &.ready {--switch-mode-transition: 1s;}
 }
 
 ::selection {background: var(--theme-color-gold);}

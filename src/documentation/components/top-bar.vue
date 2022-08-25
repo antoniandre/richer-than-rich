@@ -1,14 +1,19 @@
 <script setup>
-defineProps({
+const props = defineProps({
   darkMode: Boolean
 })
 
-defineEmits(['update:dark-mode'])
+const switchTheme = () => {
+  document.body.classList.toggle('dark')
+  emit('update:dark-mode', !props.darkMode)
+}
+
+const emit = defineEmits(['update:dark-mode'])
 </script>
 
 <template lang="pug">
 .top-bar
-  .theme-switch(@click="$emit('update:dark-mode', !darkMode)")
+  .theme-switch(@click="switchTheme")
     button.button.i-moon(:class="{ 'button--active': darkMode }")
     button.button.i-sun(:class="{ 'button--active': !darkMode }")
     .slider
@@ -75,7 +80,7 @@ defineEmits(['update:dark-mode'])
 
 // Dark theme.
 // --------------------------------------------------------
-.page.dark {
+.dark {
   .top-bar {
     @include backdrop-blur(6px, rgba($light-main-bg-color, 0.8), rgba(#fff, 0));
     box-shadow: 0 0 12px rgba($dark-main-bg-color, 0.15);
