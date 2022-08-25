@@ -63,6 +63,16 @@ body {
   padding: 0 2rem;
 }
 
+footer {
+  .container {
+    padding: 1rem;
+    opacity: 0.3;
+    font-size: 0.9rem;
+  }
+}
+
+// Elements base style.
+// --------------------------------------------------------
 code {
   background-color: rgba(var(--theme-color-invert-bg-rgb), 0.1);
   border-radius: 3px;
@@ -103,137 +113,6 @@ code {
 .mb3 {margin-bottom: 3em;}
 .mb4 {margin-bottom: 4em;}
 
-// Main.
-// --------------------------------------------------------
-.section {
-  position: relative;
-  min-height: 450px;
-  padding-top: 6rem;
-  padding-bottom: 6rem;
-  transition: $switch-mode-transition;
-
-  .container {position: relative;}
-  .richer {box-shadow: 1px 1px 4px rgba(#000, 0.07);}
-}
-
-.section--why {
-  padding-top: 1rem;
-  background:
-    var(--theme-color-invert-bg)
-    linear-gradient(175deg, var(--theme-color-invert-bg) 50%, rgba(var(--theme-color-main-bg-rgb), 7%));
-  color: var(--theme-color-invert-fg);
-
-  ::selection {background: $dark-gold-color;}
-
-  .container {max-width: 700px;}
-
-  .checklist {
-    column-count: 2;
-    column-gap: 2rem;
-    justify-content: center;
-  }
-}
-
-.section--install {
-  padding-top: 4rem;
-
-  &:before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: -5vw;
-    right: -5vw;
-    height: 150px;
-    border-radius: 0 80% 0 0;
-    transform: rotate(-4deg) translateY(50%);
-    background-color: var(--theme-color-main-bg);
-    transition: inherit;
-  }
-}
-
-.section--easy {
-  background-color: rgba(var(--theme-color-invert-bg-rgb), 0.05);
-}
-
-.section--customizable {
-  .flex {gap: 2rem;}
-
-  .richer {
-    width: 100%;
-    max-width: 400px;
-  }
-}
-
-.section--get-it {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(170deg, transparent 20%, #fde9ae);
-
-  .cta {
-    position: relative;
-    background: linear-gradient(110deg, #ebb447, #fcf6ba, #cc9a2e, #fbf5b7, #bf953f);
-    background-size: 200%;
-    border: none;
-    border-radius: 99em;
-    font-size: 1.2rem;
-    font-family: 'Arial Black', Arial, Helvetica, sans-serif;
-    color: #000;
-    cursor: pointer;
-    box-shadow: 3px 3px 12px rgba(#000, 0.25);
-
-    span.wrap {
-      display: block;
-      position: relative;
-      padding: 1rem 1.5rem;
-      border-radius: inherit;
-      overflow: hidden;
-    }
-
-    span.wrap:before {
-      content: '';
-      position: absolute;
-      top: -120%;
-      right: -200%;
-      width: 50%;
-      height: 300%;
-      transform: rotate(30deg);
-      background: linear-gradient( to right, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.13), rgba(255, 246, 198, 0.65), rgba(255, 255, 255, 0));
-    }
-
-    &:after {
-      content: 'Copied!';
-      position: absolute;
-      top: 100%;
-      margin-top: 0.5rem;
-      font: italic 1rem Arial, Helvetica, sans-serif;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateX(-50%);
-      transition: 0.3s ease-in-out;
-      color: #bf953f;
-    }
-
-    code {
-      margin-left: 0.5rem;
-      background-color: #{$light-gold-color}9c;
-      padding: 0.5rem;
-    }
-
-    span.wrap:hover:before {animation: shine 2s infinite;}
-
-    &.copied:after {
-      opacity: 1;
-      transform: translate(-50%, 0.3rem);
-    }
-  }
-}
-
-.gold-separator {
-  height: 1px;
-  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-}
-
 ul.checklist {
   margin-top: 20px;
   list-style-type: none;
@@ -256,33 +135,14 @@ ul.checklist {
   }
 }
 
-.stack-box {
-  position: relative;
-
-  > * {width: 70%;}
-
-  > * + * {
-    position: absolute;
-    top: 4rem;
-    left: 4rem;
-  }
-  > * + * + * {
-    top: 8rem;
-    left: 8rem;
-  }
-}
-
 div.ssh-pre {
   margin-top: 0;
   background: rgba(var(--theme-color-invert-bg-rgb), 0.05);
 }
 
-footer {
-  .container {
-    padding: 1rem;
-    opacity: 0.3;
-    font-size: 0.9rem;
-  }
+.gold-separator {
+  height: 1px;
+  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
 }
 
 @keyframes shine {
@@ -313,4 +173,3 @@ footer {
     }
   }
 }
-
