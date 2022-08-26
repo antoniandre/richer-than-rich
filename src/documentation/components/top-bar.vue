@@ -53,8 +53,7 @@ const emit = defineEmits(['update:dark-mode'])
   background-color: rgba(#bf953f, 0.5);
   box-shadow: 1px 1px 3px #973 inset;
   cursor: pointer;
-  border: 1px solid transparent;
-  outline: none;
+  outline: 1px solid transparent;
   transition: 0.3s ease-in-out;
 
 
@@ -99,10 +98,10 @@ const emit = defineEmits(['update:dark-mode'])
 
   .theme-switch {
     box-shadow: 1px 1px 3px #403216 inset;
-    &:focus {border-color: #b9a273;}
+    &:focus {outline-color: #b9a273;}
 
     .button {color: rgba(#000, 0.5);}
-    .button--active {color: hsl(40, 30%, 53%)}
+    .button--active {color: #ab9363;}
     .slider {background-color: $dark-main-bg-color;}
   }
 }

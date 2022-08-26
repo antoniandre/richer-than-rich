@@ -96,7 +96,6 @@ section.section.section--easy
           :dark-mode="darkMode"
           :buttons="['bold', 'underline', '|', 'subscript', 'superscript']")
 
-      .grow
         h3 Emitted events
         .stack-box
           editor.mt2(:dark-mode="darkMode")
