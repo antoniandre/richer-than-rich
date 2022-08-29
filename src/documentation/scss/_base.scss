@@ -135,6 +135,23 @@ ul.checklist {
   }
 }
 
+.stack-box {
+  position: relative;
+  width: 100%;
+
+  > * {width: 70%;}
+
+  > * + * {
+    position: absolute;
+    top: 4rem;
+    left: 4rem;
+  }
+  > * + * + * {
+    top: 8rem;
+    left: 8rem;
+  }
+}
+
 div.ssh-pre {
   margin-top: 0;
   background: rgba(var(--theme-color-invert-bg-rgb), 0.05);

@@ -10,8 +10,6 @@ const editorContent = ref(`
   <h2 class="r-align-center">Hi. I\'m r$$$ch.</h2>
   <p class="r-align-center"><br><br>Wanna try me?</p>
 `)
-
-const cl = (...args) => console.log(...args)
 </script>
 
 <template lang="pug">
@@ -27,13 +25,7 @@ header
     editor.hero(
       :model-value="editorContent"
       placeholder="Write something..."
-      :dark-mode="darkMode"
-      @button-click="cl('button-click', $event)"
-      @click="cl('click', $event)"
-      @keyup="cl('keyup', $event)"
-      @focus="cl('focus', $event)"
-      @blur="cl('blur', $event)"
-      @paste="cl('paste', $event)")
+      :dark-mode="darkMode")
 
   //- .particles
     - for (i = 1; i <= 100; i++)

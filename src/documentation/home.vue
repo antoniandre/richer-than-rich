@@ -16,6 +16,9 @@ const buttons = [
   { name: 'text-color', label: 'Text color' }
 ]
 
+const cl = (...args) => console.log(...args)
+const log = (...args) => console.log(...args)
+
 const copyCode = e => {
   e.target.insertAdjacentHTML(
     'afterend',
@@ -76,7 +79,7 @@ section.section.section--easy
           &lt;richer&gt;&lt;/richer&gt;
         editor.mt1(:dark-mode="darkMode")
 
-        p.mt2 You can also chose buttons by just giving an array of button names.
+        p.mt2 You can also choose buttons by just giving an array of button names.
         pre-ssh(language="html-vue" :dark="darkMode").
           &lt;richer
             :buttons="['bold', 'underline', 'subscript', 'superscript']"
@@ -96,10 +99,27 @@ section.section.section--easy
           :dark-mode="darkMode"
           :buttons="['bold', 'underline', '|', 'subscript', 'superscript']")
 
-        h3 Emitted events
-        .stack-box
-          editor.mt2(:dark-mode="darkMode")
-          pre-ssh(language="html-vue" :dark="darkMode") &lt;richer&gt;&lt;/richer&gt;
+        h3.mt2 Emitted events
+        p Listen to events when interacting with the editor to trigger specific actions.
+
+        editor.mt2(
+          :dark-mode="darkMode"
+          @button-click="cl('button-click', $event)"
+          @click="cl('click', $event)"
+          @keyup="cl('keyup', $event)"
+          @focus="cl('focus', $event)"
+          @blur="cl('blur', $event)"
+          @paste="cl('paste', $event)")
+        pre-ssh(language="html-vue" :dark="darkMode").
+          &lt;richer
+            @button-click="cl('button-click', $event)"
+            @click="cl('click', $event)"
+            @keyup="cl('keyup', $event)"
+            @focus="cl('focus', $event)"
+            @blur="cl('blur', $event)"
+            @paste="cl('paste', $event)"
+            :dark="darkMode"&gt;
+          &lt;/richer&gt;
 
 section.section.section--customizable
   .container
@@ -107,11 +127,16 @@ section.section.section--customizable
 
     div
       h3.mt3 You pick your buttons
+      p you can easily choose which button to use among a predefined list of common buttons.
       .flex
-        editor(
-          :dark-mode="darkMode"
-          :buttons="['bold', 'underline', 'subscript', 'superscript']")
-        pre-ssh(language="html-vue" :dark="darkMode").
+        .stack-box.grow
+          editor(
+            :dark-mode="darkMode"
+            :buttons="['bold', 'underline', 'subscript', 'superscript']")
+          editor(
+            :dark-mode="darkMode"
+            :buttons="['font-size', 'font-family', 'text-color', 'background-color', 'bold', 'italic', 'underline', 'strikethrough', 'list-ul', 'list-ol', 'align-left', 'align-center', 'align-right', 'align-justify', 'unindent', 'indent', 'subscript', 'superscript', 'link', 'image', 'table', 'code', 'undo', 'redo', 'clear-format']")
+        pre-ssh.grow(language="html-vue" :dark="darkMode").
           &lt;richer
             :buttons="['bold', 'underline', 'subscript', 'superscript']"
           &gt;
@@ -122,12 +147,12 @@ section.section.section--customizable
       .flex
         editor(
           :dark-mode="darkMode"
-          :buttons="[{ name: 'dark', label: 'Dark theme', icon: 'i-moon' }, { name: 'light', label: 'Light theme', icon: 'i-sun' }]")
+          :buttons="[{ name: 'dark', label: 'Dark theme', icon: 'i-moon', action: log }, { name: 'light', label: 'Light theme', icon: 'i-sun', action: log }]")
         pre-ssh(language="html-vue" :dark="darkMode").
           &lt;richer
             :buttons="[
-              { name: 'dark', label: 'Dark theme', icon: 'i-moon' },
-              { name: 'light', label: 'Light theme', icon: 'i-sun' }
+              { name: 'dark', label: 'Dark theme', icon: 'i-moon', action: log },
+              { name: 'light', label: 'Light theme', icon: 'i-sun', action: log }
             ]"
           &gt;
           &lt;/richer&gt;
