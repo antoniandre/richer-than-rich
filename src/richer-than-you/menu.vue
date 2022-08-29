@@ -96,9 +96,13 @@ const action = (e, button) => {
   button.active = !button.active // @todo: improve this rule.
 
   // Perform a specific action if any.
-  if (button.action && typeof actions[button.action] === 'function') {
+  if (button.action && [typeof actions[button.action], typeof button.action].includes('function')) {
     let nearestBlockEl = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
-    actions[button.action]({ button, inputField: inputField.value, sel, e, nearestBlockEl })
+    const functionParams = { button, inputField: inputField.value, sel, e, nearestBlockEl }
+
+    if (typeof button.action === 'function') button.action(functionParams)
+    else actions[button.action](functionParams)
+
     process({ inputField: inputField.value, content: content.value })
   }
 
@@ -111,6 +115,7 @@ const action = (e, button) => {
     else {
       if (button.active) wrapSelection(sel, button)
       else unwrapSelection(sel, button)
+      process({ inputField: inputField.value, content: content.value })
     }
   }
 
