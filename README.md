@@ -1,22 +1,21 @@
-# Richer than you
-
-[![Latest Version on NPM](https://img.shields.io/npm/v/richer-than-you.svg)](https://npmjs.com/package/richer-than-you)
+[![Latest Version on NPM](https://img.shields.io/npm/v/richer-than-rich.svg)](https://npmjs.com/package/richer-than-rich)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
-[![npm](https://img.shields.io/npm/dt/richer-than-you.svg)](https://www.npmjs.com/package/richer-than-you)
-<!-- [![npm](https://img.shields.io/npm/dw/richer-than-you.svg)](https://www.npmjs.com/package/richer-than-you) -->
+[![npm](https://img.shields.io/npm/dt/richer-than-rich.svg)](https://www.npmjs.com/package/richer-than-rich)
+<!-- [![npm](https://img.shields.io/npm/dw/richer-than-rich.svg)](https://www.npmjs.com/package/richer-than-rich) -->
 
+# Richer than rich
 > Another modern rich text editor $$. A promising one. 🚧 WIP
 
 ___
 
 ## Demo & Documentation
-> [antoniandre.github.io/richer-than-you](https://antoniandre.github.io/richer-than-you)
+> [antoniandre.github.io/richer-than-rich](https://antoniandre.github.io/richer-than-rich)
 
 ___
 
 ## install (Vue 3)
 ```
-npm i richer-than-you
+npm i richer-than-rich
 ```
 
 ___

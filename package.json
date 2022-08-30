@@ -1,26 +1,26 @@
 {
-  "name": "richer-than-you",
+  "name": "richer-than-rich",
   "version": "0.1.6",
   "description": "Another modern rich text editor $$. A promising one. 🚧 WIP",
   "author": "Antoni Andre <antoniandre.web@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/antoniandre/richer-than-you",
+  "repository": "https://github.com/antoniandre/richer-than-rich",
   "funding": "https://github.com/sponsors/antoniandre",
-  "main": "./dist/richer-than-you.umd.js",
-  "unpkg": "dist/richer-than-you.umd.js",
-  "jsdelivr": "dist/richer-than-you.umd.js",
-  "module": "./dist/richer-than-you.es.js",
+  "main": "./dist/richer-than-rich.umd.js",
+  "unpkg": "dist/richer-than-rich.umd.js",
+  "jsdelivr": "dist/richer-than-rich.umd.js",
+  "module": "./dist/richer-than-rich.es.js",
   "exports": {
     ".": {
-      "import": "./dist/richer-than-you.es.js",
-      "require": "./dist/richer-than-you.cjs.js"
+      "import": "./dist/richer-than-rich.es.js",
+      "require": "./dist/richer-than-rich.cjs.js"
     },
     "./package.json": "./package.json",
     "./dist/*": "./dist/*"
   },
   "files": [
     "dist",
-    "src/richer-than-you"
+    "src/richer-than-rich"
   ],
   "type": "module",
   "keywords": [
@@ -34,9 +34,9 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base /richer-than-you/",
+    "build": "vite build --base /richer-than-rich/",
     "build-bundle": "BUNDLE=true vite build",
-    "serve": "vite preview --base /richer-than-you/"
+    "serve": "vite preview --base /richer-than-rich/"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
