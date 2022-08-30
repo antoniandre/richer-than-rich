@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import Editor from '@/richer-than-you/index.vue'
+import Editor from '@/richer-than-rich/index.vue'
 
 defineProps({
   darkMode: Boolean
@@ -16,9 +16,9 @@ const editorContent = ref(`
 header
   .header__content.container
     h1
-      | Richer than you
+      | Richer than rich
       img.dollar(src="/dollar.svg")
-    p.catchphrase $. Another modern rich text editor. This one's richer than you.
+    p.catchphrase $. Another modern rich text editor. This one's Richer than rich.
 
     p.wip 🚧 &nbsp; WORK IN PROGRESS &nbsp; 🚧
 

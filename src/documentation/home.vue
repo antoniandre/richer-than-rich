@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import Editor from '@/richer-than-you/index.vue'
+import Editor from '@/richer-than-rich/index.vue'
 
 defineProps({
   darkMode: Boolean
@@ -56,12 +56,12 @@ section.section.section--why
 section.section.section--install
   .container
     h2 Installation
-    pre-ssh(language="shell") npm i richer-than-you
+    pre-ssh(language="shell") npm i richer-than-rich
 
     p.mt2 Import in your component:
     pre-ssh(language="js" :dark="darkMode").
-      import Richer from 'richer-than-you'
-      import 'richer-than-you/dist/styles.css'
+      import Richer from 'richer-than-rich'
+      import 'richer-than-rich/dist/styles.css'
 
     p.mt2 Use in the template:
     pre-ssh(language="html-vue") &lt;richer&gt;&lt;/richer&gt;
@@ -183,7 +183,7 @@ section.section.section--get-it
   button.cta(@click="copyCode" :class="{ copied }")
     span.wrap
       | Get it now:
-      code(ref="codeToCopy") npm i richer-than-you
+      code(ref="codeToCopy") npm i richer-than-rich
 </template>
 
 
