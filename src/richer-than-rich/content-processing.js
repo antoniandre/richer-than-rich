@@ -2,7 +2,7 @@
  * Richer editor content processing & cleanup.
  */
 
- import { blockNodes, mergeTweenNodes, memorizeSelection, restoreSelection } from './dom-utils'
+ import { blockNodes, mergeTweenNodes, memorizeSelection, restoreSelection, unwrapNode } from './dom-utils'
 
 // Processing rules.
 const rules = {
@@ -98,16 +98,24 @@ const replaceTags = inputField => {
  * - merge tween nodes
  *
  * @param {HTMLCollection|NodeList} htmlCollection the collection of nodes to cleanup.
+ * @notes if a NodeList is given, it will also contain text nodes (node.childNodes !== node.children).
  **/
-const recursiveCleanup = htmlCollection => {
-  // Remove empty nodes.
+const recursiveCleanup = (htmlCollection) => {
+  // 1. Remove empty nodes.
 
-  // Remove nested duplicates.
+  // 2. Cleanup nested duplicates in depth.
+  // But also need to run deeper in order to find different duplicate nodes than the top level.
+  ([...htmlCollection]).forEach(node => {
+    if (node.nodeType === 3) return
+    const selector = node.nodeName === 'SPAN' ? `${node.nodeName}.r-${node.className}` : node.nodeName
+    const nestedDupes = node.querySelectorAll(selector)
+    if (nestedDupes) nestedDupes.forEach(node => unwrapNode(node))
+  })
 
-  // Merge tween nodes.
+  // 3. Merge tween nodes (needs manual recursion).
   mergeTweenNodes(htmlCollection);
 
-  // 2. Check any potential deeper level.
+  // 4. Check any potential deeper level.
   ([...htmlCollection]).forEach(node => {
     if (node.hasChildNodes()) recursiveCleanup(node.childNodes)
   })
