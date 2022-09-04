@@ -107,7 +107,8 @@ const recursiveCleanup = (htmlCollection) => {
   // But also need to run deeper in order to find different duplicate nodes than the top level.
   ([...htmlCollection]).forEach(node => {
     if (node.nodeType === 3) return
-    const selector = node.nodeName === 'SPAN' ? `${node.nodeName}.r-${node.className}` : node.nodeName
+    const nodeName = node.nodeName.toLowerCase()
+    const selector = nodeName + (nodeName === 'span' ? `.${node.className}` : '')
     const nestedDupes = node.querySelectorAll(selector)
     if (nestedDupes) nestedDupes.forEach(node => unwrapNode(node))
   })
