@@ -47,7 +47,7 @@ const content = ref({
  */
 const wrapSelection = (sel, button) => {
   const range = sel.getRangeAt(0)
-  const newParent = document.createElement(button.tag || 'span')
+  const newParent = document.createElement(button.tag)
   if (!button.tag || button.tag === 'span') newParent.className = `r-${button.name}`
 
   try {
@@ -93,7 +93,7 @@ const unwrapSelection = (sel, button) => {
   const middleFragment = middleRange.extractContents()
 
   // On the selection, remove the tag of the selected button (there could be multiple).
-  const selectorTag = button.tag || 'span'
+  const selectorTag = button.tag
   const selectorClass =  selectorTag === 'span' ? `.r-${button.name}` : ''
   middleFragment.querySelectorAll(selectorTag + selectorClass).forEach(node => {
     node.replaceWith(...node.childNodes)
@@ -146,6 +146,8 @@ const unwrapSelection = (sel, button) => {
  * When meta key is pressed, handle keyboard shortcuts and prevent default browser action.
  */
 const onKeydown = e => {
+  menu.value.highlightButtons()
+
   // On metaKey+[key] press, perform an action of the matching shortcut.
   if (e.metaKey) {
     const matchedAction = shortcuts[`meta+${e.key}`]
@@ -163,10 +165,12 @@ const onKeydown = e => {
 
 const onKeyup = e => {
   // processed.value = false
+  menu.value.highlightButtons()
   emit('keyup', { e, html: content.value.processed })
 }
 
 const onClick = e => {
+  menu.value.highlightButtons()
   emit('click', { e, html: content.value.processed })
 }
 

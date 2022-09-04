@@ -134,7 +134,28 @@ const action = (e, button) => {
   emit('action', { e, button: toRaw(button) })
 }
 
-defineExpose({ action })
+const highlightButtons = () => {
+  const sel = window.getSelection()
+
+  menuButtons.value.forEach(button => {
+    if (button.name === '|') return // Don't analyze the separators.
+
+    button.active = false
+    const selector = button.tag === 'span' ? `${button.tag}.r-${button.name}` : button.tag
+
+    if (sel.isCollapsed) {
+      const caretNode = sel.baseNode.nodeType === 3 ? sel.baseNode.parentNode : sel.baseNode
+      button.active = !!caretNode.closest(selector)
+    }
+    else {
+      const { commonAncestorContainer, commonAncestorContainer: { nodeType, parentNode } } = sel.getRangeAt(0)
+      const commonAncestor = nodeType === 3 ? parentNode : commonAncestorContainer
+      button.active = !!commonAncestor.closest(selector)
+    }
+  })
+}
+
+defineExpose({ action, highlightButtons })
 </script>
 
 <template lang="pug">
