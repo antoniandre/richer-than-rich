@@ -81,11 +81,15 @@ const wrapSelection = (sel, button) => {
 const unwrapSelection = (sel, button) => {
   const baseBlockNode = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
   const extentBlockNode = utils.getNearestBlockNode(sel.extentNode, sel.extentOffset, inputField.value)
+  const selRange = sel.getRangeAt(0)
 
   // The range starting from the beginning of the selection block node and until the selection.
   const startRange = new Range()
   startRange.setStart(baseBlockNode, 0)
-  startRange.setEnd(sel.baseNode, sel.baseOffset)
+  // BaseNode & extentNode could be in wrong order if selecting from the right.
+  // But a range start and end are always in the right order.
+  // startRange.setEnd(sel.baseNode, sel.baseOffset)
+  startRange.setEnd(selRange.startContainer, selRange.startOffset)
   const startFragment = startRange.extractContents()
 
   // The selection range.
@@ -103,7 +107,10 @@ const unwrapSelection = (sel, button) => {
   const endRange = new Range()
   // Sets the end of the range correctly: just before the block node closing tag.
   endRange.selectNodeContents(extentBlockNode)
-  endRange.setStart(sel.extentNode, sel.extentOffset)
+  // BaseNode & extentNode could be in wrong order if selecting from the right.
+  // But a range start and end are always in the right order.
+  // endRange.setStart(sel.extentNode, sel.extentOffset)
+  endRange.setStart(selRange.endContainer, selRange.endOffset)
   const endFragment = endRange.extractContents()
 
   // sel.removeAllRanges()
