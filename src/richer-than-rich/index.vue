@@ -44,11 +44,13 @@ const content = ref({
  * Wrap the selected content with the clicked button generated tag.
  * This will modify the innerHTML of the contenteditable, then call process() to cleanup,
  * and emit the clean markup.
+ * @todo: if selection is containing block nodes, add the wrap in each of them instead
+ *        of around all of them.
  */
 const wrapSelection = (sel, button) => {
   const range = sel.getRangeAt(0)
   const newParent = document.createElement(button.tag)
-  if (!button.tag || button.tag === 'span') newParent.className = `r-${button.name}`
+  if (button.tag === 'span') newParent.className = `r-${button.name}`
 
   try {
     // Can't surround the content if the selection is cutting a DOM element (across 2 nodes).
