@@ -11,7 +11,7 @@ const props = defineProps({
   shortcuts: { type: Object }
 })
 
-const emit = defineEmits(['button-click'])
+const emit = defineEmits(['button-click', 'action'])
 
 // Default tag: span.
 // Default icon: i-[button-name].
@@ -61,7 +61,7 @@ const defaultButtons = [
 ]
 
 const initializeButtons = (() => {
-  menuButtons = [] // Reset for HMR.
+  menuButtons.value = [] // Reset for HMR.
 
   let requestedButtons = props.userButtons.length ? props.userButtons : defaultButtons
 
@@ -70,19 +70,33 @@ const initializeButtons = (() => {
     return { ...availableButtons[button.name], ...button, name: button.name }
   })
 
-  menuButtons.push(...requestedButtons.map(button => {
+  menuButtons.value.push(...requestedButtons.map(button => {
     // Populate the shortcuts map.
     if (button.shortcut) props.shortcuts[button.shortcut] = button.name
 
     return {
       ...button,
+      tag: button.tag || 'span', // If no tag is given for that button, it will be a span.
       active: false
     }
   }))
 })()
 
 /**
- * On button click, perform an action on the content by calling one of the above methods.
+ * On button click, perform an action on the content.
+ *
+ * @param {Object} e the event that triggered the action.
+ * @param {Object} button the clicked button, or matched button from action shortcut.
+ */
+const onButtonClick = (e, button) => {
+  button.active = !button.active
+  emit('button-click', { e, button: toRaw(button) })
+  action(e, button)
+}
+
+/**
+ * On button click or from shortcut match, perform an action on the content by calling
+ * the associated action.
  *
  * @param {Object} e the event that triggered the action.
  * @param {Object} button the clicked button, or matched button from action shortcut.
@@ -90,10 +104,6 @@ const initializeButtons = (() => {
 const action = (e, button) => {
   focus() // Focus the input field first.
   const sel = window.getSelection()
-
-  emit('button-click', { e, button: toRaw(button) })
-
-  button.active = !button.active // @todo: improve this rule.
 
   // Perform a specific action if any.
   if (button.action && [typeof actions[button.action], typeof button.action].includes('function')) {
@@ -121,7 +131,7 @@ const action = (e, button) => {
 
   focus() // Re-focus the editor after a button click.
 
-  emit('button-click', { e, button: toRaw(button) })
+  emit('action', { e, button: toRaw(button) })
 }
 
 defineExpose({ action })
@@ -135,10 +145,10 @@ defineExpose({ action })
       v-else
       name="button"
       :button="button"
-      :action="() => action($event, button)"
+      :action="() => onButtonClick($event, button)"
       :classes="{ [`richer__button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'richer__button--active': button.active }")
       button.richer__button(
-        @click="action($event, button)"
+        @click="onButtonClick($event, button)"
         type="button"
         :title="button.label"
         :class="{ [`richer__button--${button.name} ${button.icon || `i-${button.name}`}`]: true, 'richer__button--active': button.active }"
