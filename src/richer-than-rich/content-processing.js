@@ -96,6 +96,8 @@ const replaceTags = inputField => {
  * - remove empty nodes? (maybe set a rule for this)
  * - remove nested duplicates
  * - merge tween nodes
+ *
+ * @param {HTMLCollection|NodeList} htmlCollection the collection of nodes to cleanup.
  **/
 const recursiveCleanup = htmlCollection => {
   // Remove empty nodes.
@@ -103,5 +105,11 @@ const recursiveCleanup = htmlCollection => {
   // Remove nested duplicates.
 
   // Merge tween nodes.
-  mergeTweenNodes(htmlCollection)
+  mergeTweenNodes(htmlCollection);
+
+  // 2. Check any potential deeper level.
+  ([...htmlCollection]).forEach(node => {
+    if (node.hasChildNodes()) recursiveCleanup(node.childNodes)
+  })
+
 }
