@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
+import autoprefixer from 'autoprefixer'
 import pkg from './package.json'
 
 const banner = `/*!
@@ -13,7 +14,7 @@ const bundlingConf = {
   lib: {
     entry: resolve(__dirname, '/src/richer-than-rich/index.vue'),
     name: 'RicherThanRich',
-    formats: ['es', 'umd', 'cjs'],
+    formats: ['es', 'umd', 'cjs']
 },
   rollupOptions: {
     plugins: [
@@ -27,7 +28,7 @@ const bundlingConf = {
       // Provide global variables to use in the UMD build for externalized deps.
       globals: { vue: 'Vue' },
       entryFileNames: 'richer.[format].js',
-      chunkFileNames: '[name].js',
+      chunkFileNames: '[name].js'
     }
   }
 }
@@ -53,6 +54,9 @@ export default defineConfig({
       scss: {
         additionalData: '@import "@/documentation/scss/variables";'
       }
+    },
+    postcss: {
+      plugins: [autoprefixer]
     }
   },
   build

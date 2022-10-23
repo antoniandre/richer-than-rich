@@ -41,7 +41,10 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.0",
+    "autoprefixer": "^10.4.12",
     "path": "^0.12.7",
+    "postcss": "^8.4.18",
+    "pug": "^3.0.2",
     "sass": "^1.54.3",
     "simple-syntax-highlighter": "^2.2.3",
     "vite": "^3.0.0",
