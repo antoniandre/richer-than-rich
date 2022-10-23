@@ -40,15 +40,15 @@
     "serve": "vite preview --base /richer-than-rich/"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^3.0.0",
+    "@vitejs/plugin-vue": "^3.1.2",
     "autoprefixer": "^10.4.12",
     "path": "^0.12.7",
     "postcss": "^8.4.18",
     "pug": "^3.0.2",
-    "sass": "^1.54.3",
+    "sass": "^1.55.0",
     "simple-syntax-highlighter": "^2.2.3",
-    "vite": "^3.0.0",
-    "vue": "^3.2.39"
+    "vite": "^3.1.8",
+    "vue": "^3.2.41"
   },
   "peerDependencies": {
     "vue": "^2.6.14 || ^3.2.0"
