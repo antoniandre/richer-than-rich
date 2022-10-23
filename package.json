@@ -3,14 +3,18 @@
   "version": "0.4.0",
   "description": "Another modern rich text editor $$. A promising one. 🚧 WIP",
   "author": "Antoni Andre <antoniandre.web@gmail.com>",
-  "license": "MIT",
-  "repository": "https://github.com/antoniandre/richer-than-rich",
   "homepage": "https://antoniandre.github.io/richer-than-rich",
+  "repository": "https://github.com/antoniandre/richer-than-rich",
+  "license": "MIT",
   "funding": "https://github.com/sponsors/antoniandre",
   "main": "./dist/richer-than-rich.umd.js",
   "unpkg": "dist/richer-than-rich.umd.js",
   "jsdelivr": "dist/richer-than-rich.umd.js",
   "module": "./dist/richer-than-rich.es.js",
+  "files": [
+    "dist",
+    "src/richer-than-rich"
+  ],
   "exports": {
     ".": {
       "import": "./dist/richer-than-rich.es.js",
@@ -19,10 +23,6 @@
     "./package.json": "./package.json",
     "./dist/*": "./dist/*"
   },
-  "files": [
-    "dist",
-    "src/richer-than-rich"
-  ],
   "type": "module",
   "keywords": [
     "wysiwyg vue",
@@ -39,15 +39,15 @@
     "build-bundle": "BUNDLE=true vite build",
     "serve": "vite preview --base /richer-than-rich/"
   },
-  "peerDependencies": {
-    "vue": "^3.0.0"
-  },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.0",
     "path": "^0.12.7",
     "sass": "^1.54.3",
     "simple-syntax-highlighter": "^2.2.3",
     "vite": "^3.0.0",
-    "vite-plugin-pug": "^0.3.1"
+    "vue": "^3.2.39"
+  },
+  "peerDependencies": {
+    "vue": "^2.6.14 || ^3.2.0"
   }
 }
