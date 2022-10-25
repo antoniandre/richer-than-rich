@@ -16,7 +16,6 @@ const buttons = [
   { name: 'text-color', label: 'Text color' }
 ]
 
-const cl = (...args) => console.log(...args)
 const log = (...args) => console.log(...args)
 
 const copyCode = e => {
@@ -104,20 +103,20 @@ section.section.section--easy
 
         editor.mt2(
           :dark-mode="darkMode"
-          @button-click="cl('button-click', $event)"
-          @click="cl('click', $event)"
-          @keyup="cl('keyup', $event)"
-          @focus="cl('focus', $event)"
-          @blur="cl('blur', $event)"
-          @paste="cl('paste', $event)")
+          @button-click="log('button-click', $event)"
+          @click="log('click', $event)"
+          @keyup="log('keyup', $event)"
+          @focus="log('focus', $event)"
+          @blur="log('blur', $event)"
+          @paste="log('paste', $event)")
         pre-ssh(language="html-vue" :dark="darkMode").
           &lt;richer
-            @button-click="cl('button-click', $event)"
-            @click="cl('click', $event)"
-            @keyup="cl('keyup', $event)"
-            @focus="cl('focus', $event)"
-            @blur="cl('blur', $event)"
-            @paste="cl('paste', $event)"
+            @button-click="log('button-click', $event)"
+            @click="log('click', $event)"
+            @keyup="log('keyup', $event)"
+            @focus="log('focus', $event)"
+            @blur="log('blur', $event)"
+            @paste="log('paste', $event)"
             :dark="darkMode"&gt;
           &lt;/richer&gt;
 
