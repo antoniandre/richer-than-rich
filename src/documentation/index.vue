@@ -5,11 +5,14 @@ import Hero from './components/hero.vue'
 import Home from './home.vue'
 import './scss/index.scss'
 
-let darkMode = ref(true)
+let darkMode = ref(false)
 
 onMounted(() => {
-  darkMode.value = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-  darkMode && document.body.classList.add('dark')
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (prefersDark === 'true') {
+    document.body.classList.add('dark')
+    darkMode.value = true
+  }
   setTimeout(() => document.body.classList.add('ready'), 300)
 })
 </script>
@@ -27,6 +30,3 @@ main
     .container.
       Copyright © Antoni Andre {{ (new Date()).getFullYear() }}.
 </template>
-
-<style lang="scss">
-</style>
