@@ -5,11 +5,12 @@ import Hero from './components/hero.vue'
 import Home from './home.vue'
 import './scss/index.scss'
 
-let darkMode = ref(false)
+const darkMode = ref(false)
 
 onMounted(() => {
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-  if (prefersDark === 'true') {
+  if ((typeof prefersDark === 'string' && prefersDark === 'true') ||
+      (typeof prefersDark === 'boolean' && prefersDark)) {
     document.body.classList.add('dark')
     darkMode.value = true
   }
