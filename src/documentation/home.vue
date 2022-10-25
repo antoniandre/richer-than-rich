@@ -205,7 +205,7 @@ section.section.section--get-it
   padding-top: 1rem;
   background:
     var(--theme-color-invert-bg)
-    linear-gradient(175deg, var(--theme-color-invert-bg) 50%, rgba(var(--theme-color-main-bg-rgb), 7%));
+    linear-gradient(170deg, var(--theme-color-invert-bg) 33%, rgba(var(--theme-color-main-bg-rgb), 7%));
   color: var(--theme-color-invert-fg);
 
   ::selection {background: $dark-gold-color;}
