@@ -7,18 +7,18 @@
   "repository": "https://github.com/antoniandre/richer-than-rich",
   "license": "MIT",
   "funding": "https://github.com/sponsors/antoniandre",
-  "main": "./dist/richer-than-rich.umd.js",
-  "unpkg": "dist/richer-than-rich.umd.js",
-  "jsdelivr": "dist/richer-than-rich.umd.js",
-  "module": "./dist/richer-than-rich.es.js",
+  "main": "./dist/richer.umd.js",
+  "unpkg": "dist/richer.umd.js",
+  "jsdelivr": "dist/richer.umd.js",
+  "module": "./dist/richer.es.js",
   "files": [
     "dist",
     "src/richer-than-rich"
   ],
   "exports": {
     ".": {
-      "import": "./dist/richer-than-rich.es.js",
-      "require": "./dist/richer-than-rich.cjs.js"
+      "import": "./dist/richer.es.js",
+      "require": "./dist/richer.cjs.js"
     },
     "./package.json": "./package.json",
     "./dist/*": "./dist/*"
