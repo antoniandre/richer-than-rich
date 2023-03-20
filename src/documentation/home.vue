@@ -60,7 +60,7 @@ section.section.section--install
     p.mt2 Import in your component:
     pre-ssh(language="js" :dark="darkMode").
       import Richer from 'richer-than-rich'
-      import 'richer-than-rich/dist/styles.css'
+      import 'richer-than-rich/dist/style.css'
 
     p.mt2 Use in the template:
     pre-ssh(language="html-vue") &lt;richer&gt;&lt;/richer&gt;
