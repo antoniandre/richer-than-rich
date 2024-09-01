@@ -38,7 +38,8 @@
     "build": "vite build --base /richer-than-rich/",
     "build-bundle": "BUNDLE=true vite build",
     "serve": "vite preview --base /richer-than-rich/",
-    "publish": "npm run build && npm run build-bundle && git add . && git commit -m 'Publish documentation on Github.' && git push && git push --tag && npm publish"
+    "publish-doc": "npm run build && git add . && git commit -m 'Publish documentation on Github.' && git push && git push --tag",
+    "publish-all": "npm run build && npm run build-bundle && git add . && git commit -m 'Publish documentation on Github.' && git push && git push --tag && npm publish"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.3",
