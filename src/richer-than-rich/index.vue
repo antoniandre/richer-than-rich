@@ -81,16 +81,16 @@ const wrapSelection = (sel, button) => {
  * For that, create 3 fragments: 1 before selection, 1 selection, 1 after selection.
  */
 const unwrapSelection = (sel, button) => {
-  const baseBlockNode = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
-  const extentBlockNode = utils.getNearestBlockNode(sel.extentNode, sel.extentOffset, inputField.value)
+  const baseBlockNode = utils.getNearestBlockNode(sel.anchorNode, sel.anchorOffset, inputField.value)
+  const extentBlockNode = utils.getNearestBlockNode(sel.focusNode, sel.focusOffset, inputField.value)
   const selRange = sel.getRangeAt(0)
 
   // The range starting from the beginning of the selection block node and until the selection.
   const startRange = new Range()
   startRange.setStart(baseBlockNode, 0)
-  // BaseNode & extentNode could be in wrong order if selecting from the right.
+  // anchorNode & focusNode could be in wrong order if selecting from the right.
   // But a range start and end are always in the right order.
-  // startRange.setEnd(sel.baseNode, sel.baseOffset)
+  // startRange.setEnd(sel.anchorNode, sel.anchorOffset)
   startRange.setEnd(selRange.startContainer, selRange.startOffset)
   const startFragment = startRange.extractContents()
 
@@ -109,9 +109,9 @@ const unwrapSelection = (sel, button) => {
   const endRange = new Range()
   // Sets the end of the range correctly: just before the block node closing tag.
   endRange.selectNodeContents(extentBlockNode)
-  // BaseNode & extentNode could be in wrong order if selecting from the right.
+  // anchorNode & focusNode could be in wrong order if selecting from the right.
   // But a range start and end are always in the right order.
-  // endRange.setStart(sel.extentNode, sel.extentOffset)
+  // endRange.setStart(sel.focusNode, sel.focusOffset)
   endRange.setStart(selRange.endContainer, selRange.endOffset)
   const endFragment = endRange.extractContents()
 

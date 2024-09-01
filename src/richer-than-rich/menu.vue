@@ -107,7 +107,7 @@ const action = (e, button) => {
 
   // Perform a specific action if any.
   if (button.action && [typeof actions[button.action], typeof button.action].includes('function')) {
-    let nearestBlockEl = utils.getNearestBlockNode(sel.baseNode, sel.baseOffset, inputField.value)
+    let nearestBlockEl = utils.getNearestBlockNode(sel.anchorNode, sel.anchorOffset, inputField.value)
     const functionParams = { button, inputField: inputField.value, sel, e, nearestBlockEl }
 
     if (typeof button.action === 'function') button.action(functionParams)
@@ -144,7 +144,7 @@ const highlightButtons = () => {
     const selector = button.tag === 'span' ? `${button.tag}.r-${button.name}` : button.tag
 
     if (sel.isCollapsed) {
-      const caretNode = sel.baseNode.nodeType === 3 ? sel.baseNode.parentNode : sel.baseNode
+      const caretNode = sel.anchorNode.nodeType === 3 ? sel.anchorNode.parentNode : sel.anchorNode
       button.active = !!caretNode.closest(selector)
     }
     else {
