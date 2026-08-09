@@ -104,6 +104,7 @@ const onButtonClick = (e, button) => {
 const action = (e, button) => {
   focus() // Focus the input field first.
   const sel = window.getSelection()
+  if (!sel || sel.rangeCount === 0) return
 
   // Perform a specific action if any.
   if (button.action && [typeof actions[button.action], typeof button.action].includes('function')) {
@@ -136,6 +137,7 @@ const action = (e, button) => {
 
 const highlightButtons = () => {
   const sel = window.getSelection()
+  if (!sel || sel.rangeCount === 0) return
 
   menuButtons.value.forEach(button => {
     if (button.name === '|') return // Don't analyze the separators.
